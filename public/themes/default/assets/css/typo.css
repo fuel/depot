@@ -1,0 +1,31 @@
+/* CSS TYPO - Typography Settings */
+
+*, html, body { font-family: "Droid Sans", helvetica, arial, sans-serif; }
+h1, h2, h3, h4, h5, h6 { font-family: "Droid Serif", georgia, serif; margin: 0 0 20px 0; }
+
+h1 { font-size: 40px; }
+h2 { font-size: 36px; }
+h3 { font-size: 32px; }
+h4 { font-size: 28px; }
+h5 { font-size: 24px; }
+h6 { font-size: 18px; }
+
+a:link, a:hover, a:active, a:visited { text-decoration: none; border: none; outline: none; }
+a, a:link { color: #c141ff; }
+
+p, pre, abbr, dl, dt, dd, ol, ul, li, span, small, a { font-family: "Droid Sans", helvetica, arial, sans-serif; font-style: normal; font-weight: normal; text-transform: normal; letter-spacing: normal; line-height: 1.4em; }
+
+p, ul, ol { color: #858585; text-shadow: 1px 1px 0px #ffffff; font-size: 13px; margin: 0 0 15px 0; }
+
+ul, ol { margin: 0 0 25px 15px; }
+ul li {}
+ol li { list-style-type: decimal; }
+
+em { font-style: italic; }
+strong { font-weight: bold; }
+pre, code { font-family: "Monaco"; color: #7d7d7d; text-shadow: 1px 1px 0px #ffffff; font-size: 11px; margin: 0 0 25px 0; }
+sup { font-size: xx-small; vertical-align: top; }
+sub { font-size: xx-small; vertical-align: bottom; }
+acronym, abbr { font-weight: bold; text-transform: uppercase; font-size: 12px; }
+dt { font-weight: bold; }
+dd { font-style: italic; }
