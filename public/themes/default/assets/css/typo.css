@@ -29,3 +29,23 @@ sub { font-size: xx-small; vertical-align: bottom; }
 acronym, abbr { font-weight: bold; text-transform: uppercase; font-size: 12px; }
 dt { font-weight: bold; }
 dd { font-style: italic; }
+
+@font-face {
+	font-family: 'BebasNeueRegular';
+	src: url('../fonts/BebasNeue-webfont.eot');
+	src: url('../fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+		 url('../fonts/BebasNeue-webfont.woff') format('woff'),
+		 url('../fonts/BebasNeue-webfont.ttf') format('truetype'),
+		 url('../fonts/BebasNeue-webfont.svg#BebasNeueRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 { font-family: "BebasNeueRegular"; text-shadow: 1px 1px 0px #ffffff; }
+#intro h1 { font-family: "BebasNeueRegular";  text-shadow: 2px 3px 0px #1d1d1d; }
+#calltos #discover .link { font-family: "BebasNeueRegular"; text-shadow: 0px 3px 0px #c02fcf; }
+#calltos #contribute .link { font-family: "BebasNeueRegular"; text-shadow: 0px 3px 0px #9e31d6; }
+#calltos #cells .link { font-family: "BebasNeueRegular"; text-shadow: 0px 3px 0px #7431d6; }
+#footer h6 { font-family: "BebasNeueRegular"; text-shadow: none; }
+h4 a { font-family: "BebasNeueRegular"; text-shadow: 1px 1px 0px #ffffff; }
+

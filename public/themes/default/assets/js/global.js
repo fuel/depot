@@ -1,11 +1,3 @@
-// Cufon
-Cufon.replace('h1, h2, h3, h4, h5, h6', { textShadow: '1px 1px 0px #ffffff' });
-Cufon.replace('#intro h1', { textShadow: '2px 3px 0px #1d1d1d' });
-Cufon.replace('#calltos #discover .link', { textShadow: '0px 3px 0px #c02fcf' });
-Cufon.replace('#calltos #contribute .link', { textShadow: '0px 3px 0px #9e31d6' });
-Cufon.replace('#calltos #cells .link', { textShadow: '0px 3px 0px #7431d6' });
-Cufon.replace('#footer h6', { textShadow: 'none' });
-
 $(document).ready(function(){
 
 // Fadein

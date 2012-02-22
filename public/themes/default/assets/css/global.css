@@ -40,7 +40,7 @@ ul#calltos li#discover { background-image: url(../img/discover.png); background-
 ul#calltos li#contribute { background-image: url(../img/contribute.png); background-repeat: no-repeat; }
 ul#calltos li#cells { background-image: url(../img/cells.png); background-repeat: no-repeat; }
 
-ul#calltos li span.link { font-size: 32px; width: 200px; color: #ffffff; margin: 23px 0 0 15px; float: left; text-transform: uppercase; }
+ul#calltos li span.link { font-size: 32px; width: 200px; color: #ffffff; margin: 17px 0 0 15px; float: left; text-transform: uppercase; }
 ul#calltos li span.desc { font-size: 11px; width: 160px; color: #ffffff; margin: 23px 15px 0 0; float: right; text-transform: uppercase; }
 
 ul#calltos li#discover .desc { color: #840193; text-shadow: 1px 1px 0px #f65afe; }
