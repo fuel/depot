@@ -49,7 +49,7 @@ return array(
 	 * Settings for Cache class
 	 */
 	'caching'         => false,
-	'cache_dir'       => APPPATH.'cache/',
+	'cache_dir'       => APPPATH.'..'.DS.'cache/',
 	'cache_lifetime'  => 3600, // In Seconds
 
 	/**
@@ -95,7 +95,7 @@ return array(
 	 * Fuel::L_ALL
 	 */
 	'log_threshold'    => Fuel::L_WARNING,
-	'log_path'         => APPPATH.'logs/',
+	'log_path'         => APPPATH.'..'.DS.'logs/',
 	'log_date_format'  => 'Y-m-d H:i:s',
 
 	/**
@@ -164,7 +164,7 @@ return array(
 	 *      array(APPPATH.'modules'.DS)
 	 */
 	'module_paths' => array(
-		APPPATH.'modules'.DS
+		APPPATH.'..'.DS.'modules'.DS
 	),
 
 

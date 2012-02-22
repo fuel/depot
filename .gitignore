@@ -11,8 +11,8 @@ build
 nbproject/
 .idea
 
-/fuel/app/logs/*/*/*
-/fuel/app/cache/*/*
+/fuel/logs/*/*/*
+/fuel/cache/*/*
 /fuel/app/config/crypt.php
 /fuel/app/development/db.php
 /fuel/app/production/db.php
