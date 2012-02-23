@@ -21,14 +21,13 @@ namespace Fuel\Tasks;
  * Usage:
  * php oil r docblox --version=1.1/develop
  */
-
 class Docblox
 {
 	// default function if no command is selected. Provided user with menu
 	public static function run()
 	{
 		// check if a version was passed
-		if ( ! $version = \Cli::option('version', \Cli::option('v', '')))
+		if ( ! $version = \Cli::option('version', \Cli::option('v', false)))
 		{
 			\Cli::write('Docblox: a FuelPHP repository version is required.');
 			return;

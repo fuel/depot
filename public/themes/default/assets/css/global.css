@@ -71,6 +71,16 @@ p.preLoader { font-size: 11px; text-shadow: 1px 1px 0px #ffffff; }
 
 /* Sidebar ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
+/* Form login / register / reset-pass ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+form#register { padding: 0 0 325px 0; }
+form#login { margin-left:325px; }
+form#login ul li label, form#register ul li label, form#reset-pass ul li label { display: block; font-weight: bold; }
+form#login ul li label.remember-me, form#register ul li label.remember-me { display: inline; font-weight: normal; }
+form#login ul, form#register ul, form#reset-pass ul { list-style: none; margin: 0; padding: 0; }
+form#login ul li, form#register ul li, form#reset-pass ul li { list-style: none; margin: 0 0 15px 0; padding: 0; }
+form#login ul li input[type=text], form#register ul li input[type=text], form#reset-pass ul li input[type=text], form#login ul li input[type=password], form#register ul li input[type=password] { width: 300px; background-color: #e8e8e8; border: 1px solid #BBB; border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;padding: 5px; font-size: 13px; font-weight: bold; color: #858585; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #fbfbfb; margin: 0; }
+form#login ul li.form_buttons input, form#register ul li.form_buttons input, form#reset-pass ul li.form_buttons input { margin: 0; }
+
 /* Footer ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 #footerWrapper { background-color: #222222; border-top: 1px solid #ffffff; width: 100%; height: 95px; margin: 0; padding: 35px 0 35px 0; clear: both; float: left; }
 #footer { width: 1000px; margin: 0 auto; }
@@ -121,6 +131,7 @@ blockquote p { margin: 0; }
 .small { font-size: 11px; }
 .alignleft { float: left; }
 .alignright: { float: right; }
+.center { text-align: center; }
 .fadein { visibility: hidden; }
 .splitter { background-image: url(../img/splitter.png); background-repeat: repeat-x; width: 100%; height: 2px; margin: 0 0 15px 0; float: left; }
 .title_icon { width: 24px; height: 24px; margin: 17px 5px 0 0; float: left; }
