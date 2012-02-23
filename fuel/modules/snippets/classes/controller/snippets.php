@@ -10,9 +10,9 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Skeleton;
+namespace Snippets;
 
-class Controller_Skeleton extends \Controller_Base_Public
+class Controller_Snippets extends \Controller_Base_Public
 {
 	/**
 	 * The module index
@@ -24,7 +24,7 @@ class Controller_Skeleton extends \Controller_Base_Public
 	{
 		// by default, the base controller loads the subpage template
 		// this will adds content to the body of the template
-		$this->template->content = \View::forge('skeleton/index');
+		$this->template->content = \View::forge('snippets/index');
 	}
 
 }
