@@ -1,4 +1,5 @@
 <?php echo \Theme::instance()->view('partials/page/header'); ?>
+
 <!-- Begin body -->
 <body id="top" class="home">
 
@@ -9,7 +10,7 @@
 			<h1><a href="/" title="Home"><?php echo \Html::img(\Theme::instance()->asset('img/logo.png'));?></a></h1>
 		</div>
 
-		<?php echo \Theme::instance()->view('partials/page/navbar'); ?>
+		<?php echo $navbar; ?>
 
 	</div>
 

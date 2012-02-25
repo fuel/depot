@@ -13,6 +13,11 @@
 class Controller_Homepage extends \Controller_Base_Public
 {
 	/**
+	* @var string page template
+	*/
+	public $template = 'templates/homepage';
+
+	/**
 	 * The application homepage
 	 *
 	 * @access  public
@@ -20,7 +25,6 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		$this->template = \Theme::instance()->view('templates/homepage');
 	}
 
 	/**

@@ -1,0 +1,69 @@
+/* CLASS API CSS - Class API content blocks */
+
+#api { min-height:300px; }
+#api p { font-size:120%; }
+
+/* JQuery collapseable trees ---------------------------------------------------------------------------------------------------------------------------------------------------- */
+#api .menutree {float:left; font-size:90%; list-style:none; margin:0; margin-bottom:25px; padding:0; vertical-align:top; width:100%; }
+#api .menutree .expand_all, .menutree .collapse_all {cursor:pointer; }
+#api .menutree ul {display:none; list-style:none; margin:0; padding:0; }
+#api .menutree li {background-image:none; margin:0; padding:0; }
+#api .menutree ul ul {display:block; }
+#api .menutree ul li a {padding-left:18px; width:100%; }
+#api .menutree a {cursor:pointer; display:block; font-weight:bold; margin-left:0; padding:2px 2px 2px 17px; width:100%; }
+#api .menutree a.expanded { background:url('../img/collapse.png') no-repeat -3px 40%; }
+#api .menutree a.collapsed { background:url('../img/expand.png') no-repeat -3px 40%; }
+#api .menutree a.current { color:#fff; background:#c141ff; font-weight:normal; text-shadow:none; }
+#api .menutree a:hover {text-decoration:none; }
+#api .menutree ul a {display:block; font-weight:normal; padding:2px 2px 2px 10px; width:100%; }
+#api .menutree ul a:link {font-weight:normal; }
+#api .menutree ul a:hover {color: #c141ff; text-decoration:underline; }
+#api .menutree li.active a {background:#fff; }
+#api .menutree li.active li a {background:#e8e8e8; }
+#api .menutree a.current:hover { color:#fff; }
+
+#api .badge.green {background-color: #7ba60d;}
+#api .badge.lightblue {background-color: #4f85cf;}
+#api .badge.blue {background-color: #0d4da6;}
+#api .badge.darkblue {background-color: #04387f;}
+#api .badge.red {background-color: #a6620d;}
+#api .badge {display: inline-block; background-color: #c141ff; color: #fff; margin-top: -2px; padding: 2px 5px 2px 5px; font-weight: normal; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px;}
+
+#api_errors {margin-bottom:20px; }
+#api_errors .error { color:red !important; }
+
+#api_docblock {font-size: 80%;}
+#api_docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#api_docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#api_docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+
+#api_constants {font-size:80%;}
+#api_constants h3 {margin-top: 20px;}
+#api_constants dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#api_constants dt {clear:left; float:left; width:269px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#api_constants dd {float:left; width:450px; padding:5px; border-top:1px dotted #ccc; overflow-x:hidden; }
+
+#api_functions {font-size:80%;}
+#api_functions h3 {margin-top:20px;margin-bottom:0px;}
+#api_functions #function dt {margin-top:20px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
+#api_functions .docblock p {margin: 0;padding: 5px 0px; font-weight:bold; font-size:125%; }
+#api_functions .docblock p p {font-weight:normal; }
+#api_functions .docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#api_functions .docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#api_functions .docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+
+#api_classes {font-size:80%;}
+#api_classes h3 {margin-top:20px;}
+#api_classes #class dt {margin-top:10px; width:100%; padding:5px 0px; color:#666; border-top:1px dotted #ccc; font-weight:bold; font-size:150%;}
+#api_classes .docblock p {margin: 0;padding: 5px 0px; font-weight:bold; font-size:125%; }
+#api_classes .docblock p p {font-weight:normal; }
+#api_classes .docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#api_classes .docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#api_classes .docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+#api_classes .properties p {margin: 0; padding: 20px 0px 5px 0px; font-weight:bold; font-size:125%; }
+#api_classes .properties dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#api_classes .properties dt {clear:left; float:left; width:269px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#api_classes .properties dd {float:left; width:450px; padding:5px; border-top:1px dotted #ccc;}
+#api_classes .properties dd p {margin: 0; font-weight:bold; font-size: 100%; }
+#api_classes .properties dd span {float:right; margin: 0px 0px 0px 5px; }
+

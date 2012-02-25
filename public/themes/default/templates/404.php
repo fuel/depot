@@ -1,4 +1,5 @@
 <?php echo \Theme::instance()->view('partials/page/header'); ?>
+
 <!-- Begin body -->
 <body id="top" class="home">
 

@@ -104,12 +104,13 @@ form#login ul li.form_buttons input, form#register ul li.form_buttons input, for
 .one_quarter_last { width: 218px; margin: 0; float: right; }
 .default_box { background-color: #f7f7f7; border: 1px solid #bcbcbc; color: #808080; padding: 10px; }
 .notice_box { background-color: #ffffe0; border: 1px solid #e6db55; color: #c7b634; padding: 10px; }
-.warning_box { background-color: #ffdfdf; border: 1px solid #ff0000; color: #ff0000; padding: 10px; }
+.error_box { background-color: #C8E2EF; border: 1px solid #0097ce; color: #0097ce; padding: 10px; }
+.critical_box { background-color: #ffa79a; border: 1px solid #ff0000; color: #e40000; padding: 10px; }
 .success_box { background-color: #e2f3c3; border: 1px solid #7be568; color: #708421; padding: 10px; }
 .download_box { background-color: #aad0e4; border: 1px solid #0097ce; color: #0097ce; padding: 10px; }
-.default_box, .notice_box, .warning_box, .success_box, .download_box { font-size: 13px; width: 98%; margin: 5px 0 5px 0; float: left; text-shadow: none; line-height: 20px; }
-.default_box img, .notice_box img, .warning_box img, .success_box img, .download_box img { width: 16px; height: 16px; margin: 0 5px 0 0; padding: 0; border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; float: left; }
-.post.default_box, .post.notice_box, .post.warning_box, .post.success_box, .post.download_box { font-size: 13px; width: 98%; margin: 5px 0 5px 0; float: left; text-shadow: 1px 1px 0px #ffffff; }
+.default_box, .notice_box, .error_box, .critical_box, .success_box, .download_box { font-size: 13px; width: 98%; margin: 5px 0 5px 0; float: left; text-shadow: none; line-height: 20px; }
+.default_box img, .notice_box img, .error_box img, .critical_box img, .success_box img, .download_box img { width: 16px; height: 16px; margin: 0 5px 0 0; padding: 0; border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; float: left; }
+.post.default_box, .post.notice_box, .post.error_box, .post.critical_box, .post.success_box, .post.download_box { font-size: 13px; width: 98%; margin: 5px 0 5px 0; float: left; text-shadow: 1px 1px 0px #ffffff; }
 .bullet_list li { list-style-image: url(../img/bullet.png); }
 .arrow_list li { list-style-image: url(../img/arrow.png); }
 .check_list li { list-style-image: url(../img/check.png); }
@@ -126,9 +127,9 @@ blockquote p { margin: 0; }
 
 /* Generic Classes ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 .keyword { background-color: yellow; padding-top: 0; padding-right: 3px; padding-bottom: 0; padding-left: 3px; }
-.tiny { font-size: 10px; }
+.tiny { font-size: 60%; }
 .error { color: #ff0000; }
-.small { font-size: 11px; }
+.small { font-size: 80%; }
 .alignleft { float: left; }
 .alignright: { float: right; }
 .center { text-align: center; }
@@ -137,10 +138,12 @@ blockquote p { margin: 0; }
 .title_icon { width: 24px; height: 24px; margin: 17px 5px 0 0; float: left; }
 .button { background-color: #e1e1e1; color: #808080; font-size: 12px; padding: 10px; border: none; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 .nobox { border: 0; box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none; }
+.no-box { }
 .error-box, .notice-box, .success-box { font-size: 12px; letter-spacing: 0.5px; text-align: center; }
 .error-box { background:#ffdfdf none repeat scroll 0 0; border: 1px solid #ff0000; color: #ff0000; margin: 0; padding: 10px; }
 .notice-box { background:#ffffe0 none repeat scroll 0 0; border: 1px solid #e6db55; color: #c7b634; margin: 0; padding: 10px; }
 .success-box {background: #e2f3c3 none repeat scroll 0 0; border: 1px solid #7be568; color: #708421; margin: 0; padding: 10px; }
+.spacer { margin-top: 5px; margin-bottom: 5px; }
 
 /* Clear Fix ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 .clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
@@ -209,9 +212,6 @@ blockquote p { margin: 0; }
 #cboxLoadingGraphic{background:url(../img/loading.gif) center center no-repeat;}
 #cboxClose{position:absolute; bottom:0; right:0; background:url(../img/controls.png) -25px 0px no-repeat; width:25px; height:25px; text-indent:-9999px;}
 #cboxClose.hover{background-position:-25px -25px;}
-
-/* Interstate Roadmap Styles */
-.iR_progress *  {text-shadow: none;}
 
 /* Disqus Comments Style */
 

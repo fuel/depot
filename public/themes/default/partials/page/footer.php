@@ -41,27 +41,10 @@
 </div>
 
 <script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
-<script type="text/javascript" src="http://api.twitter.com/1/statuses/user_timeline/fuelphpdepot.json?callback=twitterCallback2&amp;count=1&amp;include_rts=true"></script>
+<script type="text/javascript" src="http://api.twitter.com/1/statuses/user_timeline/fuelphp.json?callback=twitterCallback2&amp;count=1&amp;include_rts=true"></script>
 
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-<script type="text/javascript">google.load('jquery', '1.4.2');</script>
+<script type="text/javascript">google.load('jquery', '1.7.1');</script>
 
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/cufon.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/bebas.font.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/ui-core.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/validate.js'); ?>"></script>
-
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/localscroll.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/scrollto.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/easing.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/colorbox.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/tipsy.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo \Theme::instance()->asset('js/global.js'); ?>"></script>
-
-<script type="text/javascript">Cufon.now();</script>
-<script type="text/javascript">
-  function recordOutboundLink(link, category, action) {
-    _gat._getTrackerByName()._trackEvent(category, action);
-    setTimeout('document.location = "' + link.href + '"', 100);
-  }
-</script>
+<?php \Theme::instance()->asset->js(array('ui-core.js', 'validate.js', 'localscroll.js', 'easing.js', 'colorbox.js', 'tipsy.js', 'global.js'), array(), 'footer'); ?>
+<?php echo \Theme::instance()->asset->render('footer'); ?>

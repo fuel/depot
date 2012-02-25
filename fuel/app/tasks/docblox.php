@@ -26,6 +26,22 @@ class Docblox
 	// default function if no command is selected. Provided user with menu
 	public static function run()
 	{
+		// check if help was requested
+		if (\Cli::option('help', \Cli::option('h', false)))
+		{
+			echo <<<HELP
+Usage:
+	php oil refine boxblox --version=1.1/develop
+
+Description:
+	Import a Docblox XML structure file into the Fuel Depot database.
+
+Version:
+	The version is required, and need to match a github repository name.
+HELP;
+			return;
+		}
+
 		// check if a version was passed
 		if ( ! $version = \Cli::option('version', \Cli::option('v', false)))
 		{
@@ -125,7 +141,7 @@ class Docblox
 					// step 2: docblock
 					if (isset($file['docblock']))
 					{
-						$info['docblock'] = serialize($file['docblock']);
+						$info['docblock'] = serialize(static::docblock($file['docblock']));
 						unset($file['docblock']);
 					}
 					else
@@ -136,7 +152,7 @@ class Docblox
 					// step 3: parse markers
 					if (isset($file['parse_markers']))
 					{
-						$info['markers'] = serialize($file['parse_markers']);
+						$info['markers'] = serialize(static::markers($file['parse_markers']));
 						unset($file['parse_markers']);
 					}
 					else
@@ -145,10 +161,22 @@ class Docblox
 						$info['markers'] = serialize(array());
 					}
 
-					// step 3: functions
+					// step 3: parse constants
+					if (isset($file['constant']))
+					{
+						$info['constants'] = serialize(static::constants($file['constant']));
+						unset($file['constant']);
+					}
+					else
+					{
+						// constants are optional
+						$info['constants'] = serialize(array());
+					}
+
+					// step 4: functions
 					if (isset($file['function']))
 					{
-						$info['functions'] = serialize($file['function']);
+						$info['functions'] = serialize(static::functions($file['function']));
 						unset($file['function']);
 					}
 					else
@@ -157,10 +185,10 @@ class Docblox
 						$info['functions'] = serialize(array());
 					}
 
-					// step 4: classes
+					// step 5: classes
 					if (isset($file['class']))
 					{
-						$info['classes'] = serialize($file['class']);
+						$info['classes'] = serialize(static::classes($file['class']));
 						unset($file['class']);
 					}
 					else
@@ -174,6 +202,314 @@ class Docblox
 				}
 			}
 		}
+	}
+
+	/**
+	 * unify and format the docblock
+	 */
+	protected static function docblock($docblock)
+	{
+		// storage for the result
+		$result = '';
+
+		// make sure it's an array
+		is_array($docblock) or $docblock = unserialize($docblock);
+
+		// get title and description
+		$result['title'] = empty($docblock['description']) ? '' : $docblock['description'];
+		$result['description'] = empty($docblock['@attributes']['long-description']) ? '' : $docblock['@attributes']['long-description'];
+		$result['type'] = empty($docblock['type']) ? '' : $docblock['type'];
+
+		// get the tag lines
+		$result['tags'] = array();
+
+		if (isset($docblock['tag']))
+		{
+			// deal with single tags
+			isset($docblock['tag']['@attributes']) and $docblock['tag'] = array($docblock['tag']['@attributes']);
+
+			foreach ($docblock['tag'] as $tag)
+			{
+				empty($tag['@attributes']['name']) and $tag['@attributes']['name'] = '';
+				empty($tag['@attributes']['title']) and $tag['@attributes']['title'] = '';
+				empty($tag['@attributes']['description']) and $tag['@attributes']['description'] = '';
+				empty($tag['@attributes']['link']) and $tag['@attributes']['link'] = '';
+				isset($tag['@attributes']) and $result['tags'][] = $tag['@attributes'];
+			}
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify the markers reported for this file
+	 */
+	protected static function markers($markers)
+	{
+		// storage for the result
+		$result = array();
+
+		// make sure it's an array
+		is_array($markers) or $markers = unserialize($markers);
+
+		// loop through the marker types
+		foreach ($markers as $type => $errors)
+		{
+			if (is_array($errors))
+			{
+				// loop through the errors per type
+				foreach ($errors as $error)
+				{
+					// unify them
+					$result[] = array('type' => $type, 'message' => $error);
+				}
+			}
+			else
+			{
+				// unify it
+				$result[] = array('type' => $type, 'message' => $errors);
+			}
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the classlist
+	 */
+	protected static function classes($classes)
+	{
+		// storage for the result
+		$result = array();
+
+		// make sure it's an array
+		is_array($classes) or $classes = unserialize($classes);
+
+		// deal with single classes
+		isset($classes['@attributes']) and $classes = array($classes);
+
+		// loop through the classes
+		foreach ($classes as $class)
+		{
+			// get some global details
+			$info = array(
+				'name' => $class['name'],
+				'namespace' => isset($class['@attributes']['namespace']) ? $class['@attributes']['namespace'] : 'default',
+				'package' => isset($class['@attributes']['package']) ? $class['@attributes']['package'] : 'Undefined',
+				'abstract' => isset($class['@attributes']['abstract']) ? $class['@attributes']['abstract'] : '',
+				'final' => isset($class['@attributes']['final']) ? $class['@attributes']['final'] : '',
+				'extends' => isset($class['extends']) ? $class['extends'] : array(),
+				'extends' => isset($class['extends']) ? static::extend($class['extends']) : array(),
+				'docblock' => isset($class['docblock']) ? static::docblock($class['docblock']) : array(),
+				'properties' => isset($class['property']) ? static::properties($class['property']) : array(),
+				'constants' => isset($class['constant']) ? static::constants($class['constant']) : array(),
+				'methods' => isset($class['method']) ? static::methods($class['method']) : array(),
+			);
+
+			// unify them
+			$info['abstract'] = $info['abstract'] == 'true' ? true : false;
+			$info['final'] = $info['final'] == 'true' ? true : false;
+
+			// store the info
+			$result[] = $info;
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the extend list
+	 */
+	protected static function extend($extends)
+	{
+		// storage for the result
+		$result = array();
+
+		// make sure it's an array
+		is_array($extends) or $extends = array($extends);
+
+		// loop through the extends
+		foreach ($extends as $ext)
+		{
+			// store the info
+			empty($ext) or $result[] = $ext;
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the constant list
+	 */
+	protected static function constants($constants)
+	{
+		// storage for the result
+		$result = array();
+
+		// deal with single constants
+		isset($constants['@attributes']) and $constants = array($constants);
+
+		// loop through the constants
+		foreach ($constants as $constant)
+		{
+			// get the details
+			$info = array(
+				'name' => $constant['name'],
+				'value' => $constant['value'],
+			);
+
+			// store the info
+			$result[] = $info;
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the property list
+	 */
+	protected static function properties($properties)
+	{
+		// storage for the result
+		$result = array();
+
+		// deal with single properties
+		isset($properties['@attributes']) and $properties = array($properties);
+
+		// loop through the properties
+		foreach ($properties as $property)
+		{
+			// get some global details
+			$info = array(
+				'name' => $property['name'],
+				'package' => isset($property['@attributes']['package']) ? $property['@attributes']['package'] : '',
+				'final' => isset($property['@attributes']['final']) ? $property['@attributes']['final'] : '',
+				'static' => isset($property['@attributes']['static']) ? $property['@attributes']['static'] : '',
+				'public' => isset($property['@attributes']['visibility']) ? $property['@attributes']['visibility'] : 'public',
+				'protected' => isset($property['@attributes']['visibility']) ? $property['@attributes']['visibility'] : 'public',
+				'private' => isset($property['@attributes']['visibility']) ? $property['@attributes']['visibility'] : 'public',
+				'default' => isset($property['default']) ? $property['default'] : '',
+				'docblock' => isset($property['docblock']) ? static::docblock($property['docblock']) : static::docblock(array()),
+			);
+
+			// unify them
+			$info['final'] = $info['final'] == 'true' ? true : false;
+			$info['static'] = $info['static'] == 'true' ? true : false;
+			$info['public'] = $info['public'] == 'public' ? true : false;
+			$info['protected'] = $info['protected'] == 'protected' ? true : false;
+			$info['private'] = $info['private'] == 'private' ? true : false;
+
+			// store the info
+			$result[] = $info;
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the method list
+	 */
+	protected static function methods($methods)
+	{
+		// storage for the result
+		$result = array();
+
+		// deal with single methods
+		isset($methods['@attributes']) and $methods = array($methods);
+
+		// loop through the methods
+		foreach ($methods as $method)
+		{
+			// get some global details
+			$info = array(
+				'name' => $method['name'],
+				'type' => $method['type'],
+				'package' => isset($method['@attributes']['package']) ? $method['@attributes']['package'] : 'Undefined',
+				'docblock' => isset($method['docblock']) ? static::docblock($method['docblock']) : static::docblock(array()),
+				'final' => isset($method['@attributes']['final']) ? $method['@attributes']['final'] : '',
+				'abstract' => isset($method['@attributes']['abstract']) ? $method['@attributes']['abstract'] : '',
+				'static' => isset($method['@attributes']['static']) ? $method['@attributes']['static'] : '',
+				'namespace' => isset($method['@attributes']['namespace']) ? $method['@attributes']['namespace'] : 'default',
+				'arguments' => isset($method['argument']) ? static::arguments($method['argument']) : array(),
+			);
+
+			// unify them
+			$info['final'] = $info['final'] == 'true' ? true : false;
+			$info['abstract'] = $info['abstract'] == 'true' ? true : false;
+			$info['static'] = $info['static'] == 'true' ? true : false;
+
+			// store the info
+			$result[] = $info;
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the argument list
+	 */
+	protected static function arguments($arguments)
+	{
+		// storage for the result
+		$result = array();
+
+		// deal with single arguments
+		isset($arguments['@attributes']) and $arguments = array($arguments);
+
+		// loop through the arguments
+		foreach ($arguments as $argument)
+		{
+			// get tge details
+			$info = array(
+				'name' => isset($argument['name']) ? $argument['name'] : '?',
+				'type' => empty($argument['type']) ? null : $argument['type'],
+				'default' => empty($argument['default']) ? null : $argument['default'],
+			);
+
+			// store the info
+			$result[] = $info;
+		}
+
+		// return the result
+		return $result;
+	}
+
+	/**
+	 * unify and format the function list
+	 */
+	protected static function functions($functions)
+	{
+		// storage for the result
+		$result = array();
+
+		// deal with single functions
+		isset($functions['@attributes']) and $functions = array($functions);
+
+		// loop through the functions
+		foreach ($functions as $function)
+		{
+			// get some global details
+			$info = array(
+				'name' => $function['name'],
+				'type' => $function['type'],
+				'docblock' => isset($function['docblock']) ? static::docblock($function['docblock']) : array(),
+				'arguments' => isset($function['argument']) ? static::arguments($function['argument']) : array(),
+				'namespace' => isset($function['@attributes']['namespace']) ? $function['@attributes']['namespace'] : 'default',
+			);
+
+			// store the info
+			$result[] = $info;
+		}
+
+		// return the result
+		return $result;
 	}
 
 }

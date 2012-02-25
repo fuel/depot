@@ -13,6 +13,11 @@
 class Controller_About extends \Controller_Base_Public
 {
 	/**
+	* @var string page template
+	*/
+	public $template = 'templates/subpage';
+
+	/**
 	 * The application homepage
 	 *
 	 * @access  public
@@ -20,7 +25,6 @@ class Controller_About extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		$this->template = \Theme::instance()->view('templates/subpage');
 		$this->template->content = \View::forge('about/index');
 	}
 

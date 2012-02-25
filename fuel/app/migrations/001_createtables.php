@@ -15,6 +15,7 @@ class Createtables
 			'major' => array('type' => 'tinyint', 'constraint' => 2),
 			'minor' => array('type' => 'tinyint', 'constraint' => 2),
 			'branch' => array('type' => 'varchar', 'constraint' => 10),
+			'default' => array('type' => 'tinyint', 'constraint' => 1, 'default' => 0),
 			'codepath' => array('type' => 'varchar', 'constraint' => 100),
 			'docspath' => array('type' => 'varchar', 'constraint' => 100),
 			'docbloxpath' => array('type' => 'varchar', 'constraint' => 100),
@@ -31,6 +32,7 @@ class Createtables
 			'markers' => array('type' => 'longtext'),
 			'functions' => array('type' => 'longtext'),
 			'classes' => array('type' => 'longtext'),
+			'constants' => array('type' => 'longtext'),
 		), array('id'));
 
 		// create FuelPHP system tables
@@ -63,6 +65,8 @@ class Createtables
 
 		// default data
 		\Auth::instance()->create_user('admin', 'password', 'depot.master@fuelphp.com', 100);
+
+		\DB::query("INSERT INTO `versions` (`id`, `major`, `minor`, `branch`, `default`, `codepath`, `docspath`, `docbloxpath`) VALUES (1, 1, 1, 'develop', 1, '', '', '/data/www/mvhosts/fuel.catwoman.exite.local/docblox');");
 	}
 
 

@@ -4,6 +4,8 @@
 <!-- Begin head -->
 <head profile="http://gmpg.org/xfn/11">
 
+<title>Fuel Depot&nbsp;&rsaquo;&nbsp;The documentation repository for the FuelPHP framework.</title>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="author" content="fuelphp.com" />
 <meta name="copyright" content="fuelphp.com" />
@@ -17,10 +19,8 @@
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold,bolditalic" type="text/css" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold" type="text/css" />
 
-<link rel="stylesheet" href="<?php echo \Theme::instance()->asset('css/reset.css'); ?>" type="text/css" />
-<link rel="stylesheet" href="<?php echo \Theme::instance()->asset('css/typo.css'); ?>" type="text/css" />
-<link rel="stylesheet" href="<?php echo \Theme::instance()->asset('css/global.css'); ?>" type="text/css" />
-
-<title>Fuel Depot&nbsp;&rsaquo;&nbsp;The documentation repository for the FuelPHP framework.</title>
+<?php \Theme::instance()->asset->css(array('reset.css', 'typo.css', 'global.css'), array(), 'header'); ?>
+<?php echo \Theme::instance()->asset->render('header'); ?>
 
 </head>
+<!-- End head -->
