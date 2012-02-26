@@ -78,7 +78,7 @@ HELP;
 			{
 				list($insert_id, $rows_affected) = \DB::insert('versions')->set(array(
 					'major' => $major,
-					'minor' => $major,
+					'minor' => $minor,
 					'branch' => $branch,
 					'docbloxpath' => $path,
 				))->execute();
