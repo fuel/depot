@@ -217,8 +217,8 @@ HELP;
 
 		// get title and description
 		$result['title'] = empty($docblock['description']) ? '' : $docblock['description'];
-		$result['description'] = empty($docblock['@attributes']['long-description']) ? '' : $docblock['@attributes']['long-description'];
-		$result['type'] = empty($docblock['type']) ? '' : $docblock['type'];
+		$result['description'] = empty($docblock['long-description']) ? '' : $docblock['long-description'];
+		is_array($result['description']) and $result['description'] = implode(' ', $result['description']);
 
 		// get the tag lines
 		$result['tags'] = array();
@@ -230,11 +230,18 @@ HELP;
 
 			foreach ($docblock['tag'] as $tag)
 			{
-				empty($tag['@attributes']['name']) and $tag['@attributes']['name'] = '';
-				empty($tag['@attributes']['title']) and $tag['@attributes']['title'] = '';
-				empty($tag['@attributes']['description']) and $tag['@attributes']['description'] = '';
-				empty($tag['@attributes']['link']) and $tag['@attributes']['link'] = '';
-				isset($tag['@attributes']) and $result['tags'][] = $tag['@attributes'];
+				if (isset($tag['@attributes']))
+				{
+					// filter some unwanted tags
+					if (in_array($tag['@attributes']['name'], array('access'))) continue;
+
+					// page, class or function docblock
+					empty($tag['@attributes']['name']) and $tag['@attributes']['name'] = '';
+					empty($tag['@attributes']['title']) and $tag['@attributes']['title'] = '';
+					empty($tag['@attributes']['description']) and $tag['@attributes']['description'] = '';
+					empty($tag['@attributes']['link']) and $tag['@attributes']['link'] = '';
+				}
+				$result['tags'][] = $tag;
 			}
 		}
 
@@ -375,6 +382,14 @@ HELP;
 	 */
 	protected static function properties($properties)
 	{
+		// fake docblock
+		static $fake_docblock = array(
+			'description' => '',
+			'@attributes' => array(
+				'long-description' => '',
+			),
+		);
+
 		// storage for the result
 		$result = array();
 
@@ -394,7 +409,7 @@ HELP;
 				'protected' => isset($property['@attributes']['visibility']) ? $property['@attributes']['visibility'] : 'public',
 				'private' => isset($property['@attributes']['visibility']) ? $property['@attributes']['visibility'] : 'public',
 				'default' => isset($property['default']) ? $property['default'] : '',
-				'docblock' => isset($property['docblock']) ? static::docblock($property['docblock']) : static::docblock(array()),
+				'docblock' => isset($property['docblock']) ? static::docblock($property['docblock']) : static::docblock($fake_docblock),
 			);
 
 			// unify them
@@ -417,6 +432,15 @@ HELP;
 	 */
 	protected static function methods($methods)
 	{
+		static $fake_docblock = array(
+			'description' => '',
+			'@attributes' => array(
+				'long-description' => '',
+			),
+			'tag' => array(
+			),
+		);
+
 		// storage for the result
 		$result = array();
 
@@ -431,18 +455,24 @@ HELP;
 				'name' => $method['name'],
 				'type' => $method['type'],
 				'package' => isset($method['@attributes']['package']) ? $method['@attributes']['package'] : 'Undefined',
-				'docblock' => isset($method['docblock']) ? static::docblock($method['docblock']) : static::docblock(array()),
+				'docblock' => isset($method['docblock']) ? static::docblock($method['docblock']) : static::docblock($fake_docblock),
 				'final' => isset($method['@attributes']['final']) ? $method['@attributes']['final'] : '',
 				'abstract' => isset($method['@attributes']['abstract']) ? $method['@attributes']['abstract'] : '',
 				'static' => isset($method['@attributes']['static']) ? $method['@attributes']['static'] : '',
+				'public' => isset($method['@attributes']['visibility']) ? $method['@attributes']['visibility'] : 'public',
+				'protected' => isset($method['@attributes']['visibility']) ? $method['@attributes']['visibility'] : 'public',
+				'private' => isset($method['@attributes']['visibility']) ? $method['@attributes']['visibility'] : 'public',
 				'namespace' => isset($method['@attributes']['namespace']) ? $method['@attributes']['namespace'] : 'default',
 				'arguments' => isset($method['argument']) ? static::arguments($method['argument']) : array(),
 			);
 
 			// unify them
-			$info['final'] = $info['final'] == 'true' ? true : false;
 			$info['abstract'] = $info['abstract'] == 'true' ? true : false;
+			$info['final'] = $info['final'] == 'true' ? true : false;
 			$info['static'] = $info['static'] == 'true' ? true : false;
+			$info['public'] = $info['public'] == 'public' ? true : false;
+			$info['protected'] = $info['protected'] == 'protected' ? true : false;
+			$info['private'] = $info['private'] == 'private' ? true : false;
 
 			// store the info
 			$result[] = $info;
@@ -486,6 +516,16 @@ HELP;
 	 */
 	protected static function functions($functions)
 	{
+		// fake docblock
+		static $fake_docblock = array(
+			'description' => '',
+			'@attributes' => array(
+				'long-description' => '',
+			),
+			'tag' => array(
+			),
+		);
+
 		// storage for the result
 		$result = array();
 
@@ -499,7 +539,7 @@ HELP;
 			$info = array(
 				'name' => $function['name'],
 				'type' => $function['type'],
-				'docblock' => isset($function['docblock']) ? static::docblock($function['docblock']) : array(),
+				'docblock' => isset($function['docblock']) ? static::docblock($function['docblock']) : static::docblock($fake_docblock),
 				'arguments' => isset($function['argument']) ? static::arguments($function['argument']) : array(),
 				'namespace' => isset($function['@attributes']['namespace']) ? $function['@attributes']['namespace'] : 'default',
 			);
