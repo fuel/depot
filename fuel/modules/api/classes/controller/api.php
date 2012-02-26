@@ -82,9 +82,9 @@ class Controller_Api extends \Controller_Base_Public
 		}
 
 		// if not found, get the last one
-		if ( ! $this->version and count($result) > 0 )
+		if ( ! $this->version and count($result) > 0 and ! empty($record))
 		{
-			$this->version = end($result);
+			$this->version = $record;
 		}
 
 		// still if not found, give up!
