@@ -20,7 +20,6 @@ class Controller_Login extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		$this->template = \Theme::instance()->view('templates/subpage');
 		$this->template->content = \View::forge('login/index');
 	}
 

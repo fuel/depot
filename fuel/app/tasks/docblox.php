@@ -71,14 +71,26 @@ HELP;
 
 		// check if we know this version
 		$result = \DB::select()->from('versions')->where('major', $major)->where('minor', $minor)->where('branch', $branch)->execute();
-		if ($result->count())
+		if ( ! $result->count())
 		{
-			static::process($result->current());
+			// if a path is given, we can create the version
+			if ( $path = \Cli::option('path', \Cli::option('p', false)) and is_dir($path))
+			{
+				list($insert_id, $rows_affected) = \DB::insert('versions')->set(array(
+					'major' => $major,
+					'minor' => $major,
+					'branch' => $branch,
+					'docbloxpath' => $path,
+				))->execute();
+				$result = \DB::select()->from('versions')->where('major', $major)->where('minor', $minor)->where('branch', $branch)->execute();
+			}
+			else
+			{
+				\Cli::write('Docblox: FuelPHP repository version "'.$major.'.'.$minor.'/'.$branch.'" does not exist.');
+			}
 		}
-		else
-		{
-			\Cli::write('Docblox: FuelPHP repository version "'.$major.'.'.$minor.'/'.$branch.'" does not exist.');
-		}
+
+		static::process($result->current());
 	}
 
 	protected static function process($version)
