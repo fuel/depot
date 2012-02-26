@@ -6,7 +6,7 @@
 	<div style="float:right">
 		<form style="text-align:right;" name="version_select" method="POST">
 			<h5 style="margin-bottom:0px;">FuelPHP version: </h5>
-			<?php echo \Form::select('branch', $version, $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = this.form.action + \'/api/\' + this.value; this.form.submit();')); ?>
+			<?php echo \Form::select('branch', $selection['version'], $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = this.form.action + \'/api/\' + this.value; this.form.submit();')); ?>
 		</form>
 	</div>
 	<div class="clearfix"></div>

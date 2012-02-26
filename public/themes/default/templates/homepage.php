@@ -117,5 +117,9 @@
 </div>
 
 <?php echo \Theme::instance()->view('partials/page/footer'); ?>
+
+<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
+<script type="text/javascript" src="http://api.twitter.com/1/statuses/user_timeline/fuelphp.json?callback=twitterCallback2&amp;count=1&amp;include_rts=true"></script>
+
 </body>
 </html>

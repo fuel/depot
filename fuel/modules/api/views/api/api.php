@@ -72,13 +72,16 @@ $func_markers = function($markers)
 /**
  * Closure to generate the HTML for the constants
  */
-$func_constants = function($constants)
+$func_constants = function($constants) use($selection)
 {
 	$result = '';
 
 	foreach ($constants as $constant)
 	{
-		$result .= '<dl><dt>'.$constant['name'].'</dt><dd>'.$constant['value'].'</dd></dl>'."\n";
+		if ($selection['constant'] == '*' or $selection['constant'] == $constant['name'])
+		{
+			$result .= '<dl><dt>'.$constant['name'].'</dt><dd>'.$constant['value'].'</dd></dl>'."\n";
+		}
 	}
 
 	return $result;
@@ -147,7 +150,7 @@ $func_properties = function($properties)
 /**
  * Closure to generate the HTML for functions or methods
  */
-$func_functions = function($functions, $is_method = false) use($func_variables)
+$func_functions = function($functions, $is_method = false) use($func_variables, $selection)
 {
 	if ($is_method)
 	{
@@ -160,34 +163,36 @@ $func_functions = function($functions, $is_method = false) use($func_variables)
 
 	foreach ($functions as $function)
 	{
-		$type = isset($function['docblock']['tags'][0]['type']) ? $function['docblock']['tags'][0]['type'] : 'mixed';
-
-		$result .= '<div class="function">'.
-					(empty($function['final']) ? '' : '<span class="badge red">final</span>').
-					(empty($function['public']) ? '' : '<span class="badge lightblue">public</span>').
-					(empty($function['protected']) ? '' : '<span class="badge blue">protected</span>').
-					(empty($function['private']) ? '' : '<span class="badge darkblue">private</span>').
-					(empty($function['static']) ? '' : '<span class="badge green">static</span>').
-					'<span>'.$type.'</span> '.$function['name'].
-					'(';
-
-		$argcount = 0;
-		foreach ($function['arguments'] as $argument)
+		if ($is_method or $selection['function'] == '*' or $selection['function'] == $function['name'])
 		{
-			if ($argcount++ > 0) $result .= ', ';
-			$result .= $argument['name'];
-			empty($argument['default']) or $result .= ' = '.$argument['default'];
+			$type = isset($function['docblock']['tags'][0]['type']) ? $function['docblock']['tags'][0]['type'] : 'mixed';
+
+			$result .= '<div class="function">'.
+						(empty($function['final']) ? '' : '<span class="badge red">final</span>').
+						(empty($function['public']) ? '' : '<span class="badge lightblue">public</span>').
+						(empty($function['protected']) ? '' : '<span class="badge blue">protected</span>').
+						(empty($function['private']) ? '' : '<span class="badge darkblue">private</span>').
+						(empty($function['static']) ? '' : '<span class="badge green">static</span>').
+						'<span>'.$type.'</span> '.$function['name'].
+						'(';
+
+			$argcount = 0;
+			foreach ($function['arguments'] as $argument)
+			{
+				if ($argcount++ > 0) $result .= ', ';
+				$result .= $argument['name'];
+				empty($argument['default']) or $result .= ' = '.$argument['default'];
+			}
+
+			$result .= ')</div>'."\n";
+
+			if ( ! empty($function['docblock']))
+			{
+				$result .= $func_variables($function['docblock']);
+			}
+
+			$result .= '<div class="clearfix"></div>'."\n";
 		}
-
-		$result .= ')</div>'."\n";
-
-		if ( ! empty($function['docblock']))
-		{
-			$result .= $func_variables($function['docblock']);
-		}
-
-		$result .= '<div class="clearfix"></div>'."\n";
-
 	}
 
 	return $result;
@@ -196,44 +201,47 @@ $func_functions = function($functions, $is_method = false) use($func_variables)
 /**
  * Closure to generate the HTML for classes
  */
-$func_classes = function($classes) use($func_docblock, $func_properties, $func_functions)
+$func_classes = function($classes) use($func_docblock, $func_properties, $func_functions, $selection)
 {
 	$result = ''."\n";
 
 	foreach ($classes as $class)
 	{
-		$result .= '<div class="class">'."\n".'<dt>';
-
-		if ( ! empty($class['namespace']))
+		if ($selection['class'] == '*' or $selection['class'] == $class['name'])
 		{
-			$result .= '<span class="badge">'.$class['namespace'].'</span>';
+			$result .= '<div class="class">'."\n".'<dt>';
+
+			if ( ! empty($class['namespace']))
+			{
+				$result .= '<span class="badge">'.$class['namespace'].'</span>';
+			}
+
+			$result .= ' '.$class['name'];
+
+			if ( ! empty($class['extends']))
+			{
+				$result .= ' extends ';
+			}
+
+			$extcount = 0;
+			foreach ($class['extends'] as $extends)
+			{
+				if ($extcount++ > 0) $result .= ', ';
+				$result .= $extends;
+			}
+
+			$result .= '</dt></div>'."\n";
+			$result .= '<div class="clearfix"></div>'."\n";
+
+			// add the class docblock
+			empty($class['docblock']) or $result .= $func_docblock($class['docblock'])."\n".'<div class="clearfix"></div>'."\n";
+
+			// add the class properties
+			empty($class['properties']) or $result .= $func_properties($class['properties'])."\n".'<div class="clearfix"></div>'."\n";
+
+			// add the class methods
+			empty($class['methods']) or $result .= $func_functions($class['methods'], true)."\n".'<div class="clearfix"></div>'."\n";
 		}
-
-		$result .= ' '.$class['name'];
-
-		if ( ! empty($class['extends']))
-		{
-			$result .= ' extends ';
-		}
-
-		$extcount = 0;
-		foreach ($class['extends'] as $extends)
-		{
-			if ($extcount++ > 0) $result .= ', ';
-			$result .= $extends;
-		}
-
-		$result .= '</dt></div>'."\n";
-		$result .= '<div class="clearfix"></div>'."\n";
-
-		// add the class docblock
-		empty($class['docblock']) or $result .= $func_docblock($class['docblock'])."\n".'<div class="clearfix"></div>'."\n";
-
-		// add the class properties
-		empty($class['properties']) or $result .= $func_properties($class['properties'])."\n".'<div class="clearfix"></div>'."\n";
-
-		// add the class methods
-		empty($class['methods']) or $result .= $func_functions($class['methods'], true)."\n".'<div class="clearfix"></div>'."\n";
 	}
 
 	$result .= '<div class="clearfix"></div>'."\n";
@@ -266,7 +274,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 	<?php endif; ?>
 
 	<!-- API global constants block -->
-	<?php if( ! empty($record['constants'])): ?>
+	<?php if( ! empty($record['constants']) and ! empty($selection['constant'])): ?>
 		<div id="api_constants">
 			<h3>Constants</h3>
 			<?php echo $func_constants($record['constants']); ?>
@@ -275,7 +283,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 	<?php endif; ?>
 
 	<!-- API functions block -->
-	<?php if( ! empty($record['functions'])): ?>
+	<?php if( ! empty($record['functions']) and ! empty($selection['function'])): ?>
 		<div id="api_functions">
 			<h3>Functions</h3>
 			<?php echo $func_functions($record['functions']); ?>
@@ -284,7 +292,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 	<?php endif; ?>
 
 	<!-- API classes block -->
-	<?php if( ! empty($record['classes'])): ?>
+	<?php if( ! empty($record['classes']) and ! empty($selection['class'])): ?>
 		<div id="api_classes">
 			<h3>Classes</h3>
 			<?php echo $func_classes($record['classes']); ?>

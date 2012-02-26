@@ -15,14 +15,9 @@ namespace Api;
 class Controller_Api extends \Controller_Base_Public
 {
 	/**
-	 * @var	array	selected fuelphp version
+	 * @var	array	parameters
 	 */
-	 protected $version = array();
-
-	/**
-	 * @var	string	selected file hash
-	 */
-	 protected $hash = null;
+	 protected $params = array();
 
 	/**
 	 * Router
@@ -35,11 +30,16 @@ class Controller_Api extends \Controller_Base_Public
 	public function router($method, $params)
 	{
 		// make sure our params have a value
-		isset($params[0]) or $params[0] = 0;
-		isset($params[1]) or $params[1] = '';
+		empty($params) or $params = \Arr::to_assoc($params);
 
-		// set the selected hash
-		$this->hash = $params[1];
+		empty($params['version']) and $params['version'] = 0;
+		empty($params['constant']) and $params['constant'] = '';
+		empty($params['function']) and $params['function'] = '';
+		empty($params['class']) and $params['class'] = '';
+		empty($params['file']) and $params['file'] = '';
+
+		// store them
+		$this->params = $params;
 
 		// set the template
 		$this->template->content = \View::forge('api/index');
@@ -56,12 +56,12 @@ class Controller_Api extends \Controller_Base_Public
 
 		// pass the dropdown to the view and set the selected version
 		$this->template->content->set('versions', $dropdown);
-		$this->template->content->set('version', $params[0]);
+		$this->template->content->set('selection', $this->params);
 
 		// find the selected version by id match
 		foreach ($result as $record)
 		{
-			if ($record['id'] == $params[0])
+			if ($record['id'] == $this->params['version'])
 			{
 				$this->version = $record;
 				break;
@@ -69,7 +69,7 @@ class Controller_Api extends \Controller_Base_Public
 		}
 
 		// if not found, get the default one
-		if ( ! $this->version)
+		if (empty($this->version))
 		{
 			foreach ($result as $record)
 			{
@@ -82,9 +82,10 @@ class Controller_Api extends \Controller_Base_Public
 		}
 
 		// if not found, get the last one
-		if ( ! $this->version and count($result) > 0 and ! empty($record))
+		if (empty($this->version) and count($result) > 0 and ! empty($record))
 		{
 			$this->version = $record;
+			$this->params['version'] = $this->version['id'];
 		}
 
 		// still if not found, give up!
@@ -96,7 +97,7 @@ class Controller_Api extends \Controller_Base_Public
 		if ($this->version)
 		{
 			// if no version was selected using the dropdown, select the default
-			$params[0] == 0 and \Response::redirect('api/'.$this->version['id']);
+			$this->params['version'] == 0 and \Response::redirect('api/version/'.$this->version['id']);
 
 			// render the docs of the selected version
 			$this->process();
@@ -172,7 +173,7 @@ class Controller_Api extends \Controller_Base_Public
 			}
 
 			// need details of this one?
-			if ($this->hash == $record['hash'] and empty($details))
+			if ($this->params['file'] == $record['hash'] and empty($details))
 			{
 				// unserialize all arrays
 				is_array($record['docblock']) or $record['docblock'] = unserialize($record['docblock']);
@@ -181,15 +182,33 @@ class Controller_Api extends \Controller_Base_Public
 				is_array($record['functions']) or $record['functions'] = unserialize($record['functions']);
 				is_array($record['classes']) or $record['classes'] = unserialize($record['classes']);
 
-	//\Debug::dump($record);die();
 				// create the API details view
-				$details = \View::forge('api/api', array('record' => $record));
+				$details = \View::forge('api/api', array('record' => $record, 'selection' => $this->params));
 			}
 		}
 
-		// add the lists to the template
+		// sort and store the constantlist
+		foreach ($constantlist as &$list)
+		{
+			ksort($list);
+		}
+		ksort($constantlist);
 		$this->template->content->set('constantlist', $constantlist, false);
+
+		// sort and store the functionlist
+		foreach ($functionlist as &$list)
+		{
+			ksort($list);
+		}
+		ksort($functionlist);
 		$this->template->content->set('functionlist', $functionlist, false);
+
+		// sort and store the classlist
+		foreach ($classlist as &$list)
+		{
+			ksort($list);
+		}
+		ksort($classlist);
 		$this->template->content->set('classlist', $classlist, false);
 
 		// if no api details were selected, show the intro page
@@ -212,18 +231,15 @@ class Controller_Api extends \Controller_Base_Public
 		// loop through them
 		foreach ($record['constants'] as $constant)
 		{
-
-			if ($this->hash == $record['hash'])
+			$css = array();
+			if ($this->params['file'] == $record['hash'] and $this->params['constant'] == $constant['name'])
 			{
-				$result[] = \Html::anchor('api/'.$this->version['id'].'/'.$record['hash'], $constant['name'], array('class' => 'current'));
+				$css = array('class' => 'current');
 			}
-			else
-			{
-				$result[] = \Html::anchor('api/'.$this->version['id'].'/'.$record['hash'], $constant['name']);
-			}
+			$result[$constant['name'].$record['hash']] = \Html::anchor('api/version/'.$this->version['id'].'/constant/'.$constant['name'].'/file/'.$record['hash'], $constant['name'], $css);
 		}
 
-		// return the result
+		// sort and return the result
 		return $result;
 	}
 
@@ -243,14 +259,12 @@ class Controller_Api extends \Controller_Base_Public
 		// loop through them
 		foreach ($record['functions'] as $function)
 		{
-			if ($this->hash == $record['hash'])
+			$css = array();
+			if ($this->params['file'] == $record['hash'] and $this->params['function'] == $function['name'])
 			{
-				$result[] = \Html::anchor('api/'.$this->version['id'].'/'.$record['hash'], $function['name'], array('class' => 'current'));
+				$css = array('class' => 'current');
 			}
-			else
-			{
-				$result[] = \Html::anchor('api/'.$this->version['id'].'/'.$record['hash'], $function['name']);
-			}
+			$result[] = \Html::anchor('api/version/'.$this->version['id'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name'], $css);
 		}
 
 		// return the result
@@ -275,14 +289,12 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			if ( ! empty($class))
 			{
-			if ($this->hash == $record['hash'])
-			{
-				$result[] = \Html::anchor('api/'.$this->version['id'].'/'.$record['hash'], $class['name'], array('class' => 'current'));
-			}
-			else
-			{
-				$result[] = \Html::anchor('api/'.$this->version['id'].'/'.$record['hash'], $class['name']);
-			}
+				$css = array();
+				if ($this->params['file'] == $record['hash'] and $this->params['class'] == $class['name'])
+				{
+					$css = array('class' => 'current');
+				}
+				$result[] = \Html::anchor('api/version/'.$this->version['id'].'/class/'.$class['name'].'/file/'.$record['hash'], $class['name'], $css);
 			}
 		}
 
