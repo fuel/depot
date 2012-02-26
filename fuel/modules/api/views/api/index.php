@@ -1,4 +1,4 @@
-<?php \Theme::instance()->asset->css(array('api.css'), array(), 'header'); ?>
+<?php var_dump($selection); \Theme::instance()->asset->css(array('api.css'), array(), 'header'); ?>
 <div style="border-bottom:1px solid #ddd;padding-bottom:10px;">
 	<div style="float:left;">
 		<h1>Class API Documentation</h1>
@@ -6,7 +6,7 @@
 	<div style="float:right">
 		<form style="text-align:right;" name="version_select" method="POST">
 			<h5 style="margin-bottom:0px;">FuelPHP version: </h5>
-			<?php echo \Form::select('branch', $selection['version'], $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = this.form.action + \'/api/\' + this.value; this.form.submit();')); ?>
+			<?php echo \Form::select('branch', $selection['version'], $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = this.form.action + \'/api/version/\' + this.value; this.form.submit();')); ?>
 		</form>
 	</div>
 	<div class="clearfix"></div>
