@@ -103,8 +103,8 @@ class Controller_Api extends \Controller_Base_Public
 			$this->process();
 		}
 
-		// render the template to deal with asset timing issues due to late rendering
-		$this->template->set('content', $this->template->content->render(), false);
+		// add the content to the template
+		$this->template->set('content', $this->template->content, false);
 	}
 
 	/*

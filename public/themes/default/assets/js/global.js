@@ -50,6 +50,7 @@ $(document).ready(function(){
 
 	// Trees
 	$(document).ready(function() {
+		// tree toggle functions
 		setTimeout(function() {
 			$('.menutree > li > a.expanded + ul').show('normal');
 			$('.menutree > li > a').click(function() {
@@ -62,7 +63,8 @@ $(document).ready(function(){
 				$('.menutree > li > a.expanded').addClass('collapsed').removeClass('expanded').parent().find('> ul').hide('normal');
 			});
 		}, 250);
-		$('.menutree > li > ul > li > a.current').parent().parent().toggle(200).parent().find('> a').removeClass('collapsed').addClass('expanded');
+		// open the trees with selected items
+		$('a.current').parents().filter('li').find('a:first').addClass('expanded').removeClass('collapsed').parent().parent().show();
 	});
 
 	// Toggler
