@@ -89,12 +89,11 @@ class Controller_Api extends \Controller_Base_Public
 		}
 
 		// still if not found, give up!
-		if ( ! $this->version)
+		if (empty($this->version))
 		{
 			$this->template->content = \View::forge('api/error');
 		}
-
-		if ($this->version)
+		else
 		{
 			// if no version was selected using the dropdown, select the default
 			$this->params['version'] == 0 and \Response::redirect('api/version/'.$this->version['id']);
