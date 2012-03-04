@@ -39,23 +39,30 @@ return array(
 	'roles' => array(
 		// default visitor rights
 		'#'           => array(
-			'website' => array('read')
+			'access' => array('public')
 		),
 
 		// defined but banned user rights
 		'banned'      => false,
 
-		// normal user rights
+		// site user rights
 		'user'        => array(
+			'access' => array('user')
 		),
 
 		// site staff rights
 		'staff'   => array(
+			'access' => array('staff')
 		),
 
 		// site administrator rights
 		'admin'       => array(
-			'admin'   => array('create', 'read', 'update', 'delete'),
+			'access' => array('admin')
+		),
+
+		// application specific rights
+		'application' => array(
+			'application' => array()
 		),
 
 		// super user rights

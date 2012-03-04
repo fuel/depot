@@ -12,4 +12,26 @@
 
 class Controller_Base_Admin extends Controller_Base_Template
 {
+	/**
+	 * @param   none
+	 * @throws  none
+	 * @returns	void
+	 */
+	public function before()
+	{
+		// users need to be logged in to access this controller
+		if ( ! \Auth::check())
+		{
+			\Messages::error('You can not access that page. Please login first');
+			\Response::redirect('/users/login');
+		}
+
+		elseif ( ! Auth::has_access('access.admin'))
+		{
+			\Messages::error('Access denied. You need to be an administrator to access that page');
+			\Response::redirect('/');
+		}
+
+		parent::before();
+	}
 }

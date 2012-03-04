@@ -12,7 +12,7 @@
 
 namespace Admin;
 
-class Controller_Admin extends \Controller_Base_Public
+class Controller_Admin extends \Controller_Base_Admin
 {
 	/**
 	 * The module index
