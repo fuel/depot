@@ -15,6 +15,7 @@ abstract class Strategy {
 		'dropbox' => 'OAuth',
 		'flickr' => 'OAuth',
 		'google' => 'OAuth2',
+		'googleplus' => 'OAuth2',
 		'github' => 'OAuth2',
 		'linkedin' => 'OAuth',
 		'openid' => 'OpenId',
@@ -31,7 +32,7 @@ abstract class Strategy {
 
 		if ($this->config === null)
 		{
-			throw new Exception(sprintf('Provider "%s" has no config.', $provider));
+			throw new \Exception(sprintf('Provider "%s" has no config.', $provider));
 		}
 
 		if ( ! $this->name)
@@ -48,7 +49,7 @@ abstract class Strategy {
 
 		if (is_null($strategy))
 		{
-			throw new Exception(sprintf('Provider "%s" has no strategy.', $provider));
+			throw new \Exception(sprintf('Provider "%s" has no strategy.', $provider));
 		}
 
 		$class = "Users\\Strategy_{$strategy}";
@@ -75,7 +76,7 @@ abstract class Strategy {
 			break;
 
 			default:
-				throw new Exception("Unsupported Strategy: {$strategy->name}");
+				throw new \Exception("Unsupported Strategy: {$strategy->name}");
 		}
 
 		if (\Auth::check())
@@ -90,7 +91,7 @@ abstract class Strategy {
 				// If there is no uid we can't remember who this is
 				if ( ! isset($user_hash['uid']))
 				{
-					throw new Exception('No uid in response.');
+					throw new \Exception('No uid in response.');
 				}
 
 				// Attach this account to the logged in user
@@ -106,13 +107,14 @@ abstract class Strategy {
 				))->save();
 
 				// Attachment went ok so we'll redirect
+				\Messages::success('You have logged in successfully');
 				\Response::redirect(\Config::get('ninjauth.urls.logged_in'));
 			}
 
 			else
 			{
 				$auth = Model_Authentication::find_by_user_id($user_id);
-				throw new Exception(sprintf('This user is already linked to "%s".', $auth->provider));
+				throw new \Exception(sprintf('This user is already linked to "%s".', $auth->provider));
 			}
 		}
 
@@ -123,6 +125,7 @@ abstract class Strategy {
 			if (\Auth::instance()->force_login($authentication->user_id))
 			{
 			    // credentials ok, go right in
+			    \Messages::success('You have logged in successfully');
 			    \Response::redirect(\Config::get('ninjauth.urls.logged_in'));
 			}
 		}

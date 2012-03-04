@@ -81,24 +81,20 @@ class Controller_Login extends \Controller_Base_Public
 					break;
 
 				case 'Facebook':
-					\Messages::warning('Facebook login not implemented yet!');
-					break;
 					\Response::redirect('users/login/session/facebook');
+					break;
 
 				case 'Twitter':
-					\Messages::warning('Twitter login not implemented yet!');
-					break;
 					\Response::redirect('users/login/session/twitter');
+					break;
 
 				case 'Github':
-					\Messages::warning('Github login not implemented yet!');
-					break;
 					\Response::redirect('users/login/session/github');
+					break;
 
 				case 'Google+':
-					\Messages::warning('Google+ login not implemented yet!');
-					break;
 					\Response::redirect('users/login/session/googleplus');
+					break;
 			}
 		}
 
@@ -110,9 +106,17 @@ class Controller_Login extends \Controller_Base_Public
 	 * send the request to the selected provider
 	 * to start the authentication session
 	 */
-	public function action_session($provider)
+	public function action_session($provider = null)
 	{
-		Strategy::forge($provider)->authenticate();
+		try
+		{
+			Strategy::forge($provider)->authenticate();
+		}
+		catch (\Exception $e)
+		{
+			\Messages::error($e->getMessage());
+			\Response::redirect('users/login');
+		}
 	}
 
 	/**
@@ -120,6 +124,14 @@ class Controller_Login extends \Controller_Base_Public
 	 */
 	public function action_callback($provider)
 	{
-		Strategy::login_or_register(Strategy::forge($provider));
+		try
+		{
+			Strategy::login_or_register(Strategy::forge($provider));
+		}
+		catch (\Exception $e)
+		{
+			\Messages::error($e->getMessage());
+			\Response::redirect('users/login');
+		}
 	}
 }

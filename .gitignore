@@ -17,4 +17,5 @@ nbproject/
 /fuel/logs/*/*/*
 /fuel/cache/*/*
 /fuel/app/config/crypt.php
-/fuel/app/development/db.php
+/fuel/app/config/development/db.php
+/fuel/app/config/stage/db.php

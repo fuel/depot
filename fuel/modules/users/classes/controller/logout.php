@@ -23,6 +23,8 @@ class Controller_Logout extends \Controller_Base_User
 	public function action_index()
 	{
 		\Auth::logout();
+		\Session::delete('ninjauth.user');
+		\Session::delete('ninjauth.authentication');
 		\Messages::success('Logout successful');
 		\Response::redirect('/');
 	}

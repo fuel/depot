@@ -1,7 +1,7 @@
 <?php
 // render the body parts so header assets will be known
-$navbar instanceOf View and $navbar = $navbar->render();
-$content instanceOf View and $content = $content->render();
+isset($navbar) and $navbar instanceOf View and $navbar = $navbar->render();
+isset($content) and $content instanceOf View and $content = $content->render();
 
 // output the page header
 echo \Theme::instance()->view('partials/page/header');

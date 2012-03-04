@@ -22,33 +22,6 @@ return array(
 	 */
 	'providers' => array(
 
-		'facebook' => array(
-			'id' => '',
-			'secret' => '',
-			'scope' => 'email,offline_access',
-		),
-
-		'twitter' => array(
-			'key' => '',
-			'secret' => '',
-		),
-
-		'github' => array(
-			'id' => '',
-			'secret' => '',
-			'scope' => '',
-		),
-
-		'google' => array(
-			'key' => '',
-			'secret' => '',
-		),
-
-		'googleplus' => array(
-			'key' => '',
-			'secret' => '',
-		),
-
 	),
 
 	/**
