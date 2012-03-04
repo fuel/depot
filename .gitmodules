@@ -13,3 +13,9 @@
 [submodule "fuel/packages/auth"]
 	path = fuel/packages/auth
 	url = https://github.com/fuel/auth.git
+[submodule "fuel/packages/oauth"]
+	path = fuel/packages/oauth
+	url = https://github.com/fuel-packages/fuel-oauth
+[submodule "fuel/packages/oauth2"]
+	path = fuel/packages/oauth2
+	url = https://github.com/fuel-packages/fuel-oauth2

@@ -16,6 +16,10 @@ FuelPHP is a fast, lightweight PHP 5.3 framework. In an age where frameworks are
 * Frank de Jonge - Developer ([http://frenky.net/](http://frenky.net/))
 * more to come...
 
+##Credits
+
+* The login, authentication and registration code is based on the [Ninjauth](http://github.com/happyninjas/fuel-ninjauth) package by @philsturgeon.
+
 ##Donate
 
 [Donate Here](http://www.pledgie.com/campaigns/14124)
