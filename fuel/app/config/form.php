@@ -13,10 +13,7 @@
 /**
  * NOTICE:
  *
- * If you need to make modifications to the default configuration, copy
- * this file to your app/config folder, and make them in there.
- *
- * This will allow you to upgrade fuel without losing your custom config.
+ * Our forms do NOT generate the Open and Close tags for the form !
  */
 
 
@@ -25,7 +22,7 @@ return array(
 	'auto_id'               => true,
 	'auto_id_prefix'        => '',
 	'form_method'           => 'post',
-	'form_template'         => "\n\t{open}\n\t\t<ul>\n{fields}\n\t\t</ul>\n\t{close}\n",
+	'form_template'  		=> "\n\t\t<ul>\n{fields}\n",
 	'fieldset_template'     => "\n\t\t<tr><td colspan=\"2\">{open}<table>\n{fields}</table></td></tr>\n\t\t{close}\n",
 	'field_template'        => "\t\t<li>\n\t\t\t{label}\n\t\t\t{field} <span class='error'>{required}</span> {help_text} {error_msg}\n\t\t</li>",
 	'multi_field_template'  => "\t\t<tr>\n\t\t\t<td class=\"{error_class}\">{group_label}{required}</td>\n\t\t\t<td class=\"{error_class}\">{fields}\n\t\t\t\t{field} {label}<br />\n{fields}{help_text}\t\t\t{error_msg}\n\t\t\t</td>\n\t\t</tr>\n",

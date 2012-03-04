@@ -12,7 +12,7 @@ body.home #subheaderWrapper { background-image: url(../img/header-bg.jpg); backg
 #subheader { width: 1000px; margin: 0 auto; padding: 0; }
 
 /* Wrappers --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-#contentWrapper { width: 1000px; margin: 0 auto; padding: 0; text-align: left; }
+#contentWrapper { width: 1000px; margin: 0 auto; padding: 0; text-align: left;}
 
 /* Logo ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 #logo { margin: 33px 0 15px 3px; float: left; }
@@ -71,16 +71,20 @@ p.preLoader { font-size: 11px; text-shadow: 1px 1px 0px #ffffff; }
 
 /* Sidebar ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* Forms login / register / reset-pass ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-form#login,form#register { margin-left:325px; }
-form#login ul li label, form#register ul li label, form#reset-pass ul li label { display: block; font-weight: bold; }
-form#login ul, form#register ul, form#reset-pass ul { list-style: none; margin: 0; padding: 0; }
-form#login ul li, form#register ul li, form#reset-pass ul li { list-style: none; margin: 0 0 15px 0; padding: 0; }
-form#login ul li input[type=text], form#register ul li input[type=text], form#reset-pass ul li input[type=text], form#login ul li input[type=password], form#register ul li input[type=password] { width: 425px; background-color: #e8e8e8; border: 1px solid #BBB; border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;padding: 5px; font-size: 13px; font-weight: bold; color: #858585; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #fbfbfb; margin: 0; }
-form#login ul li.form_buttons input, form#register ul li.form_buttons input, form#reset-pass ul li.form_buttons input { margin: 0; }
-form#login ul li.form_buttons button {margin:0 5px 0 0;height:34px;}
-form#login ul li.form_buttons button img {margin:0;padding:0;margin-right:5px;height:20px;}
-form#login ul li.form_buttons a {font-size: 14px;}
+/* Forms ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+form.form { margin-left:325px; }
+form.form ul li label { display: block; font-weight: bold; }
+form.form ul { list-style: none; margin: 0; padding: 0; }
+form.form ul li { list-style: none; margin: 0 0 15px 0; padding: 0; }
+form.form ul li input[type=text], form.form ul li input[type=password] { width: 425px; background-color: #e8e8e8; border: 1px solid #BBB; border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;padding: 5px; font-size: 13px; font-weight: bold; color: #858585; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #fbfbfb; margin: 0; }
+form.form ul li button {margin:0 10px 0 0;height:34px;}
+form.form ul li a {font-size: 14px;}
+
+/* Form buttons ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ */
+form.form ul li.form_buttons button.button-github { background-image:url(../img/icons/github.png);background-repeat:no-repeat; background-size: 30px; text-indent:20px;}
+form.form ul li.form_buttons button.button-twitter { background-image:url(../img/icons/twitter.png);background-repeat:no-repeat; background-size: 30px; text-indent:20px;}
+form.form ul li.form_buttons button.button-facebook { background-image:url(../img/icons/facebook-logo.png);background-repeat:no-repeat; background-size: 30px; text-indent:20px;}
+form.form ul li.form_buttons button.button-google { background-image:url(../img/icons/google-plus.png);background-repeat:no-repeat; background-size: 30px; text-indent:20px;}
 
 /* Footer ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 #footerWrapper { background-color: #222222; border-top: 1px solid #ffffff; width: 100%; height: 95px; margin: 0; padding: 35px 0 35px 0; clear: both; float: left; }

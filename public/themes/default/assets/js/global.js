@@ -20,7 +20,7 @@ $(document).ready(function(){
 			alert.show()
 
 			window.setTimeout(function() {
-			  alert.toggle(500);
+			  alert.toggle(750);
 			}, 3000);
 		}
 	});
