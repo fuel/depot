@@ -14,7 +14,7 @@ $(document).ready(function(){
 
 	// Notices
 	$(function () {
-		var alert = $('.success-box, .notice-box, .error-box, .no-box');
+		var alert = $('.success-box, .info-box, .error-box, .warning-box, .no-box');
 		if (alert.length > 0)
 		{
 			alert.show()

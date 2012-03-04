@@ -71,15 +71,16 @@ p.preLoader { font-size: 11px; text-shadow: 1px 1px 0px #ffffff; }
 
 /* Sidebar ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-/* Form login / register / reset-pass ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-form#register { padding: 0 0 325px 0; }
-form#login { margin-left:325px; }
+/* Forms login / register / reset-pass ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+form#login,form#register { margin-left:325px; }
 form#login ul li label, form#register ul li label, form#reset-pass ul li label { display: block; font-weight: bold; }
-form#login ul li label.remember-me, form#register ul li label.remember-me { display: inline; font-weight: normal; }
 form#login ul, form#register ul, form#reset-pass ul { list-style: none; margin: 0; padding: 0; }
 form#login ul li, form#register ul li, form#reset-pass ul li { list-style: none; margin: 0 0 15px 0; padding: 0; }
-form#login ul li input[type=text], form#register ul li input[type=text], form#reset-pass ul li input[type=text], form#login ul li input[type=password], form#register ul li input[type=password] { width: 300px; background-color: #e8e8e8; border: 1px solid #BBB; border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;padding: 5px; font-size: 13px; font-weight: bold; color: #858585; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #fbfbfb; margin: 0; }
+form#login ul li input[type=text], form#register ul li input[type=text], form#reset-pass ul li input[type=text], form#login ul li input[type=password], form#register ul li input[type=password] { width: 425px; background-color: #e8e8e8; border: 1px solid #BBB; border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;padding: 5px; font-size: 13px; font-weight: bold; color: #858585; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #fbfbfb; margin: 0; }
 form#login ul li.form_buttons input, form#register ul li.form_buttons input, form#reset-pass ul li.form_buttons input { margin: 0; }
+form#login ul li.form_buttons button {margin:0 5px 0 0;height:34px;}
+form#login ul li.form_buttons button img {margin:0;padding:0;margin-right:5px;height:20px;}
+form#login ul li.form_buttons a {font-size: 14px;}
 
 /* Footer ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 #footerWrapper { background-color: #222222; border-top: 1px solid #ffffff; width: 100%; height: 95px; margin: 0; padding: 35px 0 35px 0; clear: both; float: left; }
@@ -96,7 +97,7 @@ form#login ul li.form_buttons input, form#register ul li.form_buttons input, for
 .one_half { width: 450px; margin: 0 25px 0 0; float: left; }
 .one_half_last { width: 450px; margin: 0; float: right; }
 .one_third { width: 300px; margin: 0 50px 0 0; float: left; }
-.one_third_last { width: 300px; margin: 0; float: left; }
+.one_third_last { width: 300px; margin: 0; float: right; }
 .one_third_first p, .one_third p, .one_third_last p { padding: 0 0 0 3px; }
 .two_third { width: 650px; margin: 0 50px 0 0; float: left; }
 .two_third_last { width: 650px; margin: 0; float: right; }
@@ -139,9 +140,10 @@ blockquote p { margin: 0; }
 .button { background-color: #e1e1e1; color: #808080; font-size: 12px; padding: 10px; border: none; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; }
 .nobox { border: 0; box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none; }
 .no-box { }
-.error-box, .notice-box, .success-box { font-size: 12px; letter-spacing: 0.5px; text-align: center; }
+.error-box, .info-box, .warning-box, .success-box { font-size: 14px; letter-spacing: 0.5px; text-align: center; }
 .error-box { background:#ffdfdf none repeat scroll 0 0; border: 1px solid #ff0000; color: #ff0000; margin: 0; padding: 10px; }
-.notice-box { background:#ffffe0 none repeat scroll 0 0; border: 1px solid #e6db55; color: #c7b634; margin: 0; padding: 10px; }
+.info-box { background:#ffffe0 none repeat scroll 0 0; border: 1px solid #e6db55; color: #c7b634; margin: 0; padding: 10px; }
+.warning-box { background:#e0f8ff none repeat scroll 0 0; border: 1px solid #558be6; color: #345dc7; margin: 0; padding: 10px; }
 .success-box {background: #e2f3c3 none repeat scroll 0 0; border: 1px solid #7be568; color: #708421; margin: 0; padding: 10px; }
 .spacer { margin-top: 5px; margin-bottom: 5px; }
 
