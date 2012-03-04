@@ -13,9 +13,19 @@
 class Controller_Homepage extends \Controller_Base_Public
 {
 	/**
-	* @var string page template
-	*/
-	public $template = 'templates/homepage';
+	 * The application homepage
+	 *
+	 * @access  public
+	 * @return  Response
+	 */
+	public function before()
+	{
+		// if this is a request for the index action, switch to the homepage layout
+		\Request::active()->action == 'index' and $this->template = 'templates/homepage';
+
+		// call the parent to setup the page template
+		parent::before();
+	}
 
 	/**
 	 * The application homepage
@@ -25,6 +35,18 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
+		// no code, the homepage is static atm
+	}
+
+	/**
+	 * The about page
+	 *
+	 * @access  public
+	 * @return  Response
+	 */
+	public function action_about()
+	{
+		$this->template->content = \View::forge('about');
 	}
 
 	/**
@@ -35,7 +57,7 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function action_404()
 	{
-		$this->template = \Theme::instance()->view('templates/404');
+		$this->template->content = \Theme::instance()->view('partials/page/404');
 	}
 
 }

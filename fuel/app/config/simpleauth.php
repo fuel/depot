@@ -65,7 +65,7 @@ return array(
 	/**
 	 * Salt for the login hash
 	 */
-	'login_hash_salt' => 'MA*&##*(*^@#BO*&O#NYTF',
+	'login_hash_salt' => 'YoUrVeRySeCrEtSaLtHeRe',
 
 	/**
 	 * $_POST key for login username

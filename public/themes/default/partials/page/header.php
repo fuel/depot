@@ -24,3 +24,12 @@
 
 </head>
 <!-- End head -->
+
+<!-- Begin messages -->
+<?php
+	foreach(\Messages::instance() as $message)
+	{
+		echo '<div class="',$message['type'],'-box">',$message['body'],'</div>',"\n";
+	}
+?>
+<!-- End of messages -->

@@ -44,7 +44,7 @@ class Controller_Base_Template extends Controller_Template
 			}
 			else
 			{
-				$this->template = \Theme::instance()->view('templates/subpage');
+				$this->template = \Theme::instance()->view('templates/layout');
 			}
 		}
 
@@ -66,11 +66,12 @@ class Controller_Base_Template extends Controller_Template
 		);
 		if (\Auth::check())
 		{
-			$navitems[] = array('name' => 'Logout', 'link' => '/logout', 'class' => '');
+			$navitems[] = array('name' => 'Profile', 'link' => '/users/profile', 'class' => '');
+			$navitems[] = array('name' => 'Logout', 'link' => '/users/logout', 'class' => '');
 		}
 		else
 		{
-			$navitems[] = array('name' => 'Login', 'link' => '/login', 'class' => '');
+			$navitems[] = array('name' => 'Login', 'link' => '/users/login', 'class' => '');
 		}
 		// see if we need to highlight one
 		$uri = '/'.\Request::active()->uri->uri;

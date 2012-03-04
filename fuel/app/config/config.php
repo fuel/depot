@@ -188,6 +188,8 @@ return array(
 			'orm',
 			'auth',
 			'email',
+			'oauth',
+			'oauth2',
 		),
 
 		/**
@@ -203,7 +205,9 @@ return array(
 		/**
 		 * Classes to autoload & initialize even when not used
 		 */
-		'classes'  => array(),
+		'classes'  => array(
+			'messages',
+		),
 
 		/**
 		 * Configs to autoload

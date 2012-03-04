@@ -62,11 +62,6 @@ class Createtables
 			'created_at' => array('type' => 'int', 'constraint' => 10, 'unsigned' => true),
 		), array('id'));
 		\DBUtil::create_index('users', array('username', 'email'), 'username', 'UNIQUE');
-
-		// default data
-		\Auth::instance()->create_user('admin', 'password', 'depot.master@fuelphp.com', 100);
-
-		\DB::query("INSERT INTO `versions` (`id`, `major`, `minor`, `branch`, `default`, `codepath`, `docspath`, `docbloxpath`) VALUES (1, 1, 1, 'develop', 1, '', '', '/data/www/mvhosts/fuel.catwoman.exite.local/docblox');");
 	}
 
 
