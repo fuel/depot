@@ -32,6 +32,9 @@ class Controller_Base_Admin extends Controller_Base_Template
 			\Response::redirect('/');
 		}
 
+		// set the admin template layout
+		$this->template = \Theme::instance()->view('templates/admin');
+
 		parent::before();
 	}
 }

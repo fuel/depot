@@ -10,25 +10,21 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Users;
 
-/**
- * Administration dashboard
- */
-class Controller_Admin extends Controller_Base
+class Controller_Logout extends \Controller_Base_User
 {
 	/**
-	 * The index action.
+	 * The module index
 	 *
 	 * @access  public
-	 * @return  void
+	 * @return  Response
 	 */
 	public function action_index()
 	{
-		$this->template->title = 'Dashboard';
-		$this->template->content = \View::forge('dashboard');
+		\Auth::logout();
+		\Messages::success('Logout successful');
+		\Response::redirect('/');
 	}
 
 }
-
-/* End of file admin.php */

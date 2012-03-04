@@ -104,10 +104,22 @@ class Messages_Instance implements ArrayAccess, Iterator
 	 */
 	protected function add_message($type, $message)
 	{
-		array_push($this->messages, array(
-			'type' => $type,
-			'body' => $message
-		));
+		is_array($message) or $message = array($message);
+
+		foreach ($message as $msg)
+		{
+			// deal with validation errors passed as-is
+			if ($msg instanceOf Validation_Error)
+			{
+				$msg = $msg->get_message();
+			}
+
+			array_push($this->messages, array(
+				'type' => $type,
+				'body' => $msg
+			));
+		}
+
 		\Session::set_flash('messages', $this->messages);
 	}
 

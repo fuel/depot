@@ -10,25 +10,20 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Users;
 
-/**
- * Administration dashboard
- */
-class Controller_Admin extends Controller_Base
+class Controller_Reset extends \Controller_Base_Public
 {
 	/**
-	 * The index action.
+	 * The module index
 	 *
 	 * @access  public
-	 * @return  void
+	 * @return  Response
 	 */
 	public function action_index()
 	{
-		$this->template->title = 'Dashboard';
-		$this->template->content = \View::forge('dashboard');
+		// display the reset password page
+		$this->template->content = \View::forge('reset/index');
 	}
 
 }
-
-/* End of file admin.php */

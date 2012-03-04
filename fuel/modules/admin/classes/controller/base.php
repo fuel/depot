@@ -1,0 +1,31 @@
+<?php
+/**
+ * Part of Fuel Depot.
+ *
+ * @package    FuelDepot
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2012 Fuel Development Team
+ * @link       http://depot.fuelphp.com
+ */
+
+namespace Admin;
+
+/**
+ * Administration base controller. All admin controllers should extend this one!
+ */
+class Controller_Base extends \Controller_Base_Admin
+{
+	public function before()
+	{
+		parent::before();
+
+		// Assign current_user to the instance so controllers can use it
+		$this->current_user = \Auth::check() ? Model_User::find_by_username(\Auth::get_screen_name()) : null;
+
+		// Set a global variable so views can use it
+		\View::set_global('current_user', $this->current_user);
+	}
+
+}
