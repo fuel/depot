@@ -17,6 +17,14 @@ class Model_User extends \Orm\Model
 	protected static $_properties = array(
 		'id',
 		'username',
+		'password',
+		'group',
+		'email',
+		'last_login',
+		'login_hash',
+		'profile_fields' => array(
+			'data_type' => 'serialize',
+		),
 		'created_at',
 	);
 
@@ -25,9 +33,8 @@ class Model_User extends \Orm\Model
 			'events' => array('before_insert'),
 			'mysql_timestamp' => false,
 		),
-		'Orm\Observer_UpdatedAt' => array(
-			'events' => array('before_save'),
-			'mysql_timestamp' => false,
+		'Orm\\Observer_Typing' => array(
+			'events' => array('before_save', 'after_save', 'after_load'),
 		),
 	);
 
@@ -35,6 +42,10 @@ class Model_User extends \Orm\Model
 	{
 		$val = \Validation::forge($factory);
 		$val->add_field('username', 'Username', 'required|max_length[255]');
+		$val->add_field('full_name', 'Fullname', 'required|max_length[255]');
+		$val->add_field('group', 'Group', 'required|is_numeric');
+		$val->add_field('email', 'Email', 'required|valid_email');
+		$val->add_field('password', 'Password', 'min_length[8]|match_field[password_again]');
 
 		return $val;
 	}

@@ -17,6 +17,34 @@ namespace Admin;
  */
 class Controller_Base extends \Controller_Base_Admin
 {
+	/**
+	 * @var	array	pagination settings
+	 */
+	 protected $pagination = array(
+		'pagination_url' => '#',
+		'total_items' => 0,
+		'per_page' => 10,
+		'uri_segment' => 3,
+		'template' => array(
+			'wrapper_start' => '<div class="pagination"><div class="pagination-block">',
+			'wrapper_end' => '</div></div><div style="clear:both;"></div>',
+			'page_start' => '',
+			'page_end' => '',
+			'previous_start' => '',
+			'previous_end' => '',
+			'previous_inactive_start' => '<span class="prev disabled"><a href="#">',
+			'previous_inactive_end' => '</a></span>',
+			'previous_mark' => '',
+			'next_start' => '<span class="next">',
+			'next_end' => '</span>',
+			'next_inactive_start' => '<span class="next disabled"><a href="#">',
+			'next_inactive_end' => '</a></span>',
+			'next_mark' => '',
+			'active_start' => '<strong>',
+			'active_end' => '</strong>',
+		),
+	);
+
 	public function before()
 	{
 		parent::before();

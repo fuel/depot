@@ -29,7 +29,7 @@ return array(
 		-1   => array('name' => 'Banned',         'roles' => array('banned')),
 		 0   => array('name' => 'Guests',         'roles' => array()),
 		 1   => array('name' => 'Users',          'roles' => array('user')),
-		 50  => array('name' => 'Staff',          'roles' => array('staff')),
+		 50  => array('name' => 'Staff',          'roles' => array('user', 'staff')),
 		 100 => array('name' => 'Administrators', 'roles' => array('user', 'staff', 'admin')),
 	),
 
@@ -58,11 +58,6 @@ return array(
 		// site administrator rights
 		'admin'       => array(
 			'access' => array('admin')
-		),
-
-		// application specific rights
-		'application' => array(
-			'application' => array()
 		),
 
 		// super user rights

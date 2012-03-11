@@ -25,8 +25,17 @@ class Controller_Admin extends Controller_Base
 	 */
 	public function action_index()
 	{
+		// user account information
+		$data['active_users'] = Model_User::find()->where('group', '!=', -1)->count();
+		$data['banned_users'] = Model_User::find()->where('group', '=', -1)->count();
+		$data['github_accounts'] = Model_Authentication::find()->where('provider', '=', 'github')->count();
+		$data['twitter_accounts'] = Model_Authentication::find()->where('provider', '=', 'twitter')->count();
+
+		// api docs data
+		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->related('docblox')->get();
+
 		$this->template->title = 'Dashboard';
-		$this->template->content = \View::forge('dashboard');
+		$this->template->content = \View::forge('dashboard', $data);
 	}
 
 }
