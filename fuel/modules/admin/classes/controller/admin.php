@@ -32,7 +32,7 @@ class Controller_Admin extends Controller_Base
 		$data['twitter_accounts'] = Model_Authentication::find()->where('provider', '=', 'twitter')->count();
 
 		// api docs data
-		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->related('docblox')->get();
+		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
 		$this->template->title = 'Dashboard';
 		$this->template->content = \View::forge('dashboard', $data);
