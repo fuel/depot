@@ -12,9 +12,12 @@ $func_page_docblock = function($docblock)
 	{
 		foreach ($docblock['tags'] as $tag)
 		{
-			$result .= '<dl><dt>'.$tag['@attributes']['name'].'</dt><dd>'.
-			(empty($tag['@attributes']['link']) ? $tag['@attributes']['description'] : Html::anchor($tag['@attributes']['link'], $tag['@attributes']['link'])).
-			'</dd></dl>'."\n";
+			if (isset($tag['@attributes']))
+			{
+				$result .= '<dl><dt>'.$tag['@attributes']['name'].'</dt><dd>'.
+				(empty($tag['@attributes']['link']) ? $tag['@attributes']['description'] : Html::anchor($tag['@attributes']['link'], $tag['@attributes']['link'])).
+				'</dd></dl>'."\n";
+			}
 		}
 	}
 
@@ -258,7 +261,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 	</div>
 
 	<!-- API documentation error block -->
-	<?php if( ! empty($record['markers'])): ?>
+	<?php if( \Auth::check() and ! empty($record['markers'])): ?>
 		<div id="api_errors" class="no-box">
 			<?php echo $func_markers($record['markers']); ?>
 		</div>
