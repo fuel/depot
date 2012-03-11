@@ -132,6 +132,7 @@ $func_properties = function($properties)
 	foreach ($properties as $property)
 	{
 		$type = isset($property['docblock']['tags'][0]['type']) ? $property['docblock']['tags'][0]['type'] : 'mixed';
+		$desc = isset($property['docblock']['tags'][0]['description']) ? $property['docblock']['tags'][0]['description'] : '';
 		is_array($property['default']) and $property['default'] = implode(' ', $property['default']);
 
 		$result .= '<dt><span>'.$type.'</span> '.$property['name'].'</dt><dd>'."\n".
@@ -141,7 +142,7 @@ $func_properties = function($properties)
 				(empty($property['protected']) ? '' : '<span class="badge blue">protected</span>').
 				(empty($property['private']) ? '' : '<span class="badge darkblue">private</span>').
 				'<pre><code>'.$property['default'].'</code></pre></dd>'.
-				(empty($property['docblock']['title']) ? '' : '<p>'.$property['docblock']['title'].'</p>').
+				(empty($property['docblock']['title']) ? $desc : '<p>'.$property['docblock']['title'].'</p>').
 				"\n";
 	}
 
