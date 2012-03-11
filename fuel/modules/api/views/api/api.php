@@ -142,7 +142,7 @@ $func_properties = function($properties)
 				(empty($property['protected']) ? '' : '<span class="badge blue">protected</span>').
 				(empty($property['private']) ? '' : '<span class="badge darkblue">private</span>').
 				'<pre><code>'.$property['default'].'</code></pre></dd>'.
-				(empty($property['docblock']['title']) ? $desc : '<p>'.$property['docblock']['title'].'</p>').
+				'<p>'.(empty($property['docblock']['title']) ? $desc : $property['docblock']['title']).'</p>'.
 				"\n";
 	}
 
