@@ -187,27 +187,27 @@ class Controller_Api extends \Controller_Base_Public
 		}
 
 		// sort and store the constantlist
+		ksort($constantlist);
 		foreach ($constantlist as &$list)
 		{
 			ksort($list);
 		}
-		ksort($constantlist);
 		$this->template->content->set('constantlist', $constantlist, false);
 
 		// sort and store the functionlist
+		ksort($functionlist);
 		foreach ($functionlist as &$list)
 		{
 			ksort($list);
 		}
-		ksort($functionlist);
 		$this->template->content->set('functionlist', $functionlist, false);
 
 		// sort and store the classlist
+		ksort($classlist);
 		foreach ($classlist as &$list)
 		{
 			ksort($list);
 		}
-		ksort($classlist);
 		$this->template->content->set('classlist', $classlist, false);
 
 		// if no api details were selected, show the intro page
@@ -263,7 +263,7 @@ class Controller_Api extends \Controller_Base_Public
 			{
 				$css = array('class' => 'current');
 			}
-			$result[] = \Html::anchor('api/version/'.$this->version['id'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name'], $css);
+			$result[$function['name'].$record['hash']] = \Html::anchor('api/version/'.$this->version['id'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name'], $css);
 		}
 
 		// return the result
@@ -288,12 +288,24 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			if ( ! empty($class))
 			{
+				// get the relative namespace
+				if (isset($class['namespace']) and isset($class['package']) and $class['namespace'] != $class['package'] and strpos($class['namespace'], $class['package']) === 0)
+				{
+					$relative_ns = substr($class['namespace'], strlen($class['package'])+1,999).'\\';
+				}
+				else
+				{
+					$relative_ns = '';
+				}
+
 				$css = array();
 				if ($this->params['file'] == $record['hash'] and $this->params['class'] == $class['name'])
 				{
 					$css = array('class' => 'current');
 				}
-				$result[] = \Html::anchor('api/version/'.$this->version['id'].'/class/'.$class['name'].'/file/'.$record['hash'], $class['name'], $css);
+
+				// note: space between name and hash makes sure the short names are sorted first!
+				$result[$relative_ns.$class['name'].' '.$record['hash']] = \Html::anchor('api/version/'.$this->version['id'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name'], $css);
 			}
 		}
 

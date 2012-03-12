@@ -6,7 +6,7 @@
 $func_page_docblock = function($docblock)
 {
 	// title and description
-	$result = '<h4>'.$docblock['title'].'</h4><h6>'.html_entity_decode($docblock['description']).'</h6>'."\n";
+	$result = '<h5>'.$docblock['title'].'</h5><h6>'.html_entity_decode($docblock['description']).'</h6>'."\n";
 
 	if ( ! empty($docblock['tags']))
 	{
@@ -258,7 +258,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 
 	<!-- API file header -->
 	<div id="api_info">
-		<h2><?php echo $record['file']; ?></h2>
+		<h3><?php echo $record['file']; ?></h3>
 	</div>
 
 	<!-- API documentation error block -->
@@ -298,7 +298,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 	<!-- API classes block -->
 	<?php if( ! empty($record['classes']) and ! empty($selection['class'])): ?>
 		<div id="api_classes">
-			<h3>Classes</h3>
+			<h4>Classes</h4>
 			<?php echo $func_classes($record['classes']); ?>
 		</div>
 		<div class="clearfix"></div>
