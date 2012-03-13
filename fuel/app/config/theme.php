@@ -17,14 +17,13 @@ return array(
 	 * on the fly via Theme::add_path($path) or Theme::add_paths(array($path1, $path2));
 	 */
 	'paths' => array(
-		DOCROOT.'themes',
+		APPPATH.'themes',
 	),
 
 	/**
-	 * The folder inside the theme to be used to store assets.  This is relative to the
-	 * theme's path.
+	 * The folder inside the docroot to be used to store theme assets.
 	 */
-	'assets_folder' => 'assets',
+	'assets_folder' => 'themes',
 
 	/**
 	 * The extension for theme view files.
