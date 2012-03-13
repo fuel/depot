@@ -19,8 +19,8 @@
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Serif:regular,italic,bold,bolditalic" type="text/css" />
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:regular,bold" type="text/css" />
 
-<?php echo \Theme::instance()->asset->css(array('reset.css', 'typo.css', 'global.css')); ?>
-<?php echo \Theme::instance()->asset->render('header'); ?>
+<?php echo \Theme::instance()->asset()->css(array('reset.css', 'typo.css', 'global.css')); ?>
+<?php echo \Theme::instance()->asset()->render('header'); ?>
 
 </head>
 <!-- End head -->

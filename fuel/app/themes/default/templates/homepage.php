@@ -1,4 +1,4 @@
-<?php echo \Theme::instance()->view('partials/page/header'); ?>
+<?php echo \Theme::instance()->view('global/header'); ?>
 
 <!-- Begin body -->
 <body id="top" class="home">
@@ -7,10 +7,10 @@
 	<div id="header">
 
 		<div id="logo">
-			<h1><a href="/" title="Home"><?php echo \Html::img(\Theme::instance()->asset('img/logo.png'));?></a></h1>
+			<h1><a href="/" title="Home"><?php echo \Theme::instance()->asset()->img('logo.png');?></a></h1>
 		</div>
 
-		<?php echo $navbar; ?>
+		<?php echo $partials['navbar']; ?>
 
 		<div id="intro">
 
@@ -48,7 +48,7 @@
 	<div id="midbar">
 
 		<div id="twitter">
-			<?php echo \Html::img(\Theme::instance()->asset('img/twitter_bird.png'));?>
+			<?php echo \Theme::instance()->asset()->img('twitter_bird.png');?>
 			<ul id="twitter_update_list">
 				<li>&nbsp;</li>
 			</ul>
@@ -116,7 +116,7 @@
 
 </div>
 
-<?php echo \Theme::instance()->view('partials/page/footer'); ?>
+<?php echo \Theme::instance()->view('global/footer'); ?>
 
 <script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
 <script type="text/javascript" src="http://api.twitter.com/1/statuses/user_timeline/fuelphp.json?callback=twitterCallback2&amp;count=1&amp;include_rts=true"></script>
