@@ -22,7 +22,7 @@ class Controller_Tutorials extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		\Theme::instance()->set_partial('content', \View::forge('tutorials/index'));
+		\Theme::instance()->set_partial('content', 'tutorials/index');
 	}
 
 }

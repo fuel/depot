@@ -22,7 +22,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		\Theme::instance()->set_partial('content', \View::forge('documentation/index'));
+		\Theme::instance()->set_partial('content', 'documentation/index');
 	}
 
 }

@@ -22,7 +22,7 @@ class Controller_Snippets extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		\Theme::instance()->set_partial('content', \View::forge('snippets/index'));
+		\Theme::instance()->set_partial('content', 'snippets/index');
 	}
 
 }

@@ -22,7 +22,7 @@ class Controller_Cells extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		\Theme::instance()->set_partial('content', \View::forge('cells/index'));
+		\Theme::instance()->set_partial('content', 'cells/index');
 	}
 
 }
