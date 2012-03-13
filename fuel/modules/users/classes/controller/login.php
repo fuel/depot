@@ -98,8 +98,8 @@ class Controller_Login extends \Controller_Base_Public
 			}
 		}
 
-		// display the login page
-		$this->template->content = \View::forge('login/index', array('fieldset' => $fieldset), false);
+		// set the login page content partial
+		\Theme::instance()->set_partial('content', 'users/login/index')->set('fieldset', $fieldset, false);
 	}
 
 	/**

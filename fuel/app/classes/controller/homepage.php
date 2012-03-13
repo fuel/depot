@@ -20,11 +20,12 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function before()
 	{
-		// if this is a request for the index action, switch to the homepage layout
-		\Request::active()->action == 'index' and $this->template = 'templates/homepage';
-
-		// call the parent to setup the page template
+		// call the parent to run the setup
 		parent::before();
+
+		// if this is a request for the index action, switch to the homepage layout template
+		\Request::active()->action == 'index' and \Theme::instance()->set_template('templates/homepage');
+
 	}
 
 	/**
@@ -46,7 +47,7 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function action_about()
 	{
-		$this->template->content = \View::forge('about');
+		\Theme::instance()->set_partial('content', 'about');
 	}
 
 	/**
@@ -57,7 +58,7 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function action_404()
 	{
-		$this->template->content = \Theme::instance()->view('partials/page/404');
+		\Theme::instance()->set_partial('content', 'global/404');
 	}
 
 }

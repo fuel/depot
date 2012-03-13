@@ -22,8 +22,8 @@ class Controller_Reset extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		// display the reset password page
-		$this->template->content = \View::forge('reset/index');
+		// set the profile view content partial
+		\Theme::instance()->set_partial('content', 'users/reset/index');
 	}
 
 }

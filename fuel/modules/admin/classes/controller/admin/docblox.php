@@ -51,10 +51,11 @@ class Controller_Admin_Docblox extends Controller_Base
 		// get the records for the current page
 		$this->data['versions'] = Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
 
-		// load the template partial
-		$this->template->title = "Source branches";
-		$this->template->content = \View::forge('docblox/index', $this->data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Source branches');
 
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/docblox/index')->set($this->data);
 	}
 
 	/**
@@ -70,9 +71,11 @@ class Controller_Admin_Docblox extends Controller_Base
 			\Response::redirect('admin/docblox');
 		}
 
-		// load the template partial
-		$this->template->title = "Source branch";
-		$this->template->content = \View::forge('docblox/view', $this->data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Source branches');
+
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/docblox/view')->set($this->data);
 	}
 
 	/**
@@ -112,9 +115,11 @@ class Controller_Admin_Docblox extends Controller_Base
 			}
 		}
 
-		// load the template partial
-		$this->template->title = "Source Branch";
-		$this->template->content = \View::forge('docblox/create', $this->data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Source branches');
+
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/docblox/create')->set($this->data);
 	}
 
 	/**
@@ -178,8 +183,11 @@ class Controller_Admin_Docblox extends Controller_Base
 			}
 		}
 
-		$this->template->title = "Source Branch";
-		$this->template->content = \View::forge('docblox/edit', $this->data)->set('version', $version, false);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Source branches');
+
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/docblox/edit')->set($this->data)->set('version', $version, false);
 	}
 
 	/**

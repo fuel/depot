@@ -22,9 +22,7 @@ class Controller_Tutorials extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
-		// by default, the base controller loads the subpage template
-		// this will adds content to the body of the template
-		$this->template->content = \View::forge('tutorials/index');
+		\Theme::instance()->set_partial('content', \View::forge('tutorials/index'));
 	}
 
 }

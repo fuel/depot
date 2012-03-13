@@ -34,8 +34,11 @@ class Controller_Admin extends Controller_Base
 		// api docs data
 		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
-		$this->template->title = 'Dashboard';
-		$this->template->content = \View::forge('dashboard', $data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Dashboard');
+
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/dashboard')->set($data);
 	}
 
 }

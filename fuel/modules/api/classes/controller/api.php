@@ -41,9 +41,6 @@ class Controller_Api extends \Controller_Base_Public
 		// store them
 		$this->params = $params;
 
-		// set the template
-		$this->template->content = \View::forge('api/index');
-
 		// load the defined FuelPHP versions, ordered by version
 		$result = \DB::select()->from('versions')->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->execute();
 
@@ -53,10 +50,6 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			$dropdown[$record['id']] = $record['major'].'.'.$record['minor'].'/'.$record['branch'];
 		}
-
-		// pass the dropdown to the view and set the selected version
-		$this->template->content->set('versions', $dropdown);
-		$this->template->content->set('selection', $this->params);
 
 		// find the selected version by id match
 		foreach ($result as $record)
@@ -91,19 +84,20 @@ class Controller_Api extends \Controller_Base_Public
 		// still if not found, give up!
 		if (empty($this->version))
 		{
-			$this->template->content = \View::forge('api/error');
+			\Theme::instance()->set_partial('content', 'api/error');
 		}
 		else
 		{
 			// if no version was selected using the dropdown, select the default
 			$this->params['version'] == 0 and \Response::redirect('api/version/'.$this->version['id']);
 
+			// add the partial to the template
+			\Theme::instance()->set_partial('content', 'api/index')->set(array('versions' => $dropdown, 'selection' => $this->params));
+
 			// render the docs of the selected version
 			$this->process();
 		}
 
-		// add the content to the template
-		$this->template->set('content', $this->template->content, false);
 	}
 
 	/*
@@ -192,7 +186,7 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			ksort($list);
 		}
-		$this->template->content->set('constantlist', $constantlist, false);
+		\Theme::instance()->get_partial('content', 'api/index')->set('constantlist', $constantlist, false);
 
 		// sort and store the functionlist
 		ksort($functionlist);
@@ -200,7 +194,7 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			ksort($list);
 		}
-		$this->template->content->set('functionlist', $functionlist, false);
+		\Theme::instance()->get_partial('content', 'api/index')->set('functionlist', $functionlist, false);
 
 		// sort and store the classlist
 		ksort($classlist);
@@ -208,11 +202,13 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			ksort($list);
 		}
-		$this->template->content->set('classlist', $classlist, false);
+		\Theme::instance()->get_partial('content', 'api/index')->set('classlist', $classlist, false);
 
 		// if no api details were selected, show the intro page
-		empty($details) and $details = \View::forge('api/intro');
-		$this->template->content->set('details', $details);
+		empty($details) and $details = \Theme::instance()->view('api/intro');
+
+		// set the content partial, add the details to it
+		\Theme::instance()->get_partial('content', 'api/index')->set('details', $details);
 	}
 
 	/**

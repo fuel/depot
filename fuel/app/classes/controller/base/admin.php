@@ -13,6 +13,11 @@
 class Controller_Base_Admin extends Controller_Base_Template
 {
 	/**
+	* @var string page template for admin controllers
+	*/
+	public $template = 'templates/admin';
+
+	/**
 	 * @param   none
 	 * @throws  none
 	 * @returns	void
@@ -31,9 +36,6 @@ class Controller_Base_Admin extends Controller_Base_Template
 			\Messages::error('Access denied. You need to be an administrator to access that page');
 			\Response::redirect('/');
 		}
-
-		// set the admin template layout
-		$this->template = \Theme::instance()->view('templates/admin');
 
 		parent::before();
 	}

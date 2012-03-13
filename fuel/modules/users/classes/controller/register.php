@@ -106,9 +106,8 @@ class Controller_Register extends \Controller_Base_Public
 
 		$fieldset->populate(\Input::post());
 
-		$this->template->content = \View::forge('register/index', array(
-			'fieldset' => $fieldset,
-		), false);
+		// set the profile view content partial
+		\Theme::instance()->set_partial('content', 'users/register/index')->set('fieldset', $fieldset, false);
 	}
 
 }

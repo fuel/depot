@@ -61,10 +61,11 @@ class Controller_Admin_Users extends Controller_Base
 		// get the records for the current page
 		$this->data['users'] = Model_User::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
 
-		// load the template partial
-		$this->template->title = "Users";
-		$this->template->content = \View::forge('users/index', $this->data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Users');
 
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/users/index')->set($this->data);
 	}
 
 	/**
@@ -80,9 +81,11 @@ class Controller_Admin_Users extends Controller_Base
 			\Response::redirect('admin/users');
 		}
 
-		// load the template partial
-		$this->template->title = "User";
-		$this->template->content = \View::forge('users/view', $this->data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Users');
+
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/users/view')->set($this->data);
 	}
 
 	/**
@@ -120,10 +123,11 @@ class Controller_Admin_Users extends Controller_Base
 			}
 		}
 
-		// load the template partial
-		$this->template->title = "Users";
-		$this->template->content = \View::forge('users/create', $this->data);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Users');
 
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/users/create')->set($this->data);
 	}
 
 	/**
@@ -139,6 +143,8 @@ class Controller_Admin_Users extends Controller_Base
 			\Response::redirect('admin/users');
 		}
 
+		// make sure the full_name profile field exists
+		isset($user->profile_fields['full_name']) or $user->profile_fields['full_name'] = '';
 
 		// run the validation rules on the input
 		$val = Model_User::validate('edit');
@@ -180,9 +186,11 @@ class Controller_Admin_Users extends Controller_Base
 			}
 		}
 
-		$this->template->title = "Users";
-		$this->template->content = \View::forge('users/edit', $this->data)->set('user', $user, false);
+		// set the admin page title
+		\Theme::instance()->get_template()->set('title', 'Users');
 
+		// and define the content body
+		\Theme::instance()->set_partial('content', 'admin/users/edit')->set($this->data)->set('user', $user, false);
 	}
 
 	/**

@@ -80,7 +80,7 @@ class Controller_Profile extends \Controller_Base_User
 			'full_name' => \Input::post('full_name', $profile ? $profile['full_name'] : '')
 		));
 
-		// load the profile view
-		$this->template->content = \View::forge('profile/index', array('fieldset' => $fieldset), false);
+		// set the profile view content partial
+		\Theme::instance()->set_partial('content', 'users/profile/index')->set('fieldset', $fieldset, false);
 	}
 }
