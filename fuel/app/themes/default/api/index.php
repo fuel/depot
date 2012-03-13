@@ -1,4 +1,4 @@
-<?php \Theme::instance()->asset->css(array('api.css'), array(), 'header'); ?>
+<?php \Theme::instance()->asset()->css(array('api.css'), array(), 'header'); ?>
 <div style="border-bottom:1px solid #ddd;padding-bottom:10px;">
 	<div style="float:left;">
 		<h1>Class API Documentation</h1>
