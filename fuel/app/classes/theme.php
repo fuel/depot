@@ -57,6 +57,11 @@ class Theme
 	protected $paths = array();
 
 	/**
+	 * @var  Asset_Instance  $asset  Asset instance for this theme instance
+	 */
+	protected $asset = null;
+
+	/**
 	 * @var  array  $active  Currently active theme
 	 */
 	protected $active = array(
@@ -114,8 +119,13 @@ class Theme
 		// Order of this addition is important, do not change this.
 		$this->config = $config + $this->config;
 
-		// define the default theme paths, the active and the fallback theme
+		// define the default theme paths...
 		$this->add_paths($this->config['paths']);
+
+		// create a unique asset instance for this theme instance...
+		$this->asset = \Asset::forge('theme_'.spl_object_hash($this), array('paths' => array()));
+
+		// and set the active and the fallback theme
 		$this->active($this->config['active']);
 		$this->fallback($this->config['fallback']);
 	}
@@ -130,10 +140,19 @@ class Theme
 	 */
 	public function active($theme = null)
 	{
+		// remove the defined theme asset paths from the asset instance
+		empty($this->active['asset_base']) or $this->asset->remove_path($this->active['asset_base']);
+		empty($this->fallback['asset_base']) or $this->asset->remove_path($this->fallback['asset_base']);
+
+		// set the active theme
 		if ($theme !== null)
 		{
 			$this->active = $this->create_theme_array($theme);
 		}
+
+		// add the asset paths to the asset instance
+		empty($this->active['asset_base']) or $this->asset->add_path($this->active['asset_base']);
+		empty($this->fallback['asset_base']) or $this->asset->add_path($this->fallback['asset_base']);
 
 		return $this->active;
 	}
@@ -149,10 +168,19 @@ class Theme
 	 */
 	public function fallback($theme = null)
 	{
+		// remove the defined theme asset paths from the asset instance
+		empty($this->active['asset_base']) or $this->asset->remove_path($this->active['asset_base']);
+		empty($this->fallback['asset_base']) or $this->asset->remove_path($this->fallback['asset_base']);
+
+		// set the fallback theme
 		if ($theme !== null)
 		{
 			$this->fallback = $this->create_theme_array($theme);
 		}
+
+		// add the asset paths to the asset instance
+		empty($this->active['asset_base']) or $this->asset->add_path($this->active['asset_base']);
+		empty($this->fallback['asset_base']) or $this->asset->add_path($this->fallback['asset_base']);
 
 		return $this->fallback;
 	}
@@ -182,28 +210,82 @@ class Theme
 	 * @param   string  $path  Relative path to the asset
 	 * @return  string  Full asset URL or path if outside docroot
 	 */
-	public function asset($path = null)
+	public function asset($path)
 	{
 		if ($this->active['path'] === null)
 		{
 			throw new \ThemeException('You must set an active theme.');
 		}
 
-		if (func_num_args())
+		if ($this->active['asset_base'])
 		{
-			// a path is given, stick it on the base and return it
-			if ($this->active['asset_base'])
-			{
-				return $this->active['asset_base'].$path;
-			}
+			return $this->active['asset_base'].$path;
+		}
 
-			return $this->active['path'].$path;
-		}
-		else
-		{
-			// no path is given, return the asset instance for chaining
-			return \Asset::instance('theme_'.$this->active['name']);
-		}
+		return $this->active['path'].$path;
+	}
+
+	/**
+	 * CSS
+	 *
+	 * Either adds the stylesheet to the group, or returns the CSS tag.
+	 *
+	 * @access	public
+	 * @param	mixed	       The file name, or an array files.
+	 * @param	array	       An array of extra attributes
+	 * @param	string	       The asset group name
+	 * @return	string|object  Rendered asset or current instance when adding to group
+	 */
+	public function css($stylesheets = array(), $attr = array(), $group = null, $raw = false)
+	{
+		return call_user_func_array(array($this->asset, 'css'), func_get_args());
+	}
+
+	/**
+	 * JS
+	 *
+	 * Either adds the javascript to the group, or returns the script tag.
+	 *
+	 * @access	public
+	 * @param	mixed	       The file name, or an array files.
+	 * @param	array	       An array of extra attributes
+	 * @param	string	       The asset group name
+	 * @return	string|object  Rendered asset or current instance when adding to group
+	 */
+	public function js($scripts = array(), $attr = array(), $group = null, $raw = false)
+	{
+		return call_user_func_array(array($this->asset, 'js'), func_get_args());
+	}
+
+	/**
+	 * Img
+	 *
+	 * Either adds the image to the group, or returns the image tag.
+	 *
+	 * @access	public
+	 * @param	mixed	       The file name, or an array files.
+	 * @param	array	       An array of extra attributes
+	 * @param	string	       The asset group name
+	 * @return	string|object  Rendered asset or current instance when adding to group
+	 */
+	public function img($images = array(), $attr = array(), $group = null)
+	{
+		return call_user_func_array(array($this->asset, 'img'), func_get_args());
+	}
+
+	/**
+	 * Renders the given group.  Each tag will be separated by a line break.
+	 * You can optionally tell it to render the files raw.  This means that
+	 * all CSS and JS files in the group will be read and the contents included
+	 * in the returning value.
+	 *
+	 * @param   mixed   the group to render
+	 * @param   bool    whether to return the raw file or not
+	 * @return  string  the group's output
+	 */
+	public function render($group = null, $raw = false)
+	{
+		return call_user_func_array(array($this->asset, 'render'), func_get_args());
 	}
 
 	/**
@@ -229,12 +311,14 @@ class Theme
 	}
 
 	/**
-	 * Get a partial so it can be manipulated
+	 * Render the partials and the theme template
 	 *
-	 * @return  View
+	 * @param   bool	$render_partials If false do not pre-render the partials
+	 * @param   bool	$render_template If false do not render the template but return the view object
+	 * @return  string|View
 	 * @throws  \ThemeException
 	 */
-	public function get_template()
+	public function get_template($render = false)
 	{
 		// make sure the partial entry exists
 		if (empty($this->active['template']))
@@ -242,7 +326,34 @@ class Theme
 			throw new \ThemeException('No valid template could be found. Use set_template() to define a page template.');
 		}
 
-		// return the template view for chaining
+		// do we want to render the template?
+		if ($render)
+		{
+			// pre-process all defined partials
+			foreach ($this->partials as $key => $partials)
+			{
+				$output = '';
+				foreach ($partials as $index => $partial)
+				{
+					// render the partial
+					$output .= $partial->render();
+				}
+
+				// store the rendered output
+				$this->partials[$key] = $output;
+			}
+
+			// do we have a template view?
+			if (empty($this->active['template']))
+			{
+				throw new \ThemeException('No valid template could be found. Use set_template() to define a page template.');
+			}
+
+			// assign the partials to the template
+			$this->active['template']->set('partials', $this->partials, false);
+		}
+
+		// return the template
 		return $this->active['template'];
 	}
 
@@ -303,43 +414,6 @@ class Theme
 		{
 			throw new \ThemeException(sprintf('No partial named "%s" can be found in the "%s" section.', $view, $section));
 		}
-	}
-
-	/**
-	 * Render the partials and the theme template
-	 *
-	 * @param   bool	$render_partials If false do not pre-render the partials
-	 * @param   bool	$render_template If false do not render the template but return the view object
-	 * @return  string|View
-	 * @throws  \ThemeException
-	 */
-	public function render()
-	{
-		// pre-process all defined partials
-		foreach ($this->partials as $key => $partials)
-		{
-			$output = '';
-			foreach ($partials as $index => $partial)
-			{
-				// render the partial
-				$output .= $partial->render();
-			}
-
-			// store the rendered output
-			$this->partials[$key] = $output;
-		}
-
-		// do we have a template view?
-		if (empty($this->active['template']))
-		{
-			throw new \ThemeException('No valid template could be found. Use set_template() to define a page template.');
-		}
-
-		// assign the partials to the template
-		$this->active['template']->set('partials', $this->partials, false);
-
-		// return the template
-		return $this->active['template'];
 	}
 
 	/**
@@ -646,11 +720,6 @@ class Theme
 
 		// asset_base always uses forward slashes (DS is a backslash on Windows)
 		$theme['asset_base'] = str_replace(DS, '/', $theme['asset_base']);
-		// create an asset instance for our theme
-		if (\Asset::instance('theme_'.$theme['name']) === false)
-		{
-			\Asset::forge('theme_'.$theme['name'], array('paths' => array($theme['asset_base'])));
-		}
 
 		return $theme;
 	}
