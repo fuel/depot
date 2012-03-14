@@ -7,7 +7,7 @@
 	<div id="header">
 
 		<div id="logo">
-			<h1><a href="/" title="Home"><?php echo \Theme::instance()->asset()->img('logo.png');?></a></h1>
+			<h1><a href="/" title="Home"><?php echo \Theme::instance()->img('logo.png');?></a></h1>
 		</div>
 
 		<?php echo $partials['navbar']; ?>
@@ -48,7 +48,7 @@
 	<div id="midbar">
 
 		<div id="twitter">
-			<?php echo \Theme::instance()->asset()->img('twitter_bird.png');?>
+			<?php echo \Theme::instance()->img('twitter_bird.png');?>
 			<ul id="twitter_update_list">
 				<li>&nbsp;</li>
 			</ul>

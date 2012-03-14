@@ -10,7 +10,7 @@ echo \Theme::instance()->view('global/header');
 	<div id="subheader">
 
 		<div id="logo">
-			<h1><a href="/" title="Home"><?php echo \Theme::instance()->asset()->img('logo.png');?></a></h1>
+			<h1><a href="/" title="Home"><?php echo \Theme::instance()->img('logo.png');?></a></h1>
 		</div>
 
 		<?php echo $partials['navbar']; ?>

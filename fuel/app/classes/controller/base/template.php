@@ -18,11 +18,6 @@ class Controller_Base_Template extends Controller
 	public $template = null;
 
 	/**
-	* @var boolean auto render template
-	**/
-	public $auto_render = true;
-
-	/**
 	* @var array navigation bar entries
 	*/
 	public $navbar = array();
@@ -86,7 +81,7 @@ class Controller_Base_Template extends Controller
 		// If nothing was returned render the defined template
 		if (empty($response))
 		{
-			$response = \Theme::instance()->render();
+			$response = \Theme::instance()->get_template(true);
 		}
 
 		// If the response isn't a Response object, embed in the available one for BC
