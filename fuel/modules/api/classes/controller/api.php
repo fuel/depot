@@ -176,7 +176,7 @@ class Controller_Api extends \Controller_Base_Public
 				is_array($record['classes']) or $record['classes'] = unserialize($record['classes']);
 
 				// create the API details view
-				$details = \View::forge('api/api', array('record' => $record, 'selection' => $this->params));
+				$details = \Theme::instance()->view('api/api', array('record' => $record, 'selection' => $this->params));
 			}
 		}
 
