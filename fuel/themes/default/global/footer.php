@@ -43,5 +43,5 @@
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">google.load('jquery', '1.7.1');</script>
 
-<?php \Theme::instance()->js(array('ui-core.js', 'validate.js', 'localscroll.js', 'easing.js', 'colorbox.js', 'tipsy.js', 'global.js'), array(), 'footer'); ?>
-<?php echo \Theme::instance()->render('footer'); ?>
+<?php \Theme::instance()->asset->js(array('ui-core.js', 'validate.js', 'localscroll.js', 'easing.js', 'colorbox.js', 'tipsy.js', 'global.js'), array(), 'footer'); ?>
+<?php echo \Theme::instance()->asset->render('footer'); ?>

@@ -28,7 +28,7 @@
 <?php foreach ($versions as $version): ?>		<tr>
 			<td><?php echo $version->major.'.'.$version->minor.'/'.$version->branch; ?></td>
 			<td><?php echo $version->default ? 'Yes' : 'No'; ?></td>
-			<td><?php echo $count = count($version->docblox); ?> file<?php echo $count == 1 ? '' : 's'; ?> documented</td>
+			<td><?php echo $count = \Admin\Model_Docblox::query()->where('version_id', $version->id)->count(); ?> file<?php echo $count == 1 ? '' : 's'; ?> documented</td>
 		</tr>
 <?php endforeach; ?>	</tbody>
 </table>

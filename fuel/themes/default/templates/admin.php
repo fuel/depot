@@ -3,11 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<title><?php echo $title; ?></title>
-	<?php echo \Theme::instance()->css('bootstrap.css'); ?>
+	<?php echo \Theme::instance()->asset->css('bootstrap.css'); ?>
 	<style>
 		body { margin: 50px; }
 	</style>
-	<?php echo \Theme::instance()->js(array(
+	<?php echo \Theme::instance()->asset->js(array(
 		'http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js',
 		'bootstrap.js'
 	)); ?>
