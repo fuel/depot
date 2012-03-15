@@ -81,7 +81,7 @@ class Controller_Base_Template extends Controller
 		// If nothing was returned render the defined template
 		if (empty($response))
 		{
-			$response = \Theme::instance()->get_template(true);
+			$response = \Theme::instance()->render();
 		}
 
 		// If the response isn't a Response object, embed in the available one for BC
