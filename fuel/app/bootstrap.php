@@ -7,9 +7,8 @@ class_alias('Fuel\\Core\\Autoloader', 'Autoloader');
 // Bootstrap the framework DO NOT edit this
 require COREPATH.'bootstrap.php';
 
-
+// Add custom classes to the autoloader
 Autoloader::add_classes(array(
-	'Theme' => APPPATH.'classes/theme.php',
 ));
 
 // Register the autoloader
