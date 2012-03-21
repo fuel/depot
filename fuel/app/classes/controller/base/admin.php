@@ -27,7 +27,7 @@ class Controller_Base_Admin extends Controller_Base_Template
 		// users need to be logged in to access this controller
 		if ( ! \Auth::check())
 		{
-			\Messages::error('You can not access that page. Please login first');
+			\Messages::error('You need to be logged in to access that page.');
 			\Response::redirect('/users/login');
 		}
 

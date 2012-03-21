@@ -93,7 +93,7 @@ class Controller_Login extends \Controller_Base_Public
 					break;
 
 				case 'Google+':
-					\Response::redirect('users/login/session/googleplus');
+					\Response::redirect('users/login/session/google');
 					break;
 			}
 		}

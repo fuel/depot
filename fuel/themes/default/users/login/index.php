@@ -23,11 +23,11 @@
 			<button type="submit" formnovalidate="formnovalidate" value="Github" name="btnSubmit" title="Login using your Github account" class="button-github">Github</button>
 			<button type="submit" formnovalidate="formnovalidate" value="Facebook" name="btnSubmit" title="Login using your Facebook account" class="button-facebook">Facebook</button>
 			<button type="submit" formnovalidate="formnovalidate" value="Twitter" name="btnSubmit" title="Login using your Twitter account" class="button-twitter">Twitter</button>
-			<button type="submit" formnovalidate="formnovalidate" value="Google+" name="btnSubmit" title="Login using your Google+ account" class="button-google">Google+</button>
+			<button type="submit" formnovalidate="formnovalidate" value="Google" name="btnSubmit" title="Login using your Google account" class="button-google">Google</button>
 		</li>
 	</ul>
 
-	<p class="critical_box" style="width:400px;">
+	<p class="critical_box" style="width:406px;">
 		Please note that at the moment we require a Github login to get write access to the documentation.
 		Contact the administrator if you don't have one but would like to help documenting FuelPHP.
 	</p>
