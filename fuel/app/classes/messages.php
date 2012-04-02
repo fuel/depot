@@ -7,7 +7,6 @@
  *
  * @package    FuelDepot
  * @version    1.0
- * @author     Cartalyst LLC
  * @author     Fuel Development Team
  * @license    MIT License
  * @copyright  2012 Fuel Development Team
@@ -134,6 +133,16 @@ class Messages
 	public static function success($message)
 	{
 		return static::instance()->success($message);
+	}
+
+	/**
+	 * Reset the error message store
+	 *
+	 * @return  $this
+	 */
+	public static function reset()
+	{
+		return static::instance()->reset();
 	}
 
 	/**

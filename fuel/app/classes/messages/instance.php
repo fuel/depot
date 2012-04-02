@@ -25,13 +25,33 @@ class Messages_Instance implements ArrayAccess, Iterator
 	protected $messages = array();
 
 	/**
+	 * @var  string  $instance  Name of the current instance
+	 */
+	protected $instance = null;
+
+	/**
 	 * Loads in all the messages from flash.
 	 *
 	 * @return  void
 	 */
 	public function __construct($name = 'messages')
 	{
-		$this->messages = \Session::get_flash($name, array());
+		$this->instance = $name;
+
+		$this->messages = \Session::get_flash($this->instance, array());
+
+		// register a shutdown event to write messages to flash
+		\Event::register('shutdown', array($this, 'shutdown'));
+	}
+
+	/**
+	 * Stores the currently loaded messages in flash
+	 *
+	 * @return  void
+	 */
+	public function shutdown()
+	{
+		\Session::set_flash($this->instance, $this->messages);
 	}
 
 	/**
@@ -87,6 +107,18 @@ class Messages_Instance implements ArrayAccess, Iterator
 	}
 
 	/**
+	 * Resets the message store
+	 *
+	 * @return  $this
+	 */
+	public function reset()
+	{
+		$this->messages = array();
+
+		return $this;
+	}
+
+	/**
 	 * Returns if there are any messages in the queue or not
 	 *
 	 * @return  bool
@@ -119,8 +151,6 @@ class Messages_Instance implements ArrayAccess, Iterator
 				'body' => $msg
 			));
 		}
-
-		\Session::set_flash('messages', $this->messages);
 	}
 
 
