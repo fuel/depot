@@ -257,13 +257,13 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 <div>
 
 	<!-- API file header -->
-	<div id="api_info">
+	<div id="docs_info">
 		<h3><?php echo $record['file']; ?></h3>
 	</div>
 
 	<!-- API documentation error block -->
 	<?php if( \Auth::check() and ! empty($record['markers'])): ?>
-		<div id="api_errors" class="no-box">
+		<div id="docs_errors" class="no-box">
 			<?php echo $func_markers($record['markers']); ?>
 		</div>
 		<div class="clearfix"></div>
@@ -271,7 +271,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 
 	<!-- API page docblock -->
 	<?php if( ! empty($record['docblock'])): ?>
-		<div id="api_docblock">
+		<div id="docs_docblock">
 			<?php echo $func_page_docblock($record['docblock']); ?>
 		</div>
 		<div class="clearfix"></div>
@@ -279,7 +279,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 
 	<!-- API global constants block -->
 	<?php if( ! empty($record['constants']) and ! empty($selection['constant'])): ?>
-		<div id="api_constants">
+		<div id="docs_constants">
 			<h3>Constants</h3>
 			<?php echo $func_constants($record['constants']); ?>
 		</div>
@@ -288,7 +288,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 
 	<!-- API functions block -->
 	<?php if( ! empty($record['functions']) and ! empty($selection['function'])): ?>
-		<div id="api_functions">
+		<div id="docs_functions">
 			<h3>Functions</h3>
 			<?php echo $func_functions($record['functions']); ?>
 		</div>
@@ -297,7 +297,7 @@ $func_classes = function($classes) use($func_docblock, $func_properties, $func_f
 
 	<!-- API classes block -->
 	<?php if( ! empty($record['classes']) and ! empty($selection['class'])): ?>
-		<div id="api_classes">
+		<div id="docs_classes">
 			<h4>Classes</h4>
 			<?php echo $func_classes($record['classes']); ?>
 		</div>

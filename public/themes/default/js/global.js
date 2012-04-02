@@ -53,7 +53,11 @@ $(document).ready(function(){
 		// tree toggle functions
 		setTimeout(function() {
 			$('.menutree > li > a.expanded + ul').show('normal');
+			$('.menutree > li > ul > li > a.expanded + ul').show('normal');
 			$('.menutree > li > a').click(function() {
+				$(this).toggleClass('expanded').toggleClass('collapsed').parent().find('> ul').toggle(500);
+			});
+			$('.menutree > li > ul > li > a').click(function() {
 				$(this).toggleClass('expanded').toggleClass('collapsed').parent().find('> ul').toggle(500);
 			});
 			$('.menutree .expand_all').click(function() {
@@ -63,6 +67,7 @@ $(document).ready(function(){
 				$('.menutree > li > a.expanded').addClass('collapsed').removeClass('expanded').parent().find('> ul').hide('normal');
 			});
 		}, 250);
+
 		// open the trees with selected items
 		$('a.current').parents().filter('li').find('a:first').addClass('expanded').removeClass('collapsed').parent().parent().show();
 	});

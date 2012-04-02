@@ -1,0 +1,77 @@
+/* DOCS CSS */
+
+#docs { min-height:300px; background:url('../img/docs_bg.png') repeat-y; }
+#docs p { font-size:120%; }
+
+/* JQuery collapseable trees ---------------------------------------------------------------------------------------------------------------------------------------------------- */
+#docs .menutree {float:left; font-size:90%; list-style:none; margin:0; margin-bottom:25px; padding:0; vertical-align:top; width:100%; }
+#docs .menutree .expand_all, .menutree .collapse_all {cursor:pointer; }
+#docs .menutree ul {display:none; list-style:none; margin:0; padding:0; }
+#docs .menutree ul li {margin-left: 15px; }
+#docs .menutree ul li ul {display:none; list-style:none; margin:0; padding:0; }
+#docs .menutree li {background-image:none; margin:0; padding:0; }
+#docs .menutree ul ul {display:block; }
+#docs .menutree ul li a {padding-left:18px; width:100%; }
+#docs .menutree a {cursor:pointer; display:block; font-weight:bold; margin-left:0; padding:2px 2px 2px 17px; width:100%; }
+#docs .menutree a.expanded { background:url('../img/collapse.png') no-repeat -3px 40%; }
+#docs .menutree a.collapsed { background:url('../img/expand.png') no-repeat -3px 40%; }
+#docs .menutree a.current { color:#fff; background:#c141ff; font-weight:normal; text-shadow:none; }
+#docs .menutree a:hover {text-decoration:none; }
+#docs .menutree ul a {display:block; font-weight:normal; padding:2px 2px 2px 10px; width:100%; }
+#docs .menutree ul a:link {font-weight:normal; }
+#docs .menutree ul a:hover {color: #c141ff; text-decoration:underline; }
+#docs .menutree li.active a {background:#fff; }
+#docs .menutree li.active li a {background:#e8e8e8; }
+#docs .menutree a.current:hover { color:#fff; }
+
+#docs .badge.green {background-color: #7ba60d;}
+#docs .badge.lightblue {background-color: #4f85cf;}
+#docs .badge.blue {background-color: #0d4da6;}
+#docs .badge.darkblue {background-color: #04387f;}
+#docs .badge.red {background-color: #a6620d;}
+#docs .badge {display: inline-block; background-color: #c141ff; color: #fff; margin-top: -2px; padding: 2px 5px 2px 5px; font-weight: normal; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px;}
+
+#docs_errors {margin-bottom:20px; }
+#docs_errors .error { color:red !important; }
+
+#docs_docblock {font-size: 80%;}
+#docs_docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#docs_docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+
+#docs_constants {font-size:80%;}
+#docs_constants h3 {margin-top: 20px;}
+#docs_constants dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#docs_constants dt {clear:left; float:left; width:269px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_constants dd {float:left; width:450px; padding:5px; border-top:1px dotted #ccc; overflow-x:hidden; }
+
+#docs_functions {font-size:80%;}
+#docs_functions h3 {margin-top:20px;margin-bottom:0px;}
+#docs_functions .function {margin-top:20px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
+#docs_functions .docblock p {margin: 0;padding: 5px 0px; font-weight:bold; font-size:110%; }
+#docs_functions .docblock p p {font-weight:normal; }
+#docs_functions .docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#docs_functions .docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_functions .docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+
+#docs_classes {font-size:80%;}
+#docs_classes h3 {margin-top:20px;}
+#docs_classes .class dt {margin-top:15px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
+#docs_classes div.docblock {border-bottom: 1px dotted #ccc;}
+#docs_classes .docblock pre {margin:0; padding:0; }
+#docs_classes .docblock pre code {font-size:120%;}
+#docs_classes .docblock p {margin: 0;padding: 5px 0px; font-weight:bold; font-size:110%; }
+#docs_classes .docblock p p {font-weight:normal; }
+#docs_classes .docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
+#docs_classes .docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_classes .docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+#docs_classes .properties p {margin: 0; padding: 20px 0px 5px 0px; font-weight:bold; font-size:150%; }
+#docs_classes .properties dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc; margin-bottom:10px; }
+#docs_classes .properties dl p {font-weight:bold; font-size:120%; padding-left:5px; }
+#docs_classes .properties dt {clear:left; float:left; width:280px; padding:5px; padding-top:10px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_classes .properties dd {float:left; width:439px; padding:5px; border-top:1px dotted #ccc;}
+#docs_classes .properties dd span {margin: 0; font-weight:bold; font-size: 100%; }
+#docs_classes .properties dd pre {margin:0; padding:5px 0 0 0;}
+#docs_classes .properties dd span {float:right; margin: 0 0 0 5px; }
+#docs_classes .function {margin-top:20px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
+#docs_classes .function span {margin: 0px 5px 0px 0px; }

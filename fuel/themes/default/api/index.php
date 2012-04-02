@@ -1,4 +1,5 @@
-<?php \Theme::instance()->asset->css(array('api.css'), array(), 'header'); ?>
+<?php \Theme::instance()->asset->css(array('docs.css'), array(), 'header'); ?>
+
 <div style="border-bottom:1px solid #ddd;padding-bottom:10px;">
 	<div style="float:left;">
 		<h1>Class API Documentation</h1>
@@ -11,8 +12,9 @@
 	</div>
 	<div class="clearfix"></div>
 </div>
-<div id="api">
-	<div style="float:left;width:250px;padding-top:10px;margin-right:0px; overflow:hidden;">
+
+<div id="docs">
+	<div style="float:left;width:250px;padding-top:10px;margin-right:0px;overflow:hidden;">
 			<h5>Constants</h5>
 			<?php echo \Html::ul($constantlist, array('id' => 'constantlist', 'class' => 'menutree')); ?>
 
@@ -22,7 +24,7 @@
 			<h5>Classes</h5>
 			<?php echo \Html::ul($classlist, array('id' => 'classlist', 'class' => 'menutree')); ?>
 	</div>
-	<div style="float:right;width:739px;padding-top:10px;border-left:1px solid #ddd;margin-left:0px;padding-left:10px;">
+	<div style="float:right;width:739px;padding-top:10px;margin-left:0px;padding-left:10px;">
 		<?php echo $details; ?>
 	</div>
 	<div class="clearfix"></div>
