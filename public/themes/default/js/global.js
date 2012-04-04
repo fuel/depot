@@ -50,26 +50,24 @@ $(document).ready(function(){
 
 	// Trees
 	$(document).ready(function() {
+		// open nodes that need to be open upon page load
+		$('.menutree a.expanded + ul').show();
+
+		// open trees that contain selected items
+		$('a.current').parents('li').children('a.collapsed').toggleClass('expanded').toggleClass('collapsed').next('ul').show();
+
 		// tree toggle functions
 		setTimeout(function() {
-			$('.menutree > li > a.expanded + ul').show('normal');
-			$('.menutree > li > ul > li > a.expanded + ul').show('normal');
-			$('.menutree > li > a').click(function() {
-				$(this).toggleClass('expanded').toggleClass('collapsed').parent().find('> ul').toggle(500);
-			});
-			$('.menutree > li > ul > li > a').click(function() {
-				$(this).toggleClass('expanded').toggleClass('collapsed').parent().find('> ul').toggle(500);
+			$('.menutree li > a').click(function() {
+				$(this).parent().find('> ul').toggle(500).parent().find('> a').toggleClass('expanded').toggleClass('collapsed');
 			});
 			$('.menutree .expand_all').click(function() {
-				$('.menutree > li > a.collapsed').addClass('expanded').removeClass('collapsed').parent().find('> ul').show('normal');
+				$('.menutree').find('li').children('a.collapsed').addClass('expanded').removeClass('collapsed').next('ul').show();
 			});
 			$('.menutree .collapse_all').click(function() {
-				$('.menutree > li > a.expanded').addClass('collapsed').removeClass('expanded').parent().find('> ul').hide('normal');
+				$('.menutree').find('li').children('a.expanded').addClass('collapsed').removeClass('expanded').next('ul').hide();
 			});
 		}, 250);
-
-		// open the trees with selected items
-		$('a.current').parents().filter('li').find('a:first').addClass('expanded').removeClass('collapsed').parent().parent().show();
 	});
 
 	// Toggler

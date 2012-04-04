@@ -15,7 +15,7 @@
 #docs .menutree a {cursor:pointer; display:block; font-weight:bold; margin-left:0; padding:2px 2px 2px 17px; width:100%; }
 #docs .menutree a.expanded { background:url('../img/collapse.png') no-repeat -3px 40%; }
 #docs .menutree a.collapsed { background:url('../img/expand.png') no-repeat -3px 40%; }
-#docs .menutree a.current { color:#fff; background:#c141ff; font-weight:normal; text-shadow:none; }
+#docs .menutree a.current { color:#fff; background-color:#c141ff; font-weight:normal; text-shadow:none; }
 #docs .menutree a:hover {text-decoration:none; }
 #docs .menutree ul a {display:block; font-weight:normal; padding:2px 2px 2px 10px; width:100%; }
 #docs .menutree ul a:link {font-weight:normal; }

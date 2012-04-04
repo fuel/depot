@@ -15,7 +15,12 @@
 
 <div id="docs">
 	<div style="float:left;width:250px;padding-top:10px;margin-right:0px;overflow:hidden;">
-			<h5>The Framework</h5>
+
+		<ul class="menutree">
+			<li><button class="small expand_all">Expand All</button> <button class="small collapse_all">Collapse All</button></li>
+		</ul>
+
+		<h5>The Framework</h5>
 
 <ul class="menutree">
 	<li><a class="collapsed" href="#">Introduction</a>
@@ -60,7 +65,7 @@
 				<ul>
 					<li><a href="#">Base controllers</a></li>
 					<li><a href="#">Template controller</a></li>
-					<li><a href="#">Rest controller</a></li>
+					<li><a href="#" class="current">Rest controller</a></li>
 				</ul>
 			</li>
 
