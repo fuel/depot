@@ -19,3 +19,6 @@
 [submodule "fuel/core"]
 	path = fuel/core
 	url = https://github.com/fuel/core.git
+[submodule "fuel/packages/nestedsets"]
+	path = fuel/packages/nestedsets
+	url = https://github.com/fuel-packages/fuel-nestedsets
