@@ -1,7 +1,15 @@
 /* DOCS CSS */
 
-#docs { min-height:300px; background:url('../img/docs_bg.png') repeat-y; }
-#docs p { font-size:120%; }
+/* Docs page header ---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+#docs .header {border-bottom:1px solid #ddd;padding-bottom:10px;}
+#docs .header form {text-align:right;}
+#docs .header form h5 {margin-bottom:0px;}
+#docs .footer {margin-top:20px;}
+
+/* Docs page structure ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+#docs .content {background-color:green;min-height:300px; background:url('../img/docs_bg.png') repeat-y;}
+#docs .sidebar {float:left;width:250px;padding-top:10px;margin-right:0px;overflow:hidden;}
+#docs .page {float:right;width:739px;padding-top:10px;margin-left:0px;padding-left:10px;}
 
 /* JQuery collapseable trees ---------------------------------------------------------------------------------------------------------------------------------------------------- */
 #docs .menutree {float:left; font-size:90%; list-style:none; margin:0; margin-bottom:25px; padding:0; vertical-align:top; width:100%; }
