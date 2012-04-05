@@ -43,7 +43,10 @@ return array(
 	 */
 	'index_file'  => false,
 
-	'profiling'  => false,
+	/**
+	 * auto enable profiling when in development
+	 */
+	'profiling'  => (\Fuel::$env == \Fuel::DEVELOPMENT),
 
 	/**
 	 * Settings for Cache class
