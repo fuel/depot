@@ -1,0 +1,169 @@
+/* Syntax Highlighting */
+/*
+
+Intellij Idea-like styling (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+pre{
+	display: inline !important;
+	width: auto;
+}
+
+pre code{
+	padding: 15px;
+	margin-bottom: 20px;
+	display: inline-block;
+	overflow: auto;
+	line-height: 20px;
+	font-size: 14px;
+}
+
+table pre code{
+	margin-bottom: 0;
+	padding: 0;
+}
+
+pre code{
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border-left: 1px solid #C73DFF;
+}
+
+pre{
+	overflow-x: auto;
+}
+
+pre.cli code{
+	background-color: #2a2a2a;
+	color: #fff;
+}
+
+/*
+
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+pre code {
+  display: block;
+  color: #000;
+  background: #ddd;
+}
+
+pre .comment,
+pre .template_comment,
+pre .diff,
+pre .javadoc {
+  color: #4d9817;
+  font-style: italic;
+}
+
+pre .keyword,
+pre .css .rule .keyword,
+pre .winutils,
+pre .javascript .title,
+pre .lisp .title,
+pre .subst {
+  color: #c81587;
+}
+
+pre .number,
+pre .hexcolor {
+  color: #40a070;
+}
+
+pre .string,
+pre .tag .value,
+pre .phpdoc,
+pre .tex .formula {
+  color: #C73DFF;
+}
+
+pre .title,
+pre .id {
+  color: #900;
+  font-weight: bold;
+}
+
+pre .javascript .title,
+pre .lisp .title,
+pre .subst {
+  font-weight: normal;
+}
+
+pre .class .title,
+pre .haskell .label,
+pre .tex .command {
+  color: #458;
+  font-weight: bold;
+}
+
+pre .tag,
+pre .tag .title,
+pre .rules .property,
+pre .django .tag .keyword {
+  color: #8989e9;
+  font-weight: normal;
+}
+
+pre .attribute,
+pre .variable,
+pre .instancevar,
+pre .lisp .body {
+  color: #9e8445;
+}
+
+pre .regexp {
+  color: #009926;
+}
+
+pre .class {
+  color: #458;
+  font-weight: bold;
+}
+
+pre .symbol,
+pre .ruby .symbol .string,
+pre .ruby .symbol .keyword,
+pre .ruby .symbol .keymethods,
+pre .lisp .keyword,
+pre .tex .special,
+pre .input_number {
+  color: #990073;
+}
+
+pre .builtin,
+pre .built_in,
+pre .lisp .title {
+  color: #0086b3;
+}
+
+pre .preprocessor,
+pre .pi,
+pre .doctype,
+pre .shebang,
+pre .cdata {
+  color: #999;
+  font-weight: bold;
+}
+
+pre .deletion {
+  background: #fdd;
+}
+
+pre .addition {
+  background: #dfd;
+}
+
+pre .diff .change {
+  background: #0086b3;
+}
+
+pre .chunk {
+  color: #aaa;
+}
+
+pre .tex .formula {
+  opacity: 0.5;
+}
