@@ -1,4 +1,4 @@
-<?php \Theme::instance()->asset->css(array('api.css'), array(), 'header'); ?>
+<?php \Theme::instance()->asset->css(array('docs.css'), array(), 'header'); ?>
 <div>
 	<h1>Class API Documentation</h1>
 </div>

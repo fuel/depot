@@ -26,7 +26,8 @@ class Model_Version extends \Orm\Model
 	);
 
 	protected static $_has_many = array(
-		'docblox'
+		'docblox',
+		'page'
 	);
 
 	protected static $_observers = array(

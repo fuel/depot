@@ -5,5 +5,5 @@
 	<h1>Not Found</h1>
 	<p>&nbsp;</p>
 	<p>&nbsp;</p>
-	<p>No documenation is available for the selected version of FuelPHP.</p>
+	<p>No documenation is available for the selected topic.</p>
 </div>

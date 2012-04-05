@@ -28,6 +28,11 @@ class Model_User extends \Orm\Model
 		'created_at',
 	);
 
+	protected static $_has_many = array(
+		'page',
+		'doc'
+	);
+
 	protected static $_observers = array(
 		'Orm\Observer_CreatedAt' => array(
 			'events' => array('before_insert'),
