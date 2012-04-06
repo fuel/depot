@@ -70,8 +70,11 @@ class Controller_Documentation extends \Controller_Base_Public
 					// not found, get it from the database, and render it
 					$details = \Markdown::parse($doc->content);
 
-					// cache the rendered result an hour if not in development, else only for 60 seconds
-					\Cache::set('documentation.menutree.version_'.$this->params['version'].'.page_'.$this->params['page'], $details, \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
+					// our custom markdown transformations: page number links
+					$details = preg_replace('~\@page\:(\d+)~', \Uri::create('/documentation/page/$1'), $details);
+
+					// cache the rendered result an hour if not in development
+					\Fuel::$env == \Fuel::DEVELOPMENT or \Cache::set('documentation.menutree.version_'.$this->params['version'].'.page_'.$this->params['page'], $details, 3600);
 				}
 
 				// some data about the last editor, and the time of the last edit
@@ -103,6 +106,12 @@ class Controller_Documentation extends \Controller_Base_Public
 		}
 		else
 		{
+			// store the version number in the session
+			if ($this->params['version'])
+			{
+				\Session::set('version', $this->params['version']);
+			}
+
 			// if no page details were found, see if we have a default page
 			$page = \Admin\Model_Page::find()->where('version_id', '=', $this->params['version'])->where('default', '=', 1)->get_one();
 
@@ -127,6 +136,12 @@ class Controller_Documentation extends \Controller_Base_Public
 				}
 				else
 				{
+					// do we have a version stored in the session?
+					if ($version = \Session::get('version', false))
+					{
+							\Response::redirect('documentation/version/'.$version);
+					}
+
 					// find the default version
 					foreach ($versions as $record)
 					{

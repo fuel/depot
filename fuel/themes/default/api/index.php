@@ -31,7 +31,9 @@
 		</div>
 
 		<div class="page">
-			<?php echo $details; ?>
+			<div class="details">
+				<?php echo $details; ?>
+			</div>
 		</div>
 		<div class="clearfix"></div>
 

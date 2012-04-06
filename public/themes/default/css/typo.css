@@ -15,7 +15,7 @@ a, a:link { color: #c141ff; }
 
 p, pre, abbr, dl, dt, dd, ol, ul, li, span, small, a { font-family: "Droid Sans", helvetica, arial, sans-serif; font-style: normal; font-weight: normal; text-transform: normal; letter-spacing: normal; line-height: 1.4em; }
 
-p, ul, ol { color: #858585; text-shadow: 1px 1px 0px #ffffff; font-size: 13px; margin: 0 0 15px 0; }
+p, ul, ol { color: #515151; font-size: 13px; margin: 0 0 15px 0; }
 
 ul, ol { margin: 0 0 25px 15px; }
 ul li {}
@@ -23,7 +23,6 @@ ol li { list-style-type: decimal; }
 
 em { font-style: italic; }
 strong { font-weight: bold; }
-pre, code { font-family: "Monaco"; color: #7d7d7d; text-shadow: 1px 1px 0px #ffffff; font-size: 11px; margin: 0 0 25px 0; }
 sup { font-size: xx-small; vertical-align: top; }
 sub { font-size: xx-small; vertical-align: bottom; }
 acronym, abbr { font-weight: bold; text-transform: uppercase; font-size: 12px; }

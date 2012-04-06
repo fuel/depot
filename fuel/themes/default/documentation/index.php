@@ -1,4 +1,4 @@
-<?php \Theme::instance()->asset->css(array('docs.css'), array(), 'header'); ?>
+<?php \Theme::instance()->asset->css(array('docs.css', 'highlight.css'), array(), 'header'); ?>
 
 <div id="docs">
 	<div class="header">
@@ -42,3 +42,5 @@
 
 	</div>
 </div>
+
+<?php \Theme::instance()->asset->js(array('highlight.pack.js'), array(), 'footer'); ?>

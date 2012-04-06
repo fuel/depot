@@ -42,62 +42,64 @@ class Controller_Api extends \Controller_Base_Public
 		$this->params = $params;
 
 		// load the defined FuelPHP versions, ordered by version
-		$result = \DB::select()->from('versions')->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->execute();
+		$versions = \DB::select()->from('versions')->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->execute();
 
 		// create the dropdown array
 		$dropdown = array();
-		foreach ($result as $record)
+		foreach ($versions as $record)
 		{
 			$dropdown[$record['id']] = $record['major'].'.'.$record['minor'].'/'.$record['branch'];
 		}
 
-		// find the selected version by id match
-		foreach ($result as $record)
+		// do we have a selected version?
+		if ($this->params['version'])
 		{
-			if ($record['id'] == $this->params['version'])
+			// see if it's valid
+			if ( ! array_key_exists($this->params['version'], $dropdown))
 			{
-				$this->version = $record;
-				break;
+				// unknown version request, redirect to the main api page
+				\Response::redirect('api');
 			}
-		}
 
-		// if not found, get the default one
-		if (empty($this->version))
-		{
-			foreach ($result as $record)
-			{
-				if ($record['default'] == 1)
-				{
-					$this->version = $record;
-					break;
-				}
-			}
-		}
-
-		// if not found, get the last one
-		if (empty($this->version) and count($result) > 0 and ! empty($record))
-		{
-			$this->version = $record;
-			$this->params['version'] = $this->version['id'];
-		}
-
-		// still if not found, give up!
-		if (empty($this->version))
-		{
-			\Theme::instance()->set_partial('content', 'api/error');
+			// store it in the session
+			\Session::set('version', $this->params['version']);
 		}
 		else
 		{
-			// if no version was selected using the dropdown, select the default
-			$this->params['version'] == 0 and \Response::redirect('api/version/'.$this->version['id']);
+			// do we have a version stored in the session?
+			if ($version = \Session::get('version', false))
+			{
+					\Response::redirect('api/version/'.$version);
+			}
 
-			// add the partial to the template
-			\Theme::instance()->set_partial('content', 'api/index')->set(array('versions' => $dropdown, 'selection' => $this->params));
+			// find the default version
+			foreach ($versions as $record)
+			{
+				if ($record['default'])
+				{
+					\Response::redirect('api/version/'.$record['id']);
+				}
+			}
 
-			// render the docs of the selected version
-			$this->process();
+			// get the latest if no default is defined
+			if ($versions->count())
+			{
+				\Response::redirect('documentation/version/'.$record['id']);
+			}
+
+			// giving up, no versions found, show an error message
+			\Theme::instance()->set_partial('content', 'api/error');
+			return;
 		}
 
+		// if no version was selected using the dropdown, select the default
+		$this->params['version'] == 0 and \Response::redirect('api/version/'.$this->params['version']);
+
+		// add the partial to the template
+		\Theme::instance()->set_partial('content', 'api/index')->set(array('versions' => $dropdown, 'selection' => $this->params));
+
+		// render the docs of the selected version
+		$this->process();
 	}
 
 	/*
@@ -110,7 +112,7 @@ class Controller_Api extends \Controller_Base_Public
 		// get the list of files with functions
 		$result = \DB::select()
 			->from('docblox')
-			->where('version_id', $this->version['id'])
+			->where('version_id', $this->params['version'])
 			->order_by('package', 'ASC')
 			->order_by('file', 'ASC')
 			->execute();
@@ -231,7 +233,7 @@ class Controller_Api extends \Controller_Base_Public
 			{
 				$css = array('class' => 'current');
 			}
-			$result[$constant['name'].$record['hash']] = \Html::anchor('api/version/'.$this->version['id'].'/constant/'.$constant['name'].'/file/'.$record['hash'], $constant['name'], $css);
+			$result[$constant['name'].$record['hash']] = \Html::anchor('api/version/'.$this->params['version'].'/constant/'.$constant['name'].'/file/'.$record['hash'], $constant['name'], $css);
 		}
 
 		// sort and return the result
@@ -259,7 +261,7 @@ class Controller_Api extends \Controller_Base_Public
 			{
 				$css = array('class' => 'current');
 			}
-			$result[$function['name'].$record['hash']] = \Html::anchor('api/version/'.$this->version['id'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name'], $css);
+			$result[$function['name'].$record['hash']] = \Html::anchor('api/version/'.$this->params['version'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name'], $css);
 		}
 
 		// return the result
@@ -301,7 +303,7 @@ class Controller_Api extends \Controller_Base_Public
 				}
 
 				// note: space between name and hash makes sure the short names are sorted first!
-				$result[$relative_ns.$class['name'].' '.$record['hash']] = \Html::anchor('api/version/'.$this->version['id'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name'], $css);
+				$result[$relative_ns.$class['name'].' '.$record['hash']] = \Html::anchor('api/version/'.$this->params['version'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name'], $css);
 			}
 		}
 
