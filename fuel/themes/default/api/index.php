@@ -17,7 +17,10 @@
 
 		<div class="sidebar">
 			<ul class="menutree">
-				<li><button class="small expand_all">Expand All</button> <button class="small collapse_all">Collapse All</button></li>
+				<li>
+					<button class="btn small expand_all">Expand All</button>
+					<button class="btn small collapse_all">Collapse All</button>
+				</li>
 			</ul>
 
 			<h5>Constants</h5>
