@@ -31,5 +31,6 @@
 	{
 		echo '<div class="',$message['type'],'-box">',$message['body'],'</div>',"\n";
 	}
+	\Messages::reset();
 ?>
 <!-- End of messages -->
