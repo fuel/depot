@@ -74,7 +74,7 @@
 			<?php endif; ?>
 			<?php if ($pagedata):?>
 				<p class="right">
-					Page last modified by <strong><?php echo $pagedata['user']; ?></strong> on <strong><?php echo \Date::forge($pagedata['updated'])->format('eu_full');?></strong>
+					Page last modified by <strong><?php echo $pagedata['user']; ?></strong> on <strong><?php echo \Date::forge($pagedata['updated'])->format('eu_full');?></strong> GMT
 				</p>
 			<?php endif; ?>
 			<div class="details">

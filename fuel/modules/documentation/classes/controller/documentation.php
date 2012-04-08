@@ -256,8 +256,11 @@ class Controller_Documentation extends \Controller_Base_Public
 							'user_id' => $user[1],
 							'content' => $val->validated('page'),
 						));
-
 						$this->doc->save();
+
+						// delete the page cache
+						\Cache::delete('documentation.version_'.$this->page->version_id.'.page_'.$this->page->id);
+
 						// nope, inform the user and don't do anything
 						\Messages::success('Page successfully saved!');
 					}
@@ -357,7 +360,7 @@ class Controller_Documentation extends \Controller_Base_Public
 				$details = $this->renderpage($this->doc->content);
 
 				// cache the rendered result an hour if not in development
-				\Cache::set('documentation.version_'.$this->params['version'].'.page_'.$this->params['page'], $details, 3600);
+				\Cache::set('documentation.version_'.$this->page->version_id.'.page_'.$this->page->id, $details, 3600);
 			}
 		}
 
