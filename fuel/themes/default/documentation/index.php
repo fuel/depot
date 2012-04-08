@@ -19,11 +19,10 @@
 
 			<ul class="menutree">
 				<li>
-					<?php if (\Auth::has_access('access.admin') or \Session::get('ninjauth.authentication.provider', false) == 'github')
+					<?php if (\Auth::has_access('access.admin'))
 					{
-						echo \Form::open(array('style' => 'display:inline;'));
-						echo \Form::hidden('form', 'new');
-						echo \Form::submit('new', 'New page', array('class' => 'btn small purple '));
+						echo \Form::open(array('action' => 'documentation/menu/'.$selection['version'], 'style' => 'display:inline;'));
+						echo \Form::submit('menu', 'Edit menu', array('class' => 'btn small purple '));
 						echo \Form::close();
 					}
 					?>
@@ -40,30 +39,36 @@
 			<?php if (\Auth::has_access('access.admin') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
 				<div class="editpage">
 					<?php
-						echo \Form::open();
-						if (\Input::post('form', 'back') != 'back')
+						if ( ! in_array(Uri::segment(2), array('version', 'page', 'edit')))
 						{
-							echo \Form::hidden('form', 'back');
+							echo \Form::open(array('action' => 'documentation/page/'.$selection['page'], 'style' => 'display:inline;'));
 							echo \Form::submit('back', 'Back', array('class' => 'btn small purple '));
+							echo \Form::close();
 						}
 						else
 						{
-							if ($doccount)
+							if ($doccount !== false)
 							{
-								echo \Form::hidden('form', 'edit');
-								echo \Form::submit('edit', 'Edit this page', array('class' => 'btn small purple'));
-								if ($doccount > 1)
+								if ($doccount)
 								{
-									echo \Form::submit('diff', 'View changes', array('class' => 'btn small'));
+									echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
+									echo \Form::submit('edit', 'Edit page', array('class' => 'btn small purple'));
+									echo \Form::close();
+									if ($doccount > 1)
+									{
+										echo \Form::open(array('action' => 'documentation/diff/'.$selection['page'], 'style' => 'display:inline;'));
+										echo \Form::submit('diff', 'View changes', array('class' => 'btn small'));
+										echo \Form::close();
+									}
+								}
+								else
+								{
+									echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
+									echo \Form::submit('new', 'New page', array('class' => 'btn small purple '));
+									echo \Form::close();
 								}
 							}
-							else
-							{
-								echo \Form::hidden('form', 'create');
-								echo \Form::submit('create', 'Create this page', array('class' => 'btn small purple '));
-							}
 						}
-						echo \Form::close();
 					?>
 				</div>
 			<?php endif; ?>

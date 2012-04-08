@@ -20,6 +20,11 @@ class Controller_Documentation extends \Controller_Base_Public
 	 protected $params = array();
 
 	/**
+	 * @var	array	all objects of the version table
+	 */
+	protected $versions = array();
+
+	/**
 	 * @var	array	version dropdown
 	 */
 	protected $dropdown = array();
@@ -35,32 +40,17 @@ class Controller_Documentation extends \Controller_Base_Public
 	protected $doc = null;
 
 	/**
-	 * The module index
-	 *
-	 * @access  public
-	 * @return  Response
+	 * @var	array	loaded menu tree structure
 	 */
-	public function router($method, $params)
+	protected $tree = array();
+
+	public function __construct($request, $response)
 	{
-		// process the URI params
-		if (! empty($params))
-		{
-			// we need an even number or elements
-			count($params) % 2 == 0 or $params[] = null;
-
-			// convert our URI params to an assoc array
-			$params = \Arr::to_assoc($params);
-		}
-
-		// set some defaults for required parameters
-		empty($params['version']) and $params['version'] = 0;
-		empty($params['page']) and $params['page'] = 0;
-
-		// and store them
-		$this->params = $params;
+		// call the parent constructor
+		parent::__construct($request, $response);
 
 		// load the defined FuelPHP versions from the database, ordered by version
-		$versions = \DB::select()
+		$this->versions = \DB::select()
 			->from('versions')
 			->order_by('major', 'ASC')
 			->order_by('minor', 'ASC')
@@ -68,94 +58,263 @@ class Controller_Documentation extends \Controller_Base_Public
 			->execute();
 
 		// create the dropdown array
-		foreach ($versions as $record)
+		foreach ($this->versions as $record)
 		{
 			$this->dropdown[$record['id']] = $record['major'].'.'.$record['minor'].'/'.$record['branch'];
 		}
+	}
 
-		// was a specific page requested?
-		if ($this->params['page'])
+	/**
+	 * Documentation start page
+	 *
+	 * @access  public
+	 * @return  Response
+	 */
+	public function action_index()
+	{
+		// do we have a version stored in the session?
+		if ($version = \Session::get('version', false))
 		{
-			// find it, and load the latest docs page
-			if ( ! $this->fetchpage())
-			{
-				// unknown page request, redirect to the main docs page
-				\Response::redirect('documentation');
-			}
+			\Response::redirect('documentation/version/'.$version);
 		}
 
-		// was it a version (switch) request?
-		elseif ($this->params['version'])
+		// find the default version
+		foreach ($this->versions as $record)
 		{
-			// find it, and load the latest docs page
-			if ( ! $this->fetchversion())
-			{
-				// unknown version request, redirect to the main docs page
-				\Response::redirect('documentation');
-			}
-		}
-
-		// no version, and no page?
-		else
-		{
-			// do we have a version stored in the session?
-			if ($version = \Session::get('version', false))
-			{
-				\Response::redirect('documentation/version/'.$version);
-			}
-
-			// find the default version
-			foreach ($versions as $record)
-			{
-				if ($record['default'])
-				{
-					\Response::redirect('documentation/version/'.$record['id']);
-				}
-			}
-
-			// get the latest if no default is defined
-			if ($versions->count())
+			if ($record['default'])
 			{
 				\Response::redirect('documentation/version/'.$record['id']);
 			}
-
-			// giving up, no versions found, show an error message
-			\Theme::instance()->set_partial('content', 'documentation/error', true);
 		}
 
-		// add the version dropdown and the selected version to it
-		if ($partial = \Theme::instance()->get_partial('content', 'documentation/index'))
+		// get the latest if no default is defined
+		if ($this->versions->count())
 		{
-			$partial->set(array('versions' => $this->dropdown, 'selection' => $this->params));
+			\Response::redirect('documentation/version/'.$record['id']);
+		}
+
+		// giving up, no versions found, show an error message
+		\Theme::instance()->set_partial('content', 'documentation/error', true);
+	}
+
+	/**
+	 * Select a version of FuelPHP
+	 *
+	 * @access  public
+	 * @return  Response
+	 */
+	public function action_version($version  = '0')
+	{
+		// store and unify the parameters
+		$this->params = array('version' => $version, 'page' => '0');
+
+		// find it, and load the latest docs page
+		if ( ! $this->fetchversion())
+		{
+			// unknown version request, redirect to the main docs page
+			\Response::redirect('documentation');
 		}
 	}
 
-	/*
+	/**
+	 * Load a specific documentation page
+	 *
+	 * @access  public
+	 * @return  Response
 	 */
-	protected function new_node()
+	public function action_page($page = '0')
 	{
-		return 'NEW NODE';
+		// validate the access
+		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
+		{
+			// nope, inform the user and don't do anything
+			\Messages::error('You don\'t have access to this page!');
+
+			\Response::redirect('documentation');
+		}
+
+		// store and unify the parameters
+		$this->params = array('version' => '0', 'page' => $page);
+
+		// find it, and load the latest docs page
+		if ( ! $this->fetchpage())
+		{
+			// unknown page request, redirect to the main docs page
+			\Response::redirect('documentation');
+		}
 	}
 
-	/*
+	/**
+	 * Load the menu editor
+	 *
+	 * @access  public
+	 * @return  Response
 	 */
-	protected function new_page()
+	public function action_menu($version = '0')
 	{
-		return 'NEW PAGE';
+		// validate the access
+		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
+		{
+			// nope, inform the user and don't do anything
+			\Messages::error('You don\'t have access to this page!');
+
+			\Response::redirect('documentation');
+		}
+
+		// store and unify the parameters
+		$this->params = array('version' => $version, 'page' => '0');
+
+		// build the page layout partial
+		$partial = $this->buildpage();
+
+		$partial->set('details', 'Edit the menu for this version');
 	}
 
-	/*
+	/**
+	 * Load the page editor
+	 *
+	 * @access  public
+	 * @return  Response
 	 */
-	protected function edit_page()
+	public function action_edit($page = '0')
 	{
-		return 'EDIT PAGE';
+		// validate the access
+		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
+		{
+			// nope, inform the user and don't do anything
+			\Messages::error('You don\'t have access to this page!');
+
+			\Response::redirect('documentation');
+		}
+
+		// store and unify the parameters
+		$this->params = array('version' => '0', 'page' => $page);
+
+		// fetch the requested page
+		$this->page = \Admin\Model_Page::find($this->params['page']);
+
+		// found?
+		if ( ! $this->page)
+		{
+			// unknown page request, redirect to the main docs page
+			\Response::redirect('documentation');
+		}
+
+		// set the version from the page so the tree can be generated
+		$this->params['version'] = $this->page->version_id;
+
+		// get the docs page to edit
+		$this->doc = \Admin\Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC')->get_one();
+
+		// build the page layout partial
+		$partial = $this->buildpage();
+
+		// add the edit page partial
+		$details = \Theme::instance()->view('documentation/editpage');
+
+		// do we have something posted?
+		if (\Input::post('page', false) !== false)
+		{
+			if (\Input::post('cancel'))
+			{
+				// cancel button used
+				\Response::redirect('documentation/page/'.$this->page->id);
+			}
+
+			elseif (\Input::post('submit'))
+			{
+				// create the validation object
+				$val = \Validation::forge('editpage');
+
+				// set the validation rules
+				$val->add('title', 'Title')->add_rule('required');
+				$val->add('slug', 'Slug')->add_rule('required');
+				$val->add('page', 'Page')->add_rule('required');
+
+				if ($val->run())
+				{
+					// save the changes to the page
+					$this->page->title = $val->validated('title');
+					$this->page->slug = $val->validated('slug');
+
+					// and save it
+					$this->page->save();
+
+					// any changes to the page
+					if ($this->doc->content == $val->validated('page'))
+					{
+						// nope, inform the user and don't do anything
+						\Messages::warning('No changes were made to the page');
+					}
+					else
+					{
+						// get the user id
+						$user = \Auth::get_user_id();
+						// create a new docs page
+						$this->doc = \Admin\Model_Doc::forge(array(
+							'page_id' => $this->page->id,
+							'user_id' => $user[1],
+							'content' => $val->validated('page'),
+						));
+
+						$this->doc->save();
+						// nope, inform the user and don't do anything
+						\Messages::success('Page successfully saved!');
+					}
+
+					// and return to the page
+					\Response::redirect('documentation/page/'.$this->page->id);
+				}
+
+				// set any error messages we need to display
+				\Messages::error($val->error());
+
+				// set the page variables on the view
+				$details
+					->set('title', \Input::post('title'))
+					->set('slug', \Input::post('slug'))
+					->set('page', \Input::post('page'));
+			}
+
+			elseif (\Input::post('preview'))
+			{
+				// set the page variables on the view
+				$details
+					->set('title', \Input::post('title'))
+					->set('slug', \Input::post('slug'))
+					->set('page', \Input::post('page'))
+					->set('preview', $this->renderpage(\Input::post('page')), false);
+			}
+		}
+		else
+		{
+			// set the page variables on the view
+			$details
+				->set('title', $this->page->title)
+				->set('slug', $this->page->slug)
+				->set('page', $this->doc ? $this->doc->content : '')
+				->set('preview', false);
+		}
+
+		// and set the partial
+		$partial->set('details', $details);
 	}
 
-	/*
+	/**
+	 * Load the diff viewer
+	 *
+	 * @access  public
+	 * @return  Response
 	 */
-	protected function page_diff()
+	public function action_diff($page = '0')
 	{
-		return 'PAGE DIFF';
+		// store and unify the parameters
+		$this->params = array('version' => '0', 'page' => $page);
+
+		// build the page layout partial
+		$partial = $this->buildpage();
+
+		$partial->set('details', 'View the page diffs');
 	}
 
 	/*
@@ -194,14 +353,11 @@ class Controller_Documentation extends \Controller_Base_Public
 			// found it?
 			if ($this->doc)
 			{
-				// not found, get it from the database, and render it
-				$details = \Markdown::parse($this->doc->content);
-
-				// our custom markdown transformations: page number links
-				$details = preg_replace('~\@page\:(\d+)~', \Uri::create('/documentation/page/$1'), $details);
+				// render the page
+				$details = $this->renderpage($this->doc->content);
 
 				// cache the rendered result an hour if not in development
-				\Fuel::$env == \Fuel::DEVELOPMENT or \Cache::set('documentation.version_'.$this->params['version'].'.page_'.$this->params['page'], $details, 3600);
+				\Cache::set('documentation.version_'.$this->params['version'].'.page_'.$this->params['page'], $details, 3600);
 			}
 		}
 
@@ -211,8 +367,8 @@ class Controller_Documentation extends \Controller_Base_Public
 		//set the fuelphp version so we can load the correct docs menu
 		$this->params['version'] = $this->page->version_id;
 
-		// add the docs index page partial to the template
-		$partial = \Theme::instance()->set_partial('content', 'documentation/index');
+		// build the page layout partial
+		$partial = $this->buildpage();
 
 		// set some data about the last editor, and the time of the last edit
 		if ($this->doc)
@@ -226,28 +382,6 @@ class Controller_Documentation extends \Controller_Base_Public
 
 		// set the doc count so we can show the correct buttons
 		$partial->set('doccount', $versions);
-
-		// add the docs menu to the docs index partial
-		$partial->set('menutree', $this->fetchmenu(), false);
-
-		// do we have a form posted?
-		if ($form = \Input::post('form'))
-		{
-			// create a new page node in the tree
-			$form == 'new' and $details = $this->new_node();
-
-			// create a new docs page for the current node
-			$form == 'create' and $details =  $this->new_page();
-
-			if ($form == 'edit')
-			{
-				// edit the docs page for the current node
-				\Input::post('edit') and $details = $this->edit_page();
-
-				// edit the docs page for the current node
-				\Input::post('diff') and $details = $this->page_diff();
-			}
-		}
 
 		// set the page details
 		$partial->set('details', $details, false);
@@ -279,10 +413,17 @@ class Controller_Documentation extends \Controller_Base_Public
 			\Response::redirect('documentation/page/'.$this->page->id);
 		}
 
-		// version exists, but no pages
+		// no default page exists for this version. Find the first page node
+		$this->page = \Admin\Model_Page::find()->where('version_id', '=', $this->params['version'])->where('left_id', '>', 2)->where('right_id', '=', \DB::expr('left_id + 1'))->get_one();
 
-		// add the docs index page partial to the template
-		$partial = \Theme::instance()->set_partial('content', 'documentation/index');
+		if ($this->page)
+		{
+			// found a page node, so redirect to it
+			\Response::redirect('documentation/page/'.$this->page->id);
+		}
+
+		// build the page layout partial
+		$partial = $this->buildpage();
 
 		// set in intro page
 		$partial->set('details', \Theme::instance()->view('documentation/intro'));
@@ -290,7 +431,10 @@ class Controller_Documentation extends \Controller_Base_Public
 		// no page data, no data to edit or create
 		$partial->set('pagedata', false);
 
-		// add the dcos menu to the docs index partial
+		// no doc count either, so no create or edit buttons
+		$partial->set('doccount', false);
+
+		// add the docs menu to the docs index partial
 		$partial->set('menutree', $this->fetchmenu(), false);
 
 		return true;
@@ -304,7 +448,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		// fetch the menu tree for this version of the docs
 		try
 		{
-			$tree = \Cache::get('documentation.version_'.$this->params['version'].'.menu');
+			$this->tree = \Cache::get('documentation.version_'.$this->params['version'].'.menu');
 		}
 		catch (\CacheNotFoundException $e)
 		{
@@ -315,7 +459,7 @@ class Controller_Documentation extends \Controller_Base_Public
 			$result = $model ? $model->tree_dump_as_array() : array();
 
 			// convert the flat array into a multi-dimensional one
-			$tree = array();
+			$this->tree = array();
 
 			// array to track nodes with children
 			$tracker = array();
@@ -337,22 +481,22 @@ class Controller_Documentation extends \Controller_Base_Public
 				else
 				{
 					// no, add it to the tree
-					$tree[$node['id']] = $node;
+					$this->tree[$node['id']] = $node;
 
 					// and to the tracker
-					$tracker[$node['id']] =& $tree[$node['id']];
+					$tracker[$node['id']] =& $this->tree[$node['id']];
 				}
 			}
 
 			// and cache for an hour if not in development, else only for 60 seconds
-			\Cache::set('documentation.version_'.$this->params['version'].'.menu', $tree, \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
+			\Cache::set('documentation.version_'.$this->params['version'].'.menu', $this->tree, \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
 		}
 
 		// php < 5.4 fix, can't pass $this to a closure
 		$params =& $this->params;
 
 		// closure to generate an unordered list
-		$menu = function ($nodes, $depth = 3) use(&$menu, $params)
+		$menu = function ($nodes, $depth = 3, &$found = false) use(&$menu, $params)
 		{
 			// some storage for the result
 			$output = '';
@@ -360,15 +504,10 @@ class Controller_Documentation extends \Controller_Base_Public
 			// do we have any nodes?
 			if ($nodes)
 			{
-				// start the new unordered list
-				if ($depth == 3)
-				{
-					$output .= str_repeat("\t", $depth).'<ul class="menutree">'."\n";
-				}
-				else
-				{
-					$output .= str_repeat("\t", $depth).'<ul>'."\n";
-				}
+				// reset the found flag
+				$found = false;
+
+				$result = '';
 
 				// loop through the nodes
 				foreach ($nodes as $node)
@@ -376,27 +515,46 @@ class Controller_Documentation extends \Controller_Base_Public
 					// does this node have children?
 					if ($node['children'])
 					{
-						// add the link with an open button
-						$output .= str_repeat("\t", $depth+1).'<li><a class="collapsed">'.$node['title'].'</a>'."\n";
-
 						// and recurse to generate the unordered list for the children
-						$output .= $menu($node['children'], $depth+1);
+						$submenu = $menu($node['children'], $depth+1, $found);
+
+						// add the link with an open button
+						$result .= str_repeat("\t", $depth+1).'<li><a class="'.($found?'expanded':'collapsed').'">'.$node['title'].'</a>'."\n".$submenu;
+
 					}
 					else
 					{
 						// determine the class for this node
-						$class = ($node['id'] == $params['page'] ? 'current' : '');
+						if ($node['id'] == $params['page'])
+						{
+							$found = true;
+							$class = 'current';
+						}
+						else
+						{
+							$class = '';
+						}
 
 						// and add the link to the docs page
-						$output .= str_repeat("\t", $depth+1).'<li><a class="'.$class.'" href="'.\Uri::create('documentation/page/'.$node['id']).'">'.$node['title'].'</a>'."\n";
+						$result .= str_repeat("\t", $depth+1).'<li><a class="'.$class.'" href="'.\Uri::create('documentation/page/'.$node['id']).'">'.$node['title'].'</a>'."\n";
 					}
 
 					// close the node
-					$output .= str_repeat("\t", $depth+1).'</li>'."\n";
+					$result .= str_repeat("\t", $depth+1).'</li>'."\n";
+				}
+
+				// start the new unordered list
+				if ($depth == 3)
+				{
+					$output .= str_repeat("\t", $depth).'<ul class="menutree">'."\n";
+				}
+				else
+				{
+					$output .= str_repeat("\t", $depth).'<ul '.($found?'style="display:block;"':'').'>'."\n";
 				}
 
 				// close the list
-				$output .= str_repeat("\t", $depth).'</ul>'."\n";
+				$output .= $result.str_repeat("\t", $depth).'</ul>'."\n";
 			}
 
 			// return the result
@@ -406,7 +564,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		// convert the tree into an unordered list
 		$menutree = '';
 
-		foreach ($tree as $book)
+		foreach ($this->tree as $book)
 		{
 			// add a new book title
 			$menutree .= "\t\t\t".'<h5>'.$book['title'].'</h5>'."\n";
@@ -420,82 +578,36 @@ class Controller_Documentation extends \Controller_Base_Public
 	}
 
 	/*
-	 * load the menu structure for this docs version
 	 */
-	protected function fetchmenux()
+	protected function buildpage()
 	{
-		// fetch the menu tree for this version of the docs
-		try
-		{
-			$menutree = \Cache::get('documentation.menutree.version_'.$this->params['version'].'.menu_'.$this->params['page']);
-		}
-		catch (\CacheNotFoundException $e)
-		{
-			// storage for the docs menutree
-			$menutree = '';
+		// add the docs index page partial to the template
+		$partial = \Theme::instance()->set_partial('content', 'documentation/index');
 
-			// load the tree for this version
-			$model = \Admin\Model_Page::forge()->tree_select($this->params['version'])->tree_get_root();
+		// add the version dropdown and the selected version to it
+		$partial->set(array('versions' => $this->dropdown, 'selection' => $this->params));
 
-			// php < 5.4 fix, can't pass $this to a closure
-			$params =& $this->params;
+		// add the docs menu to the docs index partial
+		$partial->set('menutree', $this->fetchmenu(), false);
 
-			// closure to generate an unordered list
-			$ul = function ($parent, $depth = 3) use(&$ul, $params) {
-				$output = '';
-				// check if the parent has children
-				if ($parent->tree_has_children())
-				{
-					if ($depth == 3)
-					{
-						$output .= str_repeat("\t", $depth).'<ul class="menutree">'."\n";
-					}
-					else
-					{
-						$output .= str_repeat("\t", $depth).'<ul>'."\n";
-					}
-					$children = $parent->tree_get_children();
-					foreach ($children as $child)
-					{
-						if ($child->tree_has_children())
-						{
-							$output .= str_repeat("\t", $depth+1).'<li><a class="collapsed">'.$child->title.'</a>'."\n";
-							$output .= $ul($child, $depth+1);
-						}
-						else
-						{
-							$class = ($child->id == $params['page'] ? 'current' : '');
-							$output .= str_repeat("\t", $depth+1).'<li><a class="'.$class.'" href="'.\Uri::create('documentation/page/'.$child->id).'">'.$child->title.'</a>'."\n";
-						}
-						$output .= str_repeat("\t", $depth+1).'</li>'."\n";
-					}
-					$output .= str_repeat("\t", $depth).'</ul>'."\n";
-				}
+		// set a default for the  doccount and the pagedata
+		$partial->set('doccount', false)->set('pagedata', false);
 
-				return $output;
-			};
-
-			// do we have a tree? and does it have nodes?
-			if ($model and $model->tree_has_children())
-			{
-				// get the defined books
-				$books = $model->tree_get_children();
-
-				// and load the tree for them
-				foreach($books as $book)
-				{
-					// book title
-					$menutree .= "\t\t\t".'<h5>'.$book->title.'</h5>'."\n";
-
-					// generate the menu
-					$menutree .= $ul($book);
-				}
-			}
-
-			// and cache for an hour if not in development, else only for 60 seconds
-			\Cache::set('documentation.menutree.version_'.$this->params['version'].'.menu_'.$this->params['page'], $menutree, \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
-		}
-
-		return $menutree;
+		return $partial;
 	}
+
+	/*
+	 */
+	protected function renderpage($doc = '')
+	{
+
+		// not found, get it from the database, and render it
+		$details = \Markdown::parse($doc);
+
+		// our custom markdown transformations: page number links
+		$details = preg_replace('~\@page\:(\d+)~', \Uri::create('/documentation/page/$1'), $details);
+
+		return $details;
+	}
+
 }

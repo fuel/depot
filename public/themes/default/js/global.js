@@ -50,16 +50,13 @@ $(document).ready(function(){
 
 	// Trees
 	$(document).ready(function() {
-		// open nodes that need to be open upon page load
-		$('.menutree a.expanded + ul').show();
-
 		// open trees that contain selected items
 		$('a.current').parents('li').children('a.collapsed').toggleClass('expanded').toggleClass('collapsed').next('ul').show();
 
 		// tree toggle functions
 		setTimeout(function() {
 			$('.menutree li > a').click(function() {
-				$(this).parent().find('> ul').toggle(500).parent().find('> a').toggleClass('expanded').toggleClass('collapsed');
+				$(this).parent().find('> ul').toggle(100).parent().find('> a').toggleClass('expanded').toggleClass('collapsed');
 			});
 			$('.menutree .expand_all').click(function() {
 				$('.menutree').find('li').children('a.collapsed').addClass('expanded').removeClass('collapsed').next('ul').show();
@@ -67,7 +64,7 @@ $(document).ready(function(){
 			$('.menutree .collapse_all').click(function() {
 				$('.menutree').find('li').children('a.expanded').addClass('collapsed').removeClass('expanded').next('ul').hide();
 			});
-		}, 250);
+		}, 0);
 	});
 
 	// Toggler
@@ -107,6 +104,11 @@ $(document).ready(function(){
 	// Scroll
 	$(document).ready(function(){
 		jQuery.localScroll();
+	});
+
+	// Enable MarkItUp
+	$(document).ready(function() {
+		$(".markItUp").markItUp(mySettings);
 	});
 
 	jQuery.fn.nudge = function(params) {
