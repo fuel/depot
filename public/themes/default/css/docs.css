@@ -37,6 +37,8 @@
 #docs .details table tr:last-child td:first-child {border-top-left-radius: 0px; border-bottom-left-radius: 5px;}
 #docs .details table tr:last-child td:last-child {border-bottom-right-radius: 5px; border-top-right-radius: 0px;}
 #docs .details ul {list-style-image:url('../img/bullet.png');}
+#docs .details ins {color:green;background:#dfd;text-decoration:none}
+#docs .details del {color:red;background:#fdd;text-decoration:none}
 
 /* JQuery collapseable trees ---------------------------------------------------------------------------------------------------------------------------------------------------- */
 #docs .menutree {float:left; font-size:90%; list-style:none; margin:0; margin-bottom:25px; padding:0; vertical-align:top; width:100%; }

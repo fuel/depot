@@ -39,34 +39,25 @@
 			<?php if (\Auth::has_access('access.admin') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
 				<div class="editpage">
 					<?php
-						if ( ! in_array(Uri::segment(2), array('version', 'page', 'edit')))
+						if ($doccount !== false)
 						{
-							echo \Form::open(array('action' => 'documentation/page/'.$selection['page'], 'style' => 'display:inline;'));
-							echo \Form::submit('back', 'Back', array('class' => 'btn small purple '));
-							echo \Form::close();
-						}
-						else
-						{
-							if ($doccount !== false)
+							if ($doccount)
 							{
-								if ($doccount)
+								echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
+								echo \Form::submit('edit', 'Edit page', array('class' => 'btn small purple'));
+								echo \Form::close();
+								if ($doccount > 1)
 								{
-									echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
-									echo \Form::submit('edit', 'Edit page', array('class' => 'btn small purple'));
-									echo \Form::close();
-									if ($doccount > 1)
-									{
-										echo \Form::open(array('action' => 'documentation/diff/'.$selection['page'], 'style' => 'display:inline;'));
-										echo \Form::submit('diff', 'View changes', array('class' => 'btn small'));
-										echo \Form::close();
-									}
-								}
-								else
-								{
-									echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
-									echo \Form::submit('new', 'New page', array('class' => 'btn small purple '));
+									echo \Form::open(array('action' => 'documentation/diff/'.$selection['page'], 'style' => 'display:inline;'));
+									echo \Form::submit('diff', 'View changes', array('class' => 'btn small'));
 									echo \Form::close();
 								}
+							}
+							else
+							{
+								echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
+								echo \Form::submit('new', 'New page', array('class' => 'btn small purple '));
+								echo \Form::close();
 							}
 						}
 					?>

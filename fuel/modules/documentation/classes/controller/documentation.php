@@ -125,13 +125,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	public function action_page($page = '0')
 	{
 		// validate the access
-		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
-		{
-			// nope, inform the user and don't do anything
-			\Messages::error('You don\'t have access to this page!');
-
-			\Response::redirect('documentation');
-		}
+		$this->checkaccess();
 
 		// store and unify the parameters
 		$this->params = array('version' => '0', 'page' => $page);
@@ -153,13 +147,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	public function action_menu($version = '0')
 	{
 		// validate the access
-		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
-		{
-			// nope, inform the user and don't do anything
-			\Messages::error('You don\'t have access to this page!');
-
-			\Response::redirect('documentation');
-		}
+		$this->checkaccess();
 
 		// store and unify the parameters
 		$this->params = array('version' => $version, 'page' => '0');
@@ -179,13 +167,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	public function action_edit($page = '0')
 	{
 		// validate the access
-		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
-		{
-			// nope, inform the user and don't do anything
-			\Messages::error('You don\'t have access to this page!');
-
-			\Response::redirect('documentation');
-		}
+		$this->checkaccess();
 
 		// store and unify the parameters
 		$this->params = array('version' => '0', 'page' => $page);
@@ -311,13 +293,88 @@ class Controller_Documentation extends \Controller_Base_Public
 	 */
 	public function action_diff($page = '0')
 	{
+		// validate the access
+		$this->checkaccess();
+
 		// store and unify the parameters
 		$this->params = array('version' => '0', 'page' => $page);
+
+		// get the docs pages
+		$docs = \Admin\Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC')->get();
+
+		// did we find more then one?
+		if ( ! $docs or count($docs) < 2)
+		{
+			// nope, inform the user there's nothing to diff
+			\Messages::error('No page versions available to run a diff on!');
+
+			// and return to the page
+			\Response::redirect('documentation/page/'.$page);
+		}
+
+		// store the version id too, we need it to generate the menu
+		$this->params['version'] = reset($docs)->page->version_id;
 
 		// build the page layout partial
 		$partial = $this->buildpage();
 
-		$partial->set('details', 'View the page diffs');
+		// do we have something posted?
+		if (\Input::post('cancel'))
+		{
+			// cancel button used
+			\Response::redirect('documentation/page/'.reset($docs)->page_id);
+		}
+
+		elseif (\Input::post('view'))
+		{
+			// do we have valid input?
+			if (\Input::post('before') and \Input::post('after'))
+			{
+				if (isset($docs[\Input::post('before')]) and isset($docs[\Input::post('after')]))
+				{
+					// load the diff class
+					require_once APPPATH.'vendor'.DS.'finediff'.DS.'finediff.php';
+
+					// add the view diff partial
+					$details = \Theme::instance()->view('documentation/viewdiff');
+
+					// run the diff on the two versions
+					$opcodes = \FineDiff::getDiffOpcodes($docs[\Input::post('before')]->content, $docs[\Input::post('after')]->content);
+					$details->set('diff', $this->renderpage(\FineDiff::renderDiffToHTMLFromOpcodes($docs[\Input::post('before')]->content, $opcodes)), false);
+
+					$details->set('before', \Input::post('before'));
+					$details->set('after', \Input::post('after'));
+				}
+				else
+				{
+					// nope, inform the user there's nothing to diff
+					\Messages::error('Invalid page versions selected to run a diff on!');
+
+					// invalid input, try again
+					\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+				}
+			}
+			else
+			{
+				// nope, inform the user there's nothing to diff
+				\Messages::error('No page versions selected to run a diff on!');
+
+				// invalid input, try again
+				\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+			}
+		}
+
+		else
+		{
+			// add the view diff partial
+			$details = \Theme::instance()->view('documentation/diffindex');
+
+			// pass the docs to it
+			$details->set('docs', $docs);
+		}
+
+		// and set the partial
+		$partial->set('details', $details);
 	}
 
 	/*
@@ -459,37 +516,7 @@ class Controller_Documentation extends \Controller_Base_Public
 			$model = \Admin\Model_Page::forge()->tree_select($this->params['version'])->tree_get_root();
 
 			// did we find it?
-			$result = $model ? $model->tree_dump_as_array() : array();
-
-			// convert the flat array into a multi-dimensional one
-			$this->tree = array();
-
-			// array to track nodes with children
-			$tracker = array();
-
-			foreach($result as $node)
-			{
-				// add an array for possible childeren of this node
-				$node['children'] = array();
-
-				// do we already track the parent?
-				if (array_key_exists($node['_parent_'], $tracker))
-				{
-					// add the node as a child of the parent
-					$tracker[$node['_parent_']]['children'][$node['id']] = $node;
-
-					// and to the tracker
-					$tracker[$node['id']] =& $tracker[$node['_parent_']]['children'][$node['id']];
-				}
-				else
-				{
-					// no, add it to the tree
-					$this->tree[$node['id']] = $node;
-
-					// and to the tracker
-					$tracker[$node['id']] =& $this->tree[$node['id']];
-				}
-			}
+			$this->tree = $model ? $model->tree_dump_as_array(array(), true, true) : array();
 
 			// and cache for an hour if not in development, else only for 60 seconds
 			\Cache::set('documentation.version_'.$this->params['version'].'.menu', $this->tree, \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
@@ -581,6 +608,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	}
 
 	/*
+	 * setup the documentation details page
 	 */
 	protected function buildpage()
 	{
@@ -600,6 +628,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	}
 
 	/*
+	 * render the markdown
 	 */
 	protected function renderpage($doc = '')
 	{
@@ -611,6 +640,20 @@ class Controller_Documentation extends \Controller_Base_Public
 		$details = preg_replace('~\@page\:(\d+)~', \Uri::create('/documentation/page/$1'), $details);
 
 		return $details;
+	}
+
+	/*
+	 * check if the current user has access to the requested action
+	 */
+	protected function checkaccess()
+	{
+		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
+		{
+			// nope, inform the user and don't do anything
+			\Messages::error('You don\'t have access to this page!');
+
+			\Response::redirect('documentation');
+		}
 	}
 
 }

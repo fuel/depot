@@ -46,7 +46,7 @@ return array(
 	/**
 	 * auto enable profiling when in development
 	 */
-	'profiling'  => (\Fuel::$env == \Fuel::DEVELOPMENT),
+	'profiling'  => false, //(\Fuel::$env == \Fuel::DEVELOPMENT),
 
 	/**
 	 * Settings for Cache class
