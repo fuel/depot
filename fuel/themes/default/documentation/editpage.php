@@ -15,7 +15,7 @@
 		<hr />
 		</li>
 	<?php endif; ?>
-	<li><?php echo Form::label('Page content', 'page'), Form::textarea('page', $page, array('class' => 'markItUp markdown')); ?></li>
+	<li class="markdown"><?php echo Form::label('Page content', 'page'), Form::textarea('page', $page, array('class' => 'markItUp')); ?></li>
 </ul>
 <?php
 	echo \Form::submit('preview', 'Preview', array('class' => 'btn purple '));
