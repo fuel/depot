@@ -478,7 +478,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		// set some data about the last editor, and the time of the last edit
 		if ($this->doc)
 		{
-			$partial->set('pagedata', array('user' => $this->page->user->profile_fields['full_name'], 'updated' => $this->doc->created_at));
+			$partial->set('pagedata', array('user' => $this->page->user->profile_fields['full_name'],'updated' => $this->doc->created_at, 'format' => $this->date_format));
 		}
 		else
 		{

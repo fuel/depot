@@ -19,7 +19,7 @@
 
 			<ul class="menutree">
 				<li>
-					<?php if (\Auth::has_access('access.admin'))
+					<?php if (\Auth::has_access('access.staff'))
 					{
 						echo \Form::open(array('action' => 'documentation/menu/'.$selection['version'], 'style' => 'display:inline;'));
 						echo \Form::submit('menu', 'Edit menu', array('class' => 'btn small purple '));
@@ -36,7 +36,7 @@
 		</div>
 
 		<div class="page">
-			<?php if (\Auth::has_access('access.admin') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
+			<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
 				<div class="editpage">
 					<?php
 						if ($doccount !== false)
@@ -65,7 +65,7 @@
 			<?php endif; ?>
 			<?php if ($pagedata):?>
 				<p class="right">
-					Page last modified by <strong><?php echo $pagedata['user']; ?></strong> on <strong><?php echo \Date::forge($pagedata['updated'])->format('eu_full');?></strong> GMT
+					Page last modified by <strong><?php echo $pagedata['user']; ?></strong> on <strong><?php $date = \Date::forge($pagedata['updated']); echo $date->format($pagedata['format'].'_full', true);?></strong> <?php echo $date->get_timezone_abbr(true); ?>
 				</p>
 			<?php endif; ?>
 			<div class="details">

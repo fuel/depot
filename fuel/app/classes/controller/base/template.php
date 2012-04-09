@@ -18,6 +18,11 @@ class Controller_Base_Template extends Controller
 	public $template = null;
 
 	/**
+	* @var string global date format to use
+	*/
+	public $date_format = 'eu';
+
+	/**
 	* @var array navigation bar entries
 	*/
 	public $navbar = array();
@@ -48,6 +53,12 @@ class Controller_Base_Template extends Controller
 		{
 			$navitems[] = array('name' => 'Profile', 'link' => '/users/profile', 'class' => '');
 			$navitems[] = array('name' => 'Logout', 'link' => '/users/logout', 'class' => '');
+
+			// set the correct timezone for logged in users
+			$profile = \Auth::get_profile_fields();
+
+			isset($profile['timezone']) and \Date::display_timezone($profile['timezone']);
+			isset($profile['dateformat']) and $this->date_format = $profile['dateformat'];
 		}
 		else
 		{

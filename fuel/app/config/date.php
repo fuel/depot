@@ -26,21 +26,24 @@ return array(
 	 * A couple of named patterns that are often used
 	 */
 	'patterns' => array(
-		'local'		=> '%c',
+		'local'			=> '%c',
 
-		'mysql'		=> '%Y-%m-%d %H:%M:%S',
+		'mysql'			=> '%Y-%m-%d %H:%M:%S',
 
-		'us'		=> '%m/%d/%Y',
-		'us_short'	=> '%m/%d',
-		'us_named'	=> '%B %d %Y',
-		'us_full'	=> '%I:%M %p, %B %d %Y',
-		'eu'		=> '%d-%m-%Y',
-		'eu_short'	=> '%d-%m',
-		'eu_named'	=> '%d %B %Y',
-		'eu_full'	=> '%d %B %Y, %H:%M',
+		'us'			=> '%m/%d/%Y',
+		'us_short'		=> '%m/%d',
+		'us_named'		=> '%B %d %Y',
+		'us_full'		=> '%I:%M %p, %B %d %Y',
+		'us_datetime'	=> '%m-%d-%Y %I:%M %p',
 
-		'24h'		=> '%H:%M',
-		'12h'		=> '%I:%M %p'
+		'eu'			=> '%d-%m-%Y',
+		'eu_short'		=> '%d-%m',
+		'eu_named'		=> '%d %B %Y',
+		'eu_full'		=> '%d %B %Y, %H:%M',
+		'eu_datetime'	=> '%d-%m-%y %H:%M',
+
+		'24h'			=> '%H:%M',
+		'12h'			=> '%I:%M %p'
 	)
 );
 

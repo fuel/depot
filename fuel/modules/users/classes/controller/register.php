@@ -35,11 +35,33 @@ class Controller_Register extends \Controller_Base_Public
 	 */
 	public function action_index()
 	{
+		// create the timezone list
+		static $regions = array(
+			'Africa' => \DateTimeZone::AFRICA,
+			'America' => \DateTimeZone::AMERICA,
+			'Antarctica' => \DateTimeZone::ANTARCTICA,
+			'Asia' => \DateTimeZone::ASIA,
+			'Atlantic' => \DateTimeZone::ATLANTIC,
+			'Europe' => \DateTimeZone::EUROPE,
+			'Indian' => \DateTimeZone::INDIAN,
+			'Pacific' => \DateTimeZone::PACIFIC
+		);
+
+		$tzlist = array();
+		foreach ($regions as $name => $mask) {
+			foreach(\DateTimeZone::listIdentifiers($mask) as $tz)
+			{
+				$tzlist[$name][$tz] = $tz;
+			}
+		}
+
 		// create the form fieldset, do not add an {open}, a closing ul and a {close}, we have a custom form layout!
 		$fieldset = \Fieldset::forge('register');
 		$fieldset->add('username', 'Username', array('maxlength' => 50), array(array('required')))
 			->add('full_name', 'Password', array('maxlength' => 50), array(array('required')))
 			->add('email', 'Email', array('maxlength' => 255), array(array('required'), array('valid_email')))
+			->add('timezone', 'Timezone', array('type' => 'select', 'options' => $tzlist, 'value' => 'Europe/London'), array(array('required')))
+			->add('dateformat', 'Date Format', array('type' => 'select', 'options' => array('eu' => 'European', 'us' => 'American')), array(array('required')))
 			->add('password', 'Password', array('type' => 'password', 'maxlength' => 255), array(array('required'), array('min_length', 8)))
 			->add('btnSubmit', '', array('value' => 'Register', 'type' => 'submit', 'tag' => 'button'));
 
@@ -71,9 +93,17 @@ class Controller_Register extends \Controller_Base_Public
 				// register the new user
 				try
 				{
-					$user_id = \Auth::create_user(\Input::post('username'), \Input::post('password'), \Input::post('email'), \Config::get('ninjauth.default_group'), array(
-						'full_name' => \Input::post('full_name'),
-					));
+					$user_id = \Auth::create_user(
+						\Input::post('username'),
+						\Input::post('password'),
+						\Input::post('email'),
+						\Config::get('ninjauth.default_group'),
+						array(
+							'full_name' => \Input::post('full_name'),
+							'dateformat' => \Input::post('dateformat'),
+							'timezone' => \Input::post('timezone'),
+						)
+					);
 
 					if ($user_id and $user_hash)
 					{
