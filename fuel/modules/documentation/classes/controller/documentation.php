@@ -219,6 +219,12 @@ class Controller_Documentation extends \Controller_Base_Public
 					$this->page->title = $val->validated('title');
 					$this->page->slug = $val->validated('slug');
 
+					// anything changed
+					if ($this->page->is_changed())
+					{
+						\Cache::delete('documentation.version_'.$this->page->version_id.'.menu');
+					}
+
 					// and save it
 					$this->page->save();
 
