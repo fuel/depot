@@ -328,6 +328,34 @@ class Controller_Documentation extends \Controller_Base_Public
 			\Response::redirect('documentation/page/'.reset($docs)->page_id);
 		}
 
+		elseif (\Input::post('delete') and \Auth::has_access('access.staff'))
+		{
+			if ($selected = \Input::post('selected', false))
+			{
+				// delete the page cache
+				\Cache::delete('documentation.version_'.reset($docs)->page->version_id.'.page_'.reset($docs)->page->id);
+
+				foreach ($selected as $doc)
+				{
+					if (isset($docs[$doc]))
+					{
+						$docs[$doc]->delete();
+					}
+				}
+
+				// nothing selected to delete
+				\Messages::success('Selected page versions were succesfully deleted!');
+			}
+			else
+			{
+				// nothing selected to delete
+				\Messages::warning('No page versions were selected!');
+			}
+
+			// and return to the diff page
+			\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+		}
+
 		elseif (\Input::post('view'))
 		{
 			// do we have valid input?
