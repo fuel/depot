@@ -661,7 +661,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	 */
 	protected function checkaccess()
 	{
-		if ( ! \Auth::has_access('access.admin') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
+		if ( ! \Auth::has_access('access.staff') and ! \Session::get('ninjauth.authentication.provider', false) == 'github')
 		{
 			// nope, inform the user and don't do anything
 			\Messages::error('You don\'t have access to this page!');
