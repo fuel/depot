@@ -20,8 +20,8 @@
 			<td><?php echo $user->email; ?></td>
 			<td><?php echo isset($groupnames[$user->group]) ? $groupnames[$user->group]['name'] : ('Group '.$user->group) ; ?></td>
 			<td class="center"><?php echo $user->group == -1 ? 'No' : 'Yes'; ?></td>
-			<td><?php echo Date::forge($user->created_at)->format('eu_full'); ?></td>
-			<td><?php echo Date::forge($user->last_login)->format('eu_full'); ?></td>
+			<td><?php echo Date::forge($user->created_at)->format('eu_datetime'); ?></td>
+			<td><?php echo Date::forge($user->last_login)->format('eu_datetime'); ?></td>
 			<td class="center shrink">
 				<?php echo Html::anchor('admin/users/view/'.$user->id, 'View', array('class' => 'btn inline')); ?>
 				<?php echo Html::anchor('admin/users/edit/'.$user->id, 'Edit', array('class' => 'btn inline')); ?>

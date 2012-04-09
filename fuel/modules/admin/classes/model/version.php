@@ -23,19 +23,24 @@ class Model_Version extends \Orm\Model
 		'codepath',
 		'docspath',
 		'docbloxpath',
+		'created_at',
 	);
 
 	protected static $_has_many = array(
-		'docblox',
-		'page'
+		'docblox' => array('cascade_delete' => true),
+		'page' => array('cascade_delete' => true),
 	);
 
 	protected static $_observers = array(
+		'Orm\Observer_CreatedAt' => array(
+			'events' => array('before_insert'),
+			'mysql_timestamp' => false,
+		),
 	);
 
-	public static function validate($factory)
+	public static function validate($forge)
 	{
-		$val = \Validation::forge($factory);
+		$val = \Validation::forge($forge);
 
 		$val->add_callable('\\Admin\\Model_Version')
 			->set_message('valid_path', 'The field :label does not contain an accessible path.');
@@ -43,6 +48,7 @@ class Model_Version extends \Orm\Model
 		$val->add_field('major', 'Major', 'required|is_numeric|numeric_min[0]');
 		$val->add_field('minor', 'Minor', 'required|is_numeric|numeric_min[0]');
 		$val->add_field('branch', 'Branch name', 'required|max_length[32]');
+		$val->add_field('default', 'Default', 'required|is_numeric|numeric_min[0]|numeric_max[1]');
 		$val->add_field('codepath', 'Local path to the code repository', 'required|max_length[100]|valid_path');
 		$val->add_field('docspath', 'Local path to the docs repository', 'required|max_length[100]|valid_path');
 		$val->add_field('docbloxpath', 'Local path to the docblox output', 'required|max_length[100]|valid_path');

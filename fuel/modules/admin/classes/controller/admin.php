@@ -30,6 +30,8 @@ class Controller_Admin extends Controller_Base
 		$data['banned_users'] = Model_User::find()->where('group', '=', -1)->count();
 		$data['github_accounts'] = Model_Authentication::find()->where('provider', '=', 'github')->count();
 		$data['twitter_accounts'] = Model_Authentication::find()->where('provider', '=', 'twitter')->count();
+		$data['facebook_accounts'] = Model_Authentication::find()->where('provider', '=', 'facebook')->count();
+		$data['google_accounts'] = Model_Authentication::find()->where('provider', '=', 'google')->count();
 
 		// api docs data
 		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();

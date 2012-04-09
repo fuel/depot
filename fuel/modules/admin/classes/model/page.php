@@ -59,7 +59,7 @@ class Model_Page extends \Nestedsets\Model
 				),
 			),
 		),
-		'doc',
+		'doc' => array('cascade_delete' => true),
 	);
 
 	protected static $_observers = array(

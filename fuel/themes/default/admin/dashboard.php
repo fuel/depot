@@ -8,10 +8,19 @@
 			<td>banned user accounts</td>
 		</tr>
 		<tr>
+			<td colspan="4"></td>
+		</tr>
+		<tr>
 			<td class="right"><?php echo $github_accounts; ?></td>
 			<td>users logging in through github</td>
 			<td class="right"><?php echo $twitter_accounts; ?></td>
 			<td>users logging in through twitter</td>
+		</tr>
+		<tr>
+			<td class="right"><?php echo $facebook_accounts; ?></td>
+			<td>users logging in through facebook</td>
+			<td class="right"><?php echo $google_accounts; ?></td>
+			<td>users logging in through google</td>
 		</tr>
 	</tbody>
 </table>
@@ -22,13 +31,15 @@
 	<thead>
 		<th>Version</th>
 		<th>Default?</th>
-		<th>Status</th>
+		<th>Documentation</th>
+		<th>API docs</th>
 	</thead>
 	<tbody>
 <?php foreach ($versions as $version): ?>		<tr>
 			<td><?php echo $version->major.'.'.$version->minor.'/'.$version->branch; ?></td>
 			<td><?php echo $version->default ? 'Yes' : 'No'; ?></td>
-			<td><?php echo $count = \Admin\Model_Docblox::query()->where('version_id', $version->id)->count(); ?> file<?php echo $count == 1 ? '' : 's'; ?> documented</td>
+			<td><?php echo $count = \Admin\Model_Page::query()->where('version_id', $version->id)->count(); ?> page<?php echo $count == 1 ? '' : 's'; ?> created</td>
+			<td><?php echo $count = \Admin\Model_Docblox::query()->where('version_id', $version->id)->count(); ?> page<?php echo $count == 1 ? '' : 's'; ?> created</td>
 		</tr>
 <?php endforeach; ?>	</tbody>
 </table>
