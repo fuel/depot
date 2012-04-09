@@ -108,6 +108,9 @@ class Controller_Documentation extends \Controller_Base_Public
 		// store and unify the parameters
 		$this->params = array('version' => $version, 'page' => '0');
 
+		// delete any stored version in the session
+		\Session::delete('version');
+
 		// find it, and load the latest docs page
 		if ( ! $this->fetchversion())
 		{
