@@ -124,9 +124,6 @@ class Controller_Documentation extends \Controller_Base_Public
 	 */
 	public function action_page($page = '0')
 	{
-		// validate the access
-		$this->checkaccess();
-
 		// store and unify the parameters
 		$this->params = array('version' => '0', 'page' => $page);
 
@@ -274,7 +271,7 @@ class Controller_Documentation extends \Controller_Base_Public
 					->set('title', \Input::post('title'))
 					->set('slug', \Input::post('slug'))
 					->set('page', \Input::post('page'))
-					->set('preview', $this->renderpage(\Input::post('page')), false);
+					->set('preview', $this->renderpage(htmlentities(\Input::post('page'))), false);
 			}
 		}
 		else
@@ -355,8 +352,8 @@ class Controller_Documentation extends \Controller_Base_Public
 						$details = \Theme::instance()->view('documentation/viewdiff');
 
 						// run the diff on the two versions
-						$opcodes = \FineDiff::getDiffOpcodes($docs[\Input::post('before')]->content, $docs[\Input::post('after')]->content);
-						$details->set('diff', $this->renderpage(\FineDiff::renderDiffToHTMLFromOpcodes($docs[\Input::post('before')]->content, $opcodes)), false);
+						$opcodes = \FineDiff::getDiffOpcodes($docs[\Input::post('after')]->content, $docs[\Input::post('before')]->content);
+						$details->set('diff', $this->renderpage(\FineDiff::renderDiffToMarkdownFromOpcodes($docs[\Input::post('after')]->content, $opcodes)), false);
 
 						$details->set('before', \Input::post('before'));
 						$details->set('after', \Input::post('after'));
@@ -431,7 +428,7 @@ class Controller_Documentation extends \Controller_Base_Public
 			if ($this->doc)
 			{
 				// render the page
-				$details = $this->renderpage($this->doc->content);
+				$details = $this->renderpage(htmlentities($this->doc->content));
 
 				// cache the rendered result an hour if not in development
 				\Cache::set('documentation.version_'.$this->page->version_id.'.page_'.$this->page->id, $details, 3600);

@@ -6,8 +6,8 @@
 				<th style="width:1px;min-width:1px;">&nbsp;</th>
 				<th>Date</th>
 				<th>Modified by</th>
-				<th style="width:1px;min-width:1px;" class="center">Compare</th>
-				<th style="width:1px;min-width:1px;" class="center">With</th>
+				<th style="width:1px;min-width:1px;" class="center">Source</th>
+				<th style="width:1px;min-width:1px;" class="center">Target</th>
 			</tr>
 			<?php $count = 0; foreach($docs as $doc):?>
 			<tr>
