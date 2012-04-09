@@ -330,28 +330,39 @@ class Controller_Documentation extends \Controller_Base_Public
 			// do we have valid input?
 			if (\Input::post('before') and \Input::post('after'))
 			{
-				if (isset($docs[\Input::post('before')]) and isset($docs[\Input::post('after')]))
-				{
-					// load the diff class
-					require_once APPPATH.'vendor'.DS.'finediff'.DS.'finediff.php';
-
-					// add the view diff partial
-					$details = \Theme::instance()->view('documentation/viewdiff');
-
-					// run the diff on the two versions
-					$opcodes = \FineDiff::getDiffOpcodes($docs[\Input::post('before')]->content, $docs[\Input::post('after')]->content);
-					$details->set('diff', $this->renderpage(\FineDiff::renderDiffToHTMLFromOpcodes($docs[\Input::post('before')]->content, $opcodes)), false);
-
-					$details->set('before', \Input::post('before'));
-					$details->set('after', \Input::post('after'));
-				}
-				else
+				if (\Input::post('before') == \Input::post('after'))
 				{
 					// nope, inform the user there's nothing to diff
-					\Messages::error('Invalid page versions selected to run a diff on!');
+					\Messages::error('No point comparing a version with itself!');
 
 					// invalid input, try again
 					\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+				}
+				else
+				{
+					if (isset($docs[\Input::post('before')]) and isset($docs[\Input::post('after')]))
+					{
+						// load the diff class
+						require_once APPPATH.'vendor'.DS.'finediff'.DS.'finediff.php';
+
+						// add the view diff partial
+						$details = \Theme::instance()->view('documentation/viewdiff');
+
+						// run the diff on the two versions
+						$opcodes = \FineDiff::getDiffOpcodes($docs[\Input::post('before')]->content, $docs[\Input::post('after')]->content);
+						$details->set('diff', $this->renderpage(\FineDiff::renderDiffToHTMLFromOpcodes($docs[\Input::post('before')]->content, $opcodes)), false);
+
+						$details->set('before', \Input::post('before'));
+						$details->set('after', \Input::post('after'));
+					}
+					else
+					{
+						// nope, inform the user there's nothing to diff
+						\Messages::error('Invalid page versions selected to run a diff on!');
+
+						// invalid input, try again
+						\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+					}
 				}
 			}
 			else
