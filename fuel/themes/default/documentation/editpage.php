@@ -1,6 +1,6 @@
 <?php
 	\Theme::instance()->asset->css(array('../markitup/sets/markdown/style.css','../markitup/skins/markitup/style.css'), array(), 'header');
-	\Theme::instance()->asset->js(array('../markitup//jquery.markitup.js', '../markitup/sets/markdown/set.js'), array(), 'footer');
+	\Theme::instance()->asset->js(array('../markitup//jquery.markitup.js', '../markitup/sets/markdown/set.js', '../markitup//jquery.markitup.load.js'), array(), 'footer');
 ?>
 <h3>Edit page</h3>
 <?php echo \Form::open(array('class' => 'form left')); ?>

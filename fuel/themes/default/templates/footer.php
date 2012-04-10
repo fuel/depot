@@ -29,11 +29,14 @@
 		</div>
 
 		<div class="one_quarter_last">
-			<!--
-			<a href="http://www.pagodabox.com/" target="_blank">
-				<div id="pagoda"><img src="/addons/default/themes/fuel/img/pagoda-float.png" alt="pagoda-float" /></div>
+			<h6>Hosted by</h6>
+
+			<a href="http://www.exite.eu/en/services/hosting.html" style="" target="_blank">
+				<div id="exite">
+					<?php echo \Theme::instance()->asset->img('exite.png', array('width' => 125, 'style' => 'margin: 10px 0px 0px 8px'));?>
+					<p style="margin:5px 0px 0px 13px;font-size:8px;text-transform:none">Expert in information technology</p>
+				</div>
 			</a>
-			-->
 		</div>
 
 	</div>
@@ -42,6 +45,7 @@
 
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">google.load('jquery', '1.7.1');</script>
+<script type="text/javascript">google.load('jqueryui', '1.8.17');</script>
 
-<?php \Theme::instance()->asset->js(array('ui-core.js', 'validate.js', 'localscroll.js', 'easing.js', 'colorbox.js', 'tipsy.js', 'global.js'), array(), 'footer'); ?>
+<?php \Theme::instance()->asset->js(array('global.js'), array(), 'footer'); ?>
 <?php echo \Theme::instance()->asset->render('footer'); ?>

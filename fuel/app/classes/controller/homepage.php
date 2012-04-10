@@ -58,7 +58,7 @@ class Controller_Homepage extends \Controller_Base_Public
 	 */
 	public function action_404()
 	{
-		\Theme::instance()->set_partial('content', 'global/404');
+		\Theme::instance()->set_partial('content', 'templates/404');
 	}
 
 }

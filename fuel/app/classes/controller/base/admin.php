@@ -24,17 +24,44 @@ class Controller_Base_Admin extends Controller_Base_Template
 	 */
 	public function before()
 	{
+		$result = array();
+
 		// users need to be logged in to access this controller
 		if ( ! \Auth::check())
 		{
-			\Messages::error('You need to be logged in to access that page.');
-			\Response::redirect('/users/login');
+			$result = array(
+				'message' => 'You need to be logged in to access that page.',
+				'url' => '/users/login',
+			);
+		}
+
+		elseif ( ! Auth::has_access('access.staff'))
+		{
+			$result = array(
+				'message' => 'Access denied. You need to be a member of staff to access that page.',
+				'url' => '/',
+			);
 		}
 
 		elseif ( ! Auth::has_access('access.admin'))
 		{
-			\Messages::error('Access denied. You need to be an administrator to access that page');
-			\Response::redirect('/');
+			$result = array(
+				'message' => 'Access denied. You need to be an administrator to access that page.',
+				'url' => '/',
+			);
+		}
+
+		if ( ! empty($result))
+		{
+			if (\Input::is_ajax())
+			{
+				$this->response(array($result['message'), 403);
+			}
+			else
+			{
+				\Messages::error($result['message']);
+				\Response::redirect($result['url']);
+			}
 		}
 
 		parent::before();

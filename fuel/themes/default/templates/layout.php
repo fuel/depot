@@ -1,6 +1,6 @@
 <?php
 // output the page header
-echo \Theme::instance()->view('global/header');
+echo \Theme::instance()->view('templates/header');
 ?>
 
 <!-- Begin body -->
@@ -25,4 +25,4 @@ echo \Theme::instance()->view('global/header');
 
 </div>
 
-<?php echo \Theme::instance()->view('global/footer'); ?>
+<?php echo \Theme::instance()->view('templates/footer'); ?>

@@ -17,7 +17,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	/**
 	 * @var	array	parameters
 	 */
-	 protected $params = array();
+	protected $params = array();
 
 	/**
 	 * @var	array	all objects of the version table
@@ -136,26 +136,6 @@ class Controller_Documentation extends \Controller_Base_Public
 			// unknown page request, redirect to the main docs page
 			\Response::redirect('documentation');
 		}
-	}
-
-	/**
-	 * Load the menu editor
-	 *
-	 * @access  public
-	 * @return  Response
-	 */
-	public function action_menu($version = '0')
-	{
-		// validate the access
-		$this->checkaccess();
-
-		// store and unify the parameters
-		$this->params = array('version' => $version, 'page' => '0');
-
-		// build the page layout partial
-		$partial = $this->buildpage();
-
-		$partial->set('details', 'Edit the menu for this version');
 	}
 
 	/**

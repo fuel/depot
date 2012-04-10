@@ -25,28 +25,10 @@ $(document).ready(function(){
 		}
 	});
 
-	// Tooltip
-	$('.tooltip').tipsy({
-		gravity: $.fn.tipsy.autoNS,
-		fade: true,
-		html: true
-	});
-	$('.tooltip-e').tipsy({
-		gravity: 'e',
-		fade: true,
-		html: true
-	});
-	$('.tooltip-s').tipsy({
-		gravity: 's',
-		fade: true,
-		html: true
-	});
-
 	// Accordion
 	$(document).ready(function(){
 		$(".accordion").accordion();
 	});
-
 
 	// Trees
 	$(document).ready(function() {
@@ -101,58 +83,75 @@ $(document).ready(function(){
 		});
 	});
 
-	// Scroll
-	$(document).ready(function(){
-		jQuery.localScroll();
-	});
-
-	// Enable MarkItUp
 	$(document).ready(function() {
-		$(".markItUp").markItUp(mySettings);
-	});
 
-	jQuery.fn.nudge = function(params) {
-		//set default parameters
-		params = jQuery.extend({
-		amount: 10,				//amount of pixels to pad / marginize
-		duration: 300,			//amount of milliseconds to take
-		property: 'padding', 	//the property to animate (could also use margin)
-		direction: 'left',		//direction to animate (could also use right)
-		toCallback: function() {},	//function to execute when MO animation completes
-		fromCallback: function() {}	//function to execute when MOut animation completes
-		}, params);
+		$cookie = 'menucookie';
+		$item_list = $("#menu_list>ul");
 
-		//For every element meant to nudge...
-		this.each(function() {
+		if ($item_list.length > 0)
+		{
+			// collapse all ordered lists but the top level
+			$item_list.find('ul').children().hide();
 
-		//variables
-		var jQueryt = jQuery(this);
-		var jQueryp = params;
-		var dir = jQueryp.direction;
-		var prop = jQueryp.property + dir.substring(0,1).toUpperCase() + dir.substring(1,dir.length);
-		var initialValue = jQueryt.css(prop);
+			// this gets ran again after drop
+			var refresh_tree = function() {
 
-		/* fx */
-		var go = {}; go[prop] = parseInt(jQueryp.amount) + parseInt(initialValue);
-		var bk = {}; bk[prop] = initialValue;
+				// add the minus icon to all parent items that now have visible children
+				$item_list.parent().find('ul li:has(li:visible)').removeClass('plus').addClass('minus');
 
-		//Proceed to nudge on hover
-		jQueryt.hover(function() {
-		jQueryt.stop().animate(go, jQueryp.duration, '', jQueryp.toCallback);
-		}, function() {
-		jQueryt.stop().animate(bk, jQueryp.duration, '', jQueryp.fromCallback);
-		});
-		});
-		return this;
-	};
+				// add the plus icon to all parent items with hidden children
+				$item_list.parent().find('ul li:has(li:hidden)').removeClass('minus').addClass('plus');
 
-	// Colorbox
-	$(document).ready(function(){
-		$(".zoom").colorbox({maxWidth:"80%", maxHeight:"80%"});
-	});
+				// remove the class if the child was removed
+				$item_list.parent().find('ul li:not(:has(ul))').removeClass('plus minus');
+			}
+			refresh_tree();
 
-	$(document).ready(function(){
-		$(".iframe").colorbox({width:"90%", height:"90%", iframe:true});
+			// set the icons properly on parents restored from cookie
+			$($.cookie($cookie)).has('ul').toggleClass('minus plus');
+
+			// show the parents that were open on last visit
+			$($.cookie($cookie)).children('ul').children().show();
+
+			// show/hide the children when clicking on an <li>
+			$item_list.find('li').live('click', function()
+			{
+				$(this).children('ul').children().slideToggle('fast');
+
+				$(this).has('ul').toggleClass('minus plus');
+
+				var items = [];
+
+				// get all of the open parents
+				$item_list.find('li.minus:visible').each(function(){ items.push('#' + this.id) });
+
+				// save open parents in the cookie
+				$.cookie($cookie, items.join(', '), { expires: 1 });
+
+				 return false;
+			});
+
+			$item_list.nestedSortable({
+				delay: 100,
+				revert: 250,
+				disableNesting: 'no-nest',
+				errorClass: 'ui-nestedSortable-error',
+				forcePlaceholderSize: true,
+				handle: 'div',
+				helper:	'clone',
+				items: 'li',
+				maxLevels: 4,
+				opacity: .7,
+				placeholder: 'placeholder',
+				tabSize: 25,
+				listType: 'ul',
+				tolerance: 'pointer',
+				toleranceElement: '> div',
+			});
+
+			$("#menu_list").show();
+		}
+
 	});
 
 });

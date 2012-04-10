@@ -10,12 +10,12 @@
  * @link       http://depot.fuelphp.com
  */
 
-class Controller_Base_Template extends Controller
+class Controller_Base_Template extends Controller_Hybrid
 {
 	/**
 	* @var string page template
 	*/
-	public $template = null;
+	public $template = 'templates/layout';
 
 	/**
 	* @var string global date format to use
@@ -34,8 +34,12 @@ class Controller_Base_Template extends Controller
 	 */
 	public function before()
 	{
+		if (\Input::is_ajax())
+		{
+			return parent::before();
+		}
+
 		// define the theme template to use for this page, set a default if needed
-		is_string($this->template) or $this->template = 'templates/layout';
 		\Theme::instance()->set_template($this->template);
 
 		// define the navbar
@@ -76,10 +80,7 @@ class Controller_Base_Template extends Controller
 		}
 
 		// define the navbar partial and add the navbar data
-		\Theme::instance()->set_partial('navbar', 'global/navbar')->set('navitems', $this->navbar);
-
-		// call the parent controller
-		parent::before();
+		\Theme::instance()->set_partial('navbar', 'templates/navbar')->set('navitems', $this->navbar);
 	}
 
 	/**
@@ -89,18 +90,23 @@ class Controller_Base_Template extends Controller
 	 */
 	public function after($response)
 	{
-		// If nothing was returned render the defined template
-		if (empty($response))
+		if ( ! \Input::is_ajax())
 		{
-			$response = \Theme::instance()->render();
-		}
+			// If nothing was returned render the defined template
+			if (empty($response))
+			{
+				$response = \Theme::instance()->render();
+			}
 
-		// If the response isn't a Response object, embed in the available one for BC
-		// @deprecated  can be removed when $this->response is removed
-		if ( ! $response instanceof Response)
-		{
-			$this->response->body = $response;
-			$response = $this->response;
+			// If the response isn't a Response object, embed in the available one for BC
+			// @deprecated  can be removed when $this->response is removed
+			if ( ! $response instanceof Response)
+			{
+				$this->response->body = $response;
+				$response = $this->response;
+			}
+
+			return $response;
 		}
 
 		return parent::after($response);
