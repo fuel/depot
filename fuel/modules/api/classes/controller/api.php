@@ -193,16 +193,16 @@ class Controller_Api extends \Controller_Base_Public
 		$output = '';
 
 		// get the menu state cookie so we can restore state
-		$state = explode(',', str_replace('#api_', '', \Cookie::get('depotmenustate', '')));
+		$state = explode(',', str_replace('#api'.$this->params['version'].'_', '', \Cookie::get('depotmenustate', '')));
 
 		foreach ($constantlist as $package => $list)
 		{
 			$id = $this->params['version'].'_'.$count++;
 			$open = in_array($id, $state);
-			$output .= '<ul>'."\n\t".'<li id="api_'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
+			$output .= '<ul>'."\n\t".'<li id="api'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
 			foreach ($list as $item)
 			{
-				$output .= "\t\t".'<li id="api_'.$id.'" style="'.($open?'':'display:none;').'"><div>'.$item.'</div></li>'."\n";
+				$output .= "\t\t".'<li id="api'.$id.'" style="'.($open?'':'display:none;').'">'.$item.'</li>'."\n";
 			}
 			$output .= "\t".'</ul>'."\t".'</li>'."\n".'</ul>';
 		}
@@ -219,10 +219,10 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			$id = $this->params['version'].'_'.$count++;
 			$open = in_array($id, $state);
-			$output .= '<ul>'."\n\t".'<li id="api_'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
+			$output .= '<ul>'."\n\t".'<li id="api'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
 			foreach ($list as $item)
 			{
-				$output .= "\t\t".'<li id="api_'.$id.'" style="'.($open?'':'display:none;').'"><div>'.$item.'</div></li>'."\n";
+				$output .= "\t\t".'<li id="api'.$id.'" style="'.($open?'':'display:none;').'">'.$item.'</li>'."\n";
 			}
 			$output .= "\t".'</ul>'."\t".'</li>'."\n".'</ul>';
 		}
@@ -239,10 +239,10 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			$id = $this->params['version'].'_'.$count++;
 			$open = in_array($id, $state);
-			$output .= '<ul>'."\n\t".'<li id="api_'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
+			$output .= '<ul>'."\n\t".'<li id="api'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
 			foreach ($list as $item)
 			{
-				$output .= "\t\t".'<li id="api_'.$id.'" style="'.($open?'':'display:none;').'"><div>'.$item.'</div></li>'."\n";
+				$output .= "\t\t".'<li id="api'.$id.'" style="'.($open?'':'display:none;').'">'.$item.'</li>'."\n";
 			}
 			$output .= "\t".'</ul>'."\t".'</li>'."\n".'</ul>';
 		}
@@ -270,12 +270,12 @@ class Controller_Api extends \Controller_Base_Public
 		// loop through them
 		foreach ($record['constants'] as $constant)
 		{
-			$css = array();
+			$css = '';
 			if ($this->params['file'] == $record['hash'] and $this->params['constant'] == $constant['name'])
 			{
-				$css = array('class' => 'current');
+				$css = ' class = "current"';
 			}
-			$result[$constant['name'].$record['hash']] = \Html::anchor('api/version/'.$this->params['version'].'/constant/'.$constant['name'].'/file/'.$record['hash'], $constant['name'], $css);
+			$result[$constant['name'].$record['hash']] = '<div'.$css.'>'.\Html::anchor('api/version/'.$this->params['version'].'/constant/'.$constant['name'].'/file/'.$record['hash'], $constant['name']).'</div>';
 		}
 
 		// sort and return the result
@@ -298,12 +298,12 @@ class Controller_Api extends \Controller_Base_Public
 		// loop through them
 		foreach ($record['functions'] as $function)
 		{
-			$css = array();
+			$css = '';
 			if ($this->params['file'] == $record['hash'] and $this->params['function'] == $function['name'])
 			{
-				$css = array('class' => 'current');
+				$css = ' class = "current"';
 			}
-			$result[$function['name'].$record['hash']] = \Html::anchor('api/version/'.$this->params['version'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name'], $css);
+			$result[$function['name'].$record['hash']] = '<div'.$css.'>'.\Html::anchor('api/version/'.$this->params['version'].'/function/'.$function['name'].'/file/'.$record['hash'], $function['name']).'</div>';
 		}
 
 		// return the result
@@ -338,14 +338,14 @@ class Controller_Api extends \Controller_Base_Public
 					$relative_ns = '';
 				}
 
-				$css = array();
+				$css = '';
 				if ($this->params['file'] == $record['hash'] and $this->params['class'] == $class['name'])
 				{
-					$css = array('class' => 'current');
+					$css = ' class = "current"';
 				}
 
 				// note: space between name and hash makes sure the short names are sorted first!
-				$result[$relative_ns.$class['name'].' '.$record['hash'].'</div>'] = \Html::anchor('api/version/'.$this->params['version'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name'], $css);
+				$result[$relative_ns.$class['name'].' '.$record['hash']] = '<div'.$css.'>'.\Html::anchor('api/version/'.$this->params['version'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name']).'</div>';
 			}
 		}
 

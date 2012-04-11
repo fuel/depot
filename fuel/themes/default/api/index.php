@@ -8,7 +8,7 @@
 		<div class="alignright">
 			<?php echo \Form::open(array('name' => 'version_select', 'action' => '/', 'method' => 'post'));?>
 				<h5 style="margin-bottom:0px;">FuelPHP version: </h5>
-				<?php echo \Form::select('branch', $selection['version'], $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = this.form.action + \'/api/version/\' + this.value; this.form.submit();')); ?>
+				<?php echo \Form::select('branch', $selection['version'], $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = \'/api/version/\' + this.value; this.form.submit();')); ?>
 			<?php echo \Form::close(); ?>
 		</div>
 	</div>
