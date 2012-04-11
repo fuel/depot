@@ -27,7 +27,7 @@ class Controller_Api extends \Controller_Base_Public
 	 * @access  public
 	 * @return  Response
 	 */
-	public function router($method, $params)
+	public function router($method, array $params)
 	{
 		// make sure our params have a value
 		empty($params) or $params = \Arr::to_assoc($params);
@@ -126,7 +126,7 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			// make sure we have a package name
 			empty($record['package']) and $record['package'] = 'Undefined';
-			$package = '<a class="collapsed">'.$record['package'].'</a>';
+			$package = $record['package'];
 
 			// process any constants defined in this file
 			if ($record['constants'] !== 'a:0:{}')
@@ -188,7 +188,25 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			ksort($list);
 		}
-		\Theme::instance()->get_partial('content', 'api/index')->set('constantlist', $constantlist, false);
+
+		$count = 0;
+		$output = '';
+
+		// get the menu state cookie so we can restore state
+		$state = explode(',', str_replace('#api_', '', \Cookie::get('depotmenustate', '')));
+
+		foreach ($constantlist as $package => $list)
+		{
+			$id = $this->params['version'].'_'.$count++;
+			$open = in_array($id, $state);
+			$output .= '<ul>'."\n\t".'<li id="api_'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
+			foreach ($list as $item)
+			{
+				$output .= "\t\t".'<li id="api_'.$id.'" style="'.($open?'':'display:none;').'"><div>'.$item.'</div></li>'."\n";
+			}
+			$output .= "\t".'</ul>'."\t".'</li>'."\n".'</ul>';
+		}
+		\Theme::instance()->get_partial('content', 'api/index')->set('constantlist', $output, false);
 
 		// sort and store the functionlist
 		ksort($functionlist);
@@ -196,7 +214,19 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			ksort($list);
 		}
-		\Theme::instance()->get_partial('content', 'api/index')->set('functionlist', $functionlist, false);
+		$output = '';
+		foreach ($functionlist as $package => $list)
+		{
+			$id = $this->params['version'].'_'.$count++;
+			$open = in_array($id, $state);
+			$output .= '<ul>'."\n\t".'<li id="api_'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
+			foreach ($list as $item)
+			{
+				$output .= "\t\t".'<li id="api_'.$id.'" style="'.($open?'':'display:none;').'"><div>'.$item.'</div></li>'."\n";
+			}
+			$output .= "\t".'</ul>'."\t".'</li>'."\n".'</ul>';
+		}
+		\Theme::instance()->get_partial('content', 'api/index')->set('functionlist', $output, false);
 
 		// sort and store the classlist
 		ksort($classlist);
@@ -204,7 +234,19 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			ksort($list);
 		}
-		\Theme::instance()->get_partial('content', 'api/index')->set('classlist', $classlist, false);
+		$output = '';
+		foreach ($classlist as $package => $list)
+		{
+			$id = $this->params['version'].'_'.$count++;
+			$open = in_array($id, $state);
+			$output .= '<ul>'."\n\t".'<li id="api_'.$id.'" class="'.($open?'minus':'plus').'"><div>'.$package.'</div>'."\n\t".'<ul>'."\n";
+			foreach ($list as $item)
+			{
+				$output .= "\t\t".'<li id="api_'.$id.'" style="'.($open?'':'display:none;').'"><div>'.$item.'</div></li>'."\n";
+			}
+			$output .= "\t".'</ul>'."\t".'</li>'."\n".'</ul>';
+		}
+		\Theme::instance()->get_partial('content', 'api/index')->set('classlist', $output, false);
 
 		// if no api details were selected, show the intro page
 		empty($details) and $details = \Theme::instance()->view('api/intro');
@@ -303,7 +345,7 @@ class Controller_Api extends \Controller_Base_Public
 				}
 
 				// note: space between name and hash makes sure the short names are sorted first!
-				$result[$relative_ns.$class['name'].' '.$record['hash']] = \Html::anchor('api/version/'.$this->params['version'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name'], $css);
+				$result[$relative_ns.$class['name'].' '.$record['hash'].'</div>'] = \Html::anchor('api/version/'.$this->params['version'].'/class/'.$class['name'].'/file/'.$record['hash'], $relative_ns.$class['name'], $css);
 			}
 		}
 

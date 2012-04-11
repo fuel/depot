@@ -530,6 +530,9 @@ class Controller_Documentation extends \Controller_Base_Public
 	 */
 	protected function fetchmenu()
 	{
+		// determine if we're in edit mode
+		$editmode = ( \Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github');
+
 		// fetch the menu tree for this version of the docs
 		try
 		{
@@ -547,11 +550,14 @@ class Controller_Documentation extends \Controller_Base_Public
 			\Cache::set('documentation.version_'.$this->params['version'].'.menu', $this->tree, \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
 		}
 
+		// get the menu state cookie so we can restore state
+		$state = explode(',', str_replace('#node_', '', \Cookie::get('depotmenustate', '')));
+
 		// php < 5.4 fix, can't pass $this to a closure
 		$params =& $this->params;
 
 		// closure to generate an unordered list
-		$menu = function ($nodes, $depth = 3, &$found = false) use(&$menu, $params)
+		$menu = function ($nodes, $depth = 3, $close = false) use(&$menu, $params, $editmode, $state)
 		{
 			// some storage for the result
 			$output = '';
@@ -559,9 +565,6 @@ class Controller_Documentation extends \Controller_Base_Public
 			// do we have any nodes?
 			if ($nodes)
 			{
-				// reset the found flag
-				$found = false;
-
 				$result = '';
 
 				// loop through the nodes
@@ -571,27 +574,16 @@ class Controller_Documentation extends \Controller_Base_Public
 					if ($node['children'])
 					{
 						// and recurse to generate the unordered list for the children
-						$submenu = $menu($node['children'], $depth+1, $found);
+						$submenu = $menu($node['children'], $depth+1, ! in_array($node['id'], $state));
 
-						// add the link with an open button
-						$result .= str_repeat("\t", $depth+1).'<li><a class="'.($found?'expanded':'collapsed').'">'.$node['title'].'</a>'."\n".$submenu;
+						// add the node
+						$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div>'.$node['title'].'</div>'."\n".$submenu;
 
 					}
 					else
 					{
-						// determine the class for this node
-						if ($node['id'] == $params['page'])
-						{
-							$found = true;
-							$class = 'current';
-						}
-						else
-						{
-							$class = '';
-						}
-
 						// and add the link to the docs page
-						$result .= str_repeat("\t", $depth+1).'<li><a class="'.$class.'" href="'.\Uri::create('documentation/page/'.$node['id']).'">'.$node['title'].'</a>'."\n";
+						$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'"'.($close?' style="display:none;"':'').'><div'.($node['id']==$params['page']?' class="current"':'').'><a href="/documentation/page/'.$node['id'].'">'.$node['title'].'</a></div>'."\n";
 					}
 
 					// close the node
@@ -601,11 +593,11 @@ class Controller_Documentation extends \Controller_Base_Public
 				// start the new unordered list
 				if ($depth == 3)
 				{
-					$output .= str_repeat("\t", $depth).'<ul class="menutree">'."\n";
+					$output .= str_repeat("\t", $depth).'<ul'.($editmode?' class="sortable"':'').'>'."\n";
 				}
 				else
 				{
-					$output .= str_repeat("\t", $depth).'<ul '.($found?'style="display:block;"':'').'>'."\n";
+					$output .= str_repeat("\t", $depth).'<ul>'."\n";
 				}
 
 				// close the list

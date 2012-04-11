@@ -30,25 +30,6 @@ $(document).ready(function(){
 		$(".accordion").accordion();
 	});
 
-	// Trees
-	$(document).ready(function() {
-		// open trees that contain selected items
-		$('a.current').parents('li').children('a.collapsed').toggleClass('expanded').toggleClass('collapsed').next('ul').show();
-
-		// tree toggle functions
-		setTimeout(function() {
-			$('.menutree li > a').click(function() {
-				$(this).parent().find('> ul').toggle(100).parent().find('> a').toggleClass('expanded').toggleClass('collapsed');
-			});
-			$('.menutree .expand_all').click(function() {
-				$('.menutree').find('li').children('a.collapsed').addClass('expanded').removeClass('collapsed').next('ul').show();
-			});
-			$('.menutree .collapse_all').click(function() {
-				$('.menutree').find('li').children('a.expanded').addClass('collapsed').removeClass('expanded').next('ul').hide();
-			});
-		}, 0);
-	});
-
 	// Toggler
 	$(document).ready(function() {
 		// choose text for the show/hide link - can contain HTML (e.g. an image)
@@ -83,29 +64,62 @@ $(document).ready(function(){
 		});
 	});
 
+	// menu tree functions
 	$(document).ready(function() {
 
-		$cookie = 'menucookie';
-		$item_list = $("#menu_list>ul");
+		var $cookie = '';
+		var $item_list = $("#menu_list>ul");
+
+		var update_cookie = function() {
+			var items = [];
+
+			// get all of the open parents
+			$item_list.find('li.minus:visible').each(function(){ items.push('#' + this.id) });
+
+			var pathArray = window.location.pathname.split( '/' );
+			var cookiepath = '/' + pathArray[1] + '/' + pathArray[2];
+
+			// save open parents in the cookie
+			$.cookie($cookie, items.join(', '), { expires: 1, path: cookiepath });
+		}
+
+		// this gets ran again after drop
+		var refresh_tree = function() {
+
+			// add the minus icon to all parent items that now have visible children
+			$item_list.parent().find('ul li:has(li:visible)').removeClass('plus').addClass('minus');
+
+			// add the plus icon to all parent items with hidden children
+			$item_list.parent().find('ul li:has(li:hidden)').removeClass('minus').addClass('plus');
+
+			// remove the class if the child was removed
+			$item_list.parent().find('ul li:not(:has(ul))').removeClass('plus minus');
+		}
+
+		// tree toggle functions
+		setTimeout(function() {
+			$('.sidebar .expand_all').click(function() {
+				$item_list.find('ul').children().show();
+				refresh_tree();
+				update_cookie();
+			});
+			$('.sidebar .collapse_all').click(function() {
+				$item_list.find('ul').children().hide();
+				refresh_tree();
+				update_cookie();
+			});
+		}, 0);
 
 		if ($item_list.length > 0)
 		{
 			// collapse all ordered lists but the top level
 			$item_list.find('ul').children().hide();
 
-			// this gets ran again after drop
-			var refresh_tree = function() {
-
-				// add the minus icon to all parent items that now have visible children
-				$item_list.parent().find('ul li:has(li:visible)').removeClass('plus').addClass('minus');
-
-				// add the plus icon to all parent items with hidden children
-				$item_list.parent().find('ul li:has(li:hidden)').removeClass('minus').addClass('plus');
-
-				// remove the class if the child was removed
-				$item_list.parent().find('ul li:not(:has(ul))').removeClass('plus minus');
-			}
 			refresh_tree();
+
+			// determine the cookie name based on the id prefix
+			$cookie = $item_list.find('li').attr('id');
+			$cookie = $cookie.substr(0, $cookie.indexOf("_")) + '_menustate';
 
 			// set the icons properly on parents restored from cookie
 			$($.cookie($cookie)).has('ul').toggleClass('minus plus');
@@ -114,21 +128,18 @@ $(document).ready(function(){
 			$($.cookie($cookie)).children('ul').children().show();
 
 			// show/hide the children when clicking on an <li>
-			$item_list.find('li').live('click', function()
+			$item_list.find('li').on('click', function(event)
 			{
-				$(this).children('ul').children().slideToggle('fast');
+				if ($(this).children('ul').length > 0)
+				{
+					$(this).children('ul').children().slideToggle('fast');
 
-				$(this).has('ul').toggleClass('minus plus');
+					$(this).has('ul').toggleClass('minus plus');
 
-				var items = [];
+					update_cookie();
+				}
 
-				// get all of the open parents
-				$item_list.find('li.minus:visible').each(function(){ items.push('#' + this.id) });
-
-				// save open parents in the cookie
-				$.cookie($cookie, items.join(', '), { expires: 1 });
-
-				 return false;
+				event.stopImmediatePropagation();
 			});
 
 			$item_list.nestedSortable({
@@ -149,7 +160,6 @@ $(document).ready(function(){
 				toleranceElement: '> div',
 			});
 
-			$("#menu_list").show();
 		}
 
 	});

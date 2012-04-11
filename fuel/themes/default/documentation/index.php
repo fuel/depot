@@ -17,21 +17,16 @@
 
 		<div class="sidebar">
 
-			<ul class="menutree">
+			<ul>
 				<li>
-					<?php if (\Auth::has_access('access.staff'))
-					{
-						echo \Form::open(array('action' => 'documentation/menu/'.$selection['version'], 'style' => 'display:inline;'));
-						echo \Form::submit('menu', 'Edit menu', array('class' => 'btn small purple '));
-						echo \Form::close();
-					}
-					?>
 					<button class="btn small expand_all">Expand All</button>
 					<button class="btn small collapse_all">Collapse All</button>
 				</li>
 			</ul>
 
-			<?php echo $menutree; ?>
+			<div id="menu_list">
+				<?php echo $menutree; ?>
+			</div>
 
 		</div>
 
@@ -77,4 +72,4 @@
 	</div>
 </div>
 
-<?php \Theme::instance()->asset->js(array('highlight.pack.js'), array(), 'footer'); ?>
+<?php \Theme::instance()->asset->js(array('jquery.cooki.js', 'jquery.ui.nestedSortable.js', 'highlight.pack.js'), array(), 'footer'); ?>

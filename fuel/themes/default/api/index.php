@@ -6,31 +6,35 @@
 			<h1>Class API Documentation</h1>
 		</div>
 		<div class="alignright">
-			<form name="version_select" method="POST">
+			<?php echo \Form::open(array('name' => 'version_select', 'action' => '/', 'method' => 'post'));?>
 				<h5 style="margin-bottom:0px;">FuelPHP version: </h5>
 				<?php echo \Form::select('branch', $selection['version'], $versions, array('style' => 'min-width:125px;', 'onchange' => 'this.form.action = this.form.action + \'/api/version/\' + this.value; this.form.submit();')); ?>
-			</form>
+			<?php echo \Form::close(); ?>
 		</div>
 	</div>
 
 	<div class="content">
 
 		<div class="sidebar">
-			<ul class="menutree">
+
+			<ul>
 				<li>
 					<button class="btn small expand_all">Expand All</button>
 					<button class="btn small collapse_all">Collapse All</button>
 				</li>
 			</ul>
 
-			<h5>Constants</h5>
-			<?php echo \Html::ul($constantlist, array('id' => 'constantlist', 'class' => 'menutree')); ?>
+			<div id="menu_list">
+				<h5>Constants</h5>
+				<?php echo $constantlist; ?>
 
-			<h5>Functions</h5>
-			<?php echo \Html::ul($functionlist, array('id' => 'functionlist', 'class' => 'menutree')); ?>
+				<h5>Functions</h5>
+				<?php echo $functionlist; ?>
 
-			<h5>Classes</h5>
-			<?php echo \Html::ul($classlist, array('id' => 'classlist', 'class' => 'menutree')); ?>
+				<h5>Classes</h5>
+				<?php echo $classlist; ?>
+			</div>
+
 		</div>
 
 		<div class="page">
@@ -47,3 +51,5 @@
 	</div>
 
 </div>
+
+<?php \Theme::instance()->asset->js(array('jquery.cooki.js'), array(), 'footer'); ?>
