@@ -52,4 +52,4 @@
 
 </div>
 
-<?php \Theme::instance()->asset->js(array('jquery.cooki.js'), array(), 'footer'); ?>
+<?php \Theme::instance()->asset->js(array('jquery.cooki.js', 'jquery.clickable.js'), array(), 'footer'); ?>

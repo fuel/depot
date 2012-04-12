@@ -112,6 +112,8 @@ $(document).ready(function(){
 
 		if ($item_list.length > 0)
 		{
+			$item_list.find('li').clickable();
+
 			// collapse all ordered lists but the top level
 			$item_list.find('ul').children().hide();
 

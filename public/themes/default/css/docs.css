@@ -26,15 +26,16 @@
 #menu_list h5 {margin: 15px 0px;}
 #menu_list ul, #menu_list ul ul, #menu_list ul ul ul, #menu_list ul ul ul ul { margin: 0; padding: 0; list-style-type: none; cursor: default; }
 #menu_list ul { margin-right: 10px }
-#menu_list li { margin: 5px 0; padding-left: 15px; }
-#menu_list li div  { padding: 5px 1px 5px 10px; margin: 0; background-color: #F3F3F3; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; }
+#menu_list li { margin: 2px 0; padding-left: 15px; }
+#menu_list li div  { padding: 2px 1px 2px 10px; margin: 0; background-color: #F3F3F3; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; }
+#menu_list li div {cursor: pointer;}
 #menu_list .sortable li div {cursor: move;}
 #menu_list li div:hover {background-color: #dbdbdb; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; }
-#menu_list .plus { background: url('../img/expand.png') no-repeat -4px 4px; }
-#menu_list .minus { background: url('../img/collapse.png') no-repeat -4px 4px; }
-#menu_list li div.current { background-color:#c141ff; }
+#menu_list .plus { font-weight:bold; background: url('../img/expand.png') no-repeat -4px 4px; }
+#menu_list .minus { font-weight:bold; background: url('../img/collapse.png') no-repeat -4px 4px; }
+#menu_list li div.current { background-color:#D293F0; }
 #menu_list li div.current a {color: #fff;}
-#menu_list li div.current:hover {background-color: #8750A2;}
+#menu_list li div.current:hover {background-color: #B688CD;}
 
 /* Docs menu sortable layout ------------------------------------------------------------------------------------------------------------------------------------------------------*/
 #menu_list .sortable li.placeholder { background-color: #c2c0c0; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; margin-left: 20px; }

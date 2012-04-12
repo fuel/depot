@@ -92,10 +92,10 @@ class Controller_Base_Template extends Controller_Hybrid
 	{
 		if ( ! \Input::is_ajax())
 		{
-			// If nothing was returned render the defined template
+			// If nothing was returned set the theme instance as the response
 			if (empty($response))
 			{
-				$response = \Theme::instance()->render();
+				$response = \Response::forge(\Theme::instance());
 			}
 
 			// If the response isn't a Response object, embed in the available one for BC
