@@ -112,7 +112,8 @@ $(document).ready(function(){
 
 		if ($item_list.length > 0)
 		{
-			$item_list.find('li').clickable();
+			// make the divs with embedded a's clickable
+			$item_list.find('li').clickable(true,  true);
 
 			// collapse all ordered lists but the top level
 			$item_list.find('ul').children().hide();

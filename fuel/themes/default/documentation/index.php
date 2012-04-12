@@ -72,4 +72,4 @@
 	</div>
 </div>
 
-<?php \Theme::instance()->asset->js(array('jquery.cooki.js', 'jquery.ui.nestedSortable.js', 'highlight.pack.js'), array(), 'footer'); ?>
+<?php \Theme::instance()->asset->js(array('jquery.cooki.js', 'jquery.ui.nestedSortable.js', 'jquery.clickable.js', 'highlight.pack.js'), array(), 'footer'); ?>

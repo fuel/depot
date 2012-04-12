@@ -8,12 +8,15 @@
  * Requires jQuery to work	(jquery.com). Tested with version 1.2.6
  *
  * 2008-12-01
+ *
+ * 2012-04-12 Modified by Harro Verton, added onlyDirect parameter
  */
 (function($) {
 	$.fn.extend( {
-		clickable: function( cpTtl ) { // v0.1.9
+		clickable: function( cpTtl, onlyDirect ) { // v0.1.9
 			//	Makes elements clickable, linking to location specified by href= attribute of first descending link (where href is not "#" and does not start with "javascript:").
 			// Args.:	cpTtl:	[Boolean | optional]	Specifies whether or not to copy the title= attribute from the link to clickable element (default: true)
+			//      :	onlyDirect:	[Boolean | optional]	Specifies whether or not only the direct child link should be taken into account (default:true)
 			//	CSS:		.jsClickable (on this)
 			//				.jsClickableHover (on this:hover)
 			//				.jsClickableFocus (on this, when guiding link gets focus)
@@ -21,7 +24,14 @@
 			return this
 				.each( function() {
 					var jClickElem = $(this);
-					var jGuideLink = $("a[href]:not([href='#']):not([href^='javascript:'])", jClickElem).eq(0);
+					if ( ( onlyDirect || onlyDirect == null ) )
+					{
+						var jGuideLink = $(">a[href]:not([href='#']):not([href^='javascript:'])", jClickElem).eq(0);
+					}
+					else
+					{
+						var jGuideLink = $("a[href]:not([href='#']):not([href^='javascript:'])", jClickElem).eq(0);
+					}
 					if ( !jGuideLink ) return true;	// continue
 
 					var href = jGuideLink.attr("href");
@@ -44,4 +54,4 @@
 				} );
 		}
 	} );
-} )(jQuery);<!--gen-->
+} )(jQuery);
