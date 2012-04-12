@@ -680,23 +680,23 @@ class FineDiff {
 
 	private static function renderDiffToHTMLFromOpcode($opcode, $from, $from_offset, $from_len) {
 		if ( $opcode === 'c' ) {
-			echo htmlentities(htmlentities(substr($from, $from_offset, $from_len)));
+			echo htmlentities(htmlentities(substr($from, $from_offset, $from_len),ENT_NOQUOTES),ENT_NOQUOTES);
 			}
 		else if ( $opcode === 'd' ) {
 			$deletion = substr($from, $from_offset, $from_len);
 			if ( strcspn($deletion, " \n\r") === 0 ) {
 				$deletion = str_replace(array("\n","\r"), array('\n','\r'), $deletion);
 				}
-			echo '<del>', htmlentities($deletion), '</del>';
+			echo '<del>', htmlentities($deletion,ENT_NOQUOTES), '</del>';
 			}
 		else /* if ( $opcode === 'i' ) */ {
- 			echo '<ins>', htmlentities(substr($from, $from_offset, $from_len)), '</ins>';
+ 			echo '<ins>', htmlentities(substr($from, $from_offset, $from_len),ENT_NOQUOTES), '</ins>';
 			}
 		}
 
 	private static function renderDiffToMarkDownFromOpcode($opcode, $from, $from_offset, $from_len) {
 		if ( $opcode === 'c' ) {
-			echo htmlentities(htmlentities(substr($from, $from_offset, $from_len)));
+			echo htmlentities(htmlentities(substr($from, $from_offset, $from_len),ENT_NOQUOTES),ENT_NOQUOTES);
 			}
 		else if ( $opcode === 'd' ) {
 			$deletion = substr($from, $from_offset, $from_len);
@@ -706,14 +706,14 @@ class FineDiff {
 			$oc = substr_count($deletion, "\r\n");
 			$deletion = rtrim($deletion);
 			$nc = substr_count($deletion, "\r\n");
-			echo '<del>', htmlentities($deletion), '</del>', str_repeat("\r\n", $oc-$nc);
+			echo '<del>', htmlentities($deletion,ENT_NOQUOTES), '</del>', str_repeat("\r\n", $oc-$nc);
 			}
 		else /* if ( $opcode === 'i' ) */ {
 			$insertion = substr($from, $from_offset, $from_len);
 			$oc = substr_count($insertion, "\r\n");
 			$deletion = rtrim($insertion);
 			$nc = substr_count($insertion, "\r\n");
- 			echo '<ins>', htmlentities($insertion), '</ins>', str_repeat("\r\n", $oc-$nc);
+ 			echo '<ins>', htmlentities($insertion,ENT_NOQUOTES), '</ins>', str_repeat("\r\n", $oc-$nc);
 			}
 		}
 	}

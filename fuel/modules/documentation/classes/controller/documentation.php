@@ -254,7 +254,7 @@ class Controller_Documentation extends \Controller_Base_Public
 					->set('title', \Input::post('title'))
 					->set('slug', \Input::post('slug'))
 					->set('page', \Input::post('page'))
-					->set('preview', $this->renderpage(htmlentities(\Input::post('page'))), false);
+					->set('preview', $this->renderpage(htmlentities(\Input::post('page'), ENT_NOQUOTES)), false);
 			}
 		}
 		else
@@ -439,7 +439,7 @@ class Controller_Documentation extends \Controller_Base_Public
 			if ($this->doc)
 			{
 				// render the page
-				$details = $this->renderpage(htmlentities($this->doc->content));
+				$details = $this->renderpage(htmlentities($this->doc->content, ENT_NOQUOTES));
 
 				// cache the rendered result an hour if not in development
 				\Cache::set('documentation.version_'.$this->page->version_id.'.page_'.$this->page->id, $details, 3600);
