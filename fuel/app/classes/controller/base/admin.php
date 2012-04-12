@@ -55,7 +55,7 @@ class Controller_Base_Admin extends Controller_Base_Template
 		{
 			if (\Input::is_ajax())
 			{
-				$this->response(array($result['message'), 403);
+				$this->response(array($result['message']), 403);
 			}
 			else
 			{
