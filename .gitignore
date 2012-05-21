@@ -1,6 +1,3 @@
-/fuel/app/config/ninjauth.php
-/fuel/app/config/migrations.php
-/localoil
 *~
 *.bak
 Thumbs.db
@@ -14,8 +11,16 @@ build
 nbproject/
 .idea
 
+/localoil
 /fuel/logs/*/*/*
 /fuel/cache/*/*
+
 /fuel/app/config/crypt.php
+/fuel/app/config/ninjauth.php
+
 /fuel/app/config/development/db.php
+/fuel/app/config/development/migrations.php
 /fuel/app/config/stage/db.php
+/fuel/app/config/stage/migrations.php
+/fuel/app/config/production/db.php
+/fuel/app/config/production/migrations.php
