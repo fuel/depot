@@ -4,5 +4,5 @@
 <?php echo \Theme::instance()->view('admin/branches/_form', array('form' => 'create', 'versions' => $versions)); ?>
 
 <p>
-	<?php echo Html::anchor('admin/branches', 'Index', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/admin/branches', 'Index', array('class' => 'btn')); ?>
 </p>

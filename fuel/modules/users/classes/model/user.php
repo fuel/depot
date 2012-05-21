@@ -10,7 +10,7 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Users;
 
 class Model_User extends \Orm\Model
 {
@@ -29,8 +29,12 @@ class Model_User extends \Orm\Model
 	);
 
 	protected static $_has_many = array(
-		'page',
-		'doc'
+		'page' => array(
+			'model_to' => '\\Documentation\\Model_Page',
+		),
+		'doc' => array(
+			'model_to' => '\\Documentation\\Model_Doc',
+		),
 	);
 
 	protected static $_observers = array(
@@ -42,6 +46,12 @@ class Model_User extends \Orm\Model
 			'events' => array('before_save', 'after_save', 'after_load'),
 		),
 	);
+
+	public static function _init()
+	{
+		// make sure the required modules are loaded
+		\Module::load('documentation');
+	}
 
 	public static function validate($factory)
 	{

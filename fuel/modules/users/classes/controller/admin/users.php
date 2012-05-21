@@ -10,9 +10,9 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Users;
 
-class Controller_Admin_Users extends Controller_Base
+class Controller_Admin_Users extends \Admin\Controller_Base
 {
 	/**
 	 * @var	array	data to send to the view
@@ -53,7 +53,7 @@ class Controller_Admin_Users extends Controller_Base
 		$page--;
 
 		// set pagination information
-		$this->pagination['pagination_url'] = \Uri::create('admin/users/');
+		$this->pagination['pagination_url'] = \Uri::create('admin/users/users');
 		$this->pagination['total_items'] = Model_User::count();
 
 		\Pagination::set_config($this->pagination);
@@ -65,7 +65,7 @@ class Controller_Admin_Users extends Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/users/index')->set($this->data);
+		\Theme::instance()->set_partial('content', 'users/admin/index')->set($this->data);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Controller_Admin_Users extends Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/users/view')->set($this->data);
+		\Theme::instance()->set_partial('content', 'users/admin/view')->set($this->data);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Controller_Admin_Users extends Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/users/create')->set($this->data);
+		\Theme::instance()->set_partial('content', 'users/admin/create')->set($this->data);
 	}
 
 	/**
@@ -190,7 +190,7 @@ class Controller_Admin_Users extends Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/users/edit')->set($this->data)->set('user', $user, false);
+		\Theme::instance()->set_partial('content', 'users/admin/edit')->set($this->data)->set('user', $user, false);
 	}
 
 	/**
@@ -210,7 +210,7 @@ class Controller_Admin_Users extends Controller_Base
 			\Session::set_flash('error', 'Could not delete user #'.$id);
 		}
 
-		\Response::redirect('admin/users');
+		\Response::redirect('users/admin');
 
 	}
 

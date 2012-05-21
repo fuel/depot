@@ -35,6 +35,6 @@
 <?php echo Form::close(); ?>
 
 <p>
-	<?php echo Html::anchor('admin/users/edit/'.$user->id, 'Edit', array('class' => 'btn')); ?>
-	<?php echo Html::anchor('admin/users', 'Back', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/users/users/edit/'.$user->id, 'Edit', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/users/users', 'Back', array('class' => 'btn')); ?>
 </p>

@@ -10,7 +10,7 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Documentation;
 
 /*
  * make sure the package is loaded
@@ -42,14 +42,18 @@ class Model_Page extends \Nestedsets\Model
 	);
 
 	protected static $_belongs_to = array(
-		'version',
-		'user',
+		'version' => array(
+			'model_to' => '\\Admin\Model_Version',
+		),
+		'user' => array(
+			'model_to' => '\\Users\Model_User',
+		),
 	);
 
 	protected static $_has_many = array(
 		'latest' => array(
 			'key_from' => 'id',
-			'model_to' => '\\Admin\\Model_Doc',
+			'model_to' => '\\Documentation\\Model_Doc',
 			'key_to' => 'page_id',
 			'cascade_save' => false,
 			'cascade_delete' => false,
@@ -59,7 +63,10 @@ class Model_Page extends \Nestedsets\Model
 				),
 			),
 		),
-		'doc' => array('cascade_delete' => true),
+		'doc' => array(
+			'model_to' => '\\Documentation\\Model_Doc',
+			'cascade_delete' => true,
+		),
 	);
 
 	protected static $_observers = array(
@@ -72,4 +79,12 @@ class Model_Page extends \Nestedsets\Model
 			'mysql_timestamp' => false,
 		),
 	);
+
+	public static function _init()
+	{
+		// make sure the required modules are loaded
+		\Module::load('admin');
+		\Module::load('documentation');
+		\Module::load('users');
+	}
 }

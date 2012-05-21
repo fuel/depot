@@ -58,6 +58,6 @@
 <?php echo Form::close(); ?>
 
 <p>
-	<?php echo Html::anchor('admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn')); ?>
-	<?php echo Html::anchor('admin/branches', 'Index', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/admin/branches', 'Index', array('class' => 'btn')); ?>
 </p>

@@ -10,7 +10,7 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Api;
 
 class Model_Docblox extends \Orm\Model
 {
@@ -30,11 +30,19 @@ class Model_Docblox extends \Orm\Model
 	);
 
 	protected static $_belongs_to = array(
-		'version'
+		'version' => array(
+			'model_to' => '\\Admin\\Model_Version',
+		),
 	);
 
 	protected static $_observers = array(
 	);
+
+	public static function _init()
+	{
+		// make sure the required modules are loaded
+		\Module::load('admin');
+	}
 
 	public static function validate($factory)
 	{

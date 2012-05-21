@@ -35,7 +35,7 @@ class Controller_Base_Admin extends Controller_Base_Template
 			);
 		}
 
-		elseif ( ! Auth::has_access('access.staff'))
+		elseif ( ! \Auth::has_access('access.staff'))
 		{
 			$result = array(
 				'message' => 'Access denied. You need to be a member of staff to access that page.',
@@ -43,7 +43,7 @@ class Controller_Base_Admin extends Controller_Base_Template
 			);
 		}
 
-		elseif ( ! Auth::has_access('access.admin'))
+		elseif ( ! \Auth::has_access('access.admin'))
 		{
 			$result = array(
 				'message' => 'Access denied. You need to be an administrator to access that page.',

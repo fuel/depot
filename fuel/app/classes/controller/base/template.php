@@ -69,7 +69,7 @@ class Controller_Base_Template extends Controller_Hybrid
 			$navitems[] = array('name' => 'Login', 'link' => '/users/login', 'class' => '');
 		}
 		// see if we need to highlight one
-		$uri = '/'.\Request::active()->uri->uri;
+		$uri = '/'.\Request::active()->uri->get();
 		foreach ($navitems as $navitem)
 		{
 			// highlight the current navigation item

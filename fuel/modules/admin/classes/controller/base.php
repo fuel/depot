@@ -24,7 +24,7 @@ class Controller_Base extends \Controller_Base_Admin
 		'pagination_url' => '#',
 		'total_items' => 0,
 		'per_page' => 10,
-		'uri_segment' => 3,
+		'uri_segment' => 4,
 		'template' => array(
 			'wrapper_start' => '<div class="pagination"><div class="pagination-block">',
 			'wrapper_end' => '</div></div><div style="clear:both;"></div>',
@@ -49,8 +49,10 @@ class Controller_Base extends \Controller_Base_Admin
 	{
 		parent::before();
 
+		\Module::load('users');
+
 		// Assign current_user to the instance so controllers can use it
-		$this->current_user = \Auth::check() ? Model_User::find_by_username(\Auth::get_screen_name()) : null;
+		$this->current_user = \Auth::check() ? \Users\Model_User::find_by_username(\Auth::get_screen_name()) : null;
 
 		// Set a global variable so views can use it
 		\View::set_global('current_user', $this->current_user);

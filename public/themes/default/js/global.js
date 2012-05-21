@@ -76,11 +76,8 @@ $(document).ready(function(){
 			// get all of the open parents
 			$item_list.find('li.minus:visible').each(function(){ items.push('#' + this.id) });
 
-			var pathArray = window.location.pathname.split( '/' );
-			var cookiepath = '/' + pathArray[1] + '/' + pathArray[2];
-
 			// save open parents in the cookie
-			$.cookie($cookie, items.join(', '), { expires: 1, path: cookiepath });
+			$.cookie($cookie, items.join(', '), { expires: 1, path: '/' });
 		}
 
 		// this gets ran again after drop
@@ -93,7 +90,7 @@ $(document).ready(function(){
 			$item_list.parent().find('ul li:has(li:hidden)').removeClass('minus').addClass('plus');
 
 			// remove the class if the child was removed
-			$item_list.parent().find('ul li:not(:has(ul))').removeClass('plus minus');
+			$item_list.parent().find('ul li:not(:has(li))').removeClass('plus minus');
 		}
 
 		// tree toggle functions
@@ -121,7 +118,7 @@ $(document).ready(function(){
 			refresh_tree();
 
 			// determine the cookie name based on the id prefix
-			$cookie = $item_list.find('li').attr('id');
+			$cookie = $item_list.find('li').last().attr('id');
 			$cookie = $cookie.substr(0, $cookie.indexOf("_")) + '_menustate';
 
 			// set the icons properly on parents restored from cookie
@@ -145,7 +142,7 @@ $(document).ready(function(){
 				event.stopImmediatePropagation();
 			});
 
-			$item_list.nestedSortable({
+			$item_list.filter('.sortable').nestedSortable({
 				delay: 100,
 				revert: 250,
 				disableNesting: 'no-nest',
@@ -161,8 +158,23 @@ $(document).ready(function(){
 				listType: 'ul',
 				tolerance: 'pointer',
 				toleranceElement: '> div',
+				update: function(event, ui) {
+					$.ajax({
+					  type: "POST",
+					  url: "/documentation/move.json",
+					  data: { 'current': $(ui.item).attr('id'), 'next': $(ui.item).next().attr('id'), 'previous': $(ui.item).prev().attr('id'), 'parent': $(ui.item).parent().parent().attr('id') },
+					  beforeSend: function() {
+						 $('#spinner').show()
+					  },
+					  complete: function(){
+						 $('#spinner').hide()
+					  },
+					}).done(function( msg ) {
+						if (msg.response != 'ok') alert( "Server response: " + msg.response );
+					});
+					refresh_tree();
+				}
 			});
-
 		}
 
 	});

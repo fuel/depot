@@ -19,8 +19,13 @@
 
 			<ul>
 				<li>
-					<button class="btn small expand_all">Expand All</button>
-					<button class="btn small collapse_all">Collapse All</button>
+					<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
+					<?php echo \Form::open(array('action' => '/documentation/add/'.$selection['version'], 'style' => 'display:inline;'));?>
+					<button class="btn small purple">New page</button> &nbsp;
+					<?php echo \Form::close(); ?>
+					<?php endif; ?>
+					<button class="btn small expand_all">Expand all</button>
+					<button class="btn small collapse_all">Collapse all</button>
 				</li>
 			</ul>
 

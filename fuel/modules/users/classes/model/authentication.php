@@ -1,11 +1,29 @@
 <?php
+/**
+ * Part of Fuel Depot.
+ *
+ * @package    FuelDepot
+ * @version    1.0
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2012 Fuel Development Team
+ * @link       http://depot.fuelphp.com
+ */
 
 namespace Users;
 
-class Model_Authentication extends \Orm\Model {
-
-	public static $_properties = array(
-		'id', 'provider', 'uid', 'access_token', 'secret', 'expires', 'refresh_token', 'user_id', 'created_at', 'updated_at'
+class Model_Authentication extends \Orm\Model
+{
+	protected static $_properties = array(
+		'id',
+		'user_id',
+		'provider',
+		'uid',
+		'secret',
+		'access_token',
+		'expires',
+		'created_at',
+		'updated_at',
 	);
 
 	protected static $_observers = array(
@@ -18,4 +36,12 @@ class Model_Authentication extends \Orm\Model {
 			'mysql_timestamp' => false,
 		),
 	);
+
+	public static function validate($factory)
+	{
+		$val = \Validation::forge($factory);
+
+		return $val;
+	}
+
 }

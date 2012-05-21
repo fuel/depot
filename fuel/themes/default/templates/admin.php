@@ -27,15 +27,17 @@
 						<?php echo Html::anchor('admin', 'Dashboard') ?>
 					</li>
 
-					<?php foreach (glob(APPPATH.'../modules/admin/classes/controller/admin/*.php') as $controller): ?>
+					<?php foreach (glob(APPPATH.'../modules/*/classes/controller/admin/*.php') as $controller): ?>
 
 						<?php
 						$section_segment = basename($controller, '.php');
 						$section_title = Inflector::humanize($section_segment);
+						$controller = explode('/', $controller);
+						$module = $controller[count($controller)-5];
 						?>
 
 	                <li class="<?php echo Uri::segment(2) == $section_segment ? 'active' : '' ?>">
-						<?php echo Html::anchor('admin/'.$section_segment, $section_title) ?>
+						<?php echo Html::anchor('admin/'.$module.'/'.$section_segment, $section_title) ?>
 					</li>
 					<?php endforeach; ?>
 	          </ul>

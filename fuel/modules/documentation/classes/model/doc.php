@@ -10,7 +10,7 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Documentation;
 
 class Model_Doc extends \Orm\Model
 {
@@ -23,8 +23,12 @@ class Model_Doc extends \Orm\Model
 	);
 
 	protected static $_belongs_to = array(
-		'page',
-		'user',
+		'page' => array(
+			'model_to' => '\\Documentation\\Model_Page',
+		),
+		'user' => array(
+			'model_to' => '\\Users\\Model_User',
+		),
 	);
 
 	protected static $_observers = array(
@@ -33,4 +37,11 @@ class Model_Doc extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
+
+	public static function _init()
+	{
+		// make sure the required modules are loaded
+		\Module::load('documentation');
+		\Module::load('users');
+	}
 }

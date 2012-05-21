@@ -4,6 +4,6 @@
 <?php echo \Theme::instance()->view('admin/branches/_form', array('version' => $version, 'form' => 'edit')); ?>
 
 <p>
-	<?php echo Html::anchor('admin/branches/view/'.$version->id, 'View', array('class' => 'btn')); ?>
-	<?php echo Html::anchor('admin/branches', 'Index', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/admin/branches/view/'.$version->id, 'View', array('class' => 'btn')); ?>
+	<?php echo Html::anchor('admin/admin/branches', 'Index', array('class' => 'btn')); ?>
 </p>

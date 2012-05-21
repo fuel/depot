@@ -64,6 +64,90 @@ class Controller_Documentation extends \Controller_Base_Public
 		}
 	}
 
+	public function post_move()
+	{
+		// do we have move rights?
+		if ( \Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github')
+		{
+			// do we have our input
+			if ($current = \Input::post('current', false))
+			{
+				// get the other fields
+				$next = \Input::post('next', 'undefined');
+				$previous = \Input::post('previous', 'undefined');
+				$parent = \Input::post('parent', 'undefined');
+
+				// get the current id
+				$current = str_replace('page_', '', $current);
+
+				// do we have a previous id?
+				if ($previous != 'undefined')
+				{
+					// get the previous id
+					$previous = str_replace('page_', '', $previous);
+
+					// we can do a move_to_next_sibling
+					$current = Model_Page::find($current);
+					$previous = Model_Page::find($previous);
+
+					if ($current and $previous)
+					{
+						$current->tree_make_next_sibling_of($previous);
+					}
+				}
+				elseif ($next != 'undefined')
+				{
+					// get the next id
+					$next = str_replace('page_', '', $next);
+
+					// we can do a move_to_next_sibling
+					$current = Model_Page::find($current);
+					$next = Model_Page::find($next);
+
+					if ($current and $next)
+					{
+						$current->tree_make_previous_sibling_of($next);
+					}
+				}
+				elseif ($parent != 'undefined' and $parent != 'menu_list')
+				{
+					// get the parent id
+					$parent = str_replace('page_', '', $parent);
+
+					// we can do a move_to_first_child
+					$current = Model_Page::find($current);
+					$parent = Model_Page::find($parent);
+
+					if ($current and $parent)
+					{
+						$current->tree_make_first_child_of($parent);
+					}
+				}
+				else
+				{
+					$response = array('response' => 'Moved to unsupported location');
+					logger('Error', 'Unknown move request: current:'.$current.', next:'.$next.', previous:'.$previous.', parent:'.$parent, __METHOD__);
+				}
+
+				// delete the cached menu to avoid refresh issues
+				if ($current)
+				{
+					\Cache::delete('documentation.version_'.$current->version_id.'.menu');
+				}
+
+				$this->response(empty($response) ? array('response' => 'ok') : $response, 200);
+			}
+			else
+			{
+				$this->response(array('response' => 'N data passed to the move request!'), 500);
+			}
+		}
+		else
+		{
+			$this->response(array('response' => 'You are not allowed to move menu items!'), 403);
+		}
+	}
+
 	/**
 	 * Documentation start page
 	 *
@@ -144,6 +228,24 @@ class Controller_Documentation extends \Controller_Base_Public
 	 * @access  public
 	 * @return  Response
 	 */
+	public function action_add($version = '0')
+	{
+		// validate the access
+		$this->checkaccess();
+
+		// store and unify the parameters
+		$this->params = array('version' => $version, 'page' => '0');
+
+		// build the page layout partial
+		$partial = $this->buildpage();
+	}
+
+	/**
+	 * Load the page editor
+	 *
+	 * @access  public
+	 * @return  Response
+	 */
 	public function action_edit($page = '0')
 	{
 		// validate the access
@@ -153,7 +255,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		$this->params = array('version' => '0', 'page' => $page);
 
 		// fetch the requested page
-		$this->page = \Admin\Model_Page::find($this->params['page']);
+		$this->page = Model_Page::find($this->params['page']);
 
 		// found?
 		if ( ! $this->page)
@@ -166,7 +268,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		$this->params['version'] = $this->page->version_id;
 
 		// get the docs page to edit
-		$this->doc = \Admin\Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC')->get_one();
+		$this->doc = Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC')->get_one();
 
 		// build the page layout partial
 		$partial = $this->buildpage();
@@ -219,7 +321,7 @@ class Controller_Documentation extends \Controller_Base_Public
 						// get the user id
 						$user = \Auth::get_user_id();
 						// create a new docs page
-						$this->doc = \Admin\Model_Doc::forge(array(
+						$this->doc = Model_Doc::forge(array(
 							'page_id' => $this->page->id,
 							'user_id' => $user[1],
 							'content' => $val->validated('page'),
@@ -286,7 +388,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		$this->params = array('version' => '0', 'page' => $page);
 
 		// get the docs pages
-		$docs = \Admin\Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC')->get();
+		$docs = Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC')->get();
 
 		// did we find more then one?
 		if ( ! $docs or count($docs) < 2)
@@ -408,7 +510,7 @@ class Controller_Documentation extends \Controller_Base_Public
 	protected function fetchpage()
 	{
 		// fetch the requested page entry
-		$this->page = \Admin\Model_Page::find($this->params['page']);
+		$this->page = Model_Page::find($this->params['page']);
 
 		// was the page found?
 		if ( ! $this->page)
@@ -418,7 +520,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		}
 
 		// build the query for this page
-		$query = \Admin\Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC');
+		$query = Model_Doc::find()->where('page_id', '=', $this->params['page'])->order_by('created_at', 'DESC');
 
 		// store the number of versions of this page
 		$versions = $query->count();
@@ -490,7 +592,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		\Session::set('version', $this->params['version']);
 
 		// see if we can find a default page for the requested version
-		$this->page = \Admin\Model_Page::find()->where('version_id', '=', $this->params['version'])->where('default', '=', 1)->get_one();
+		$this->page = Model_Page::find()->where('version_id', '=', $this->params['version'])->where('default', '=', 1)->get_one();
 
 		if ($this->page)
 		{
@@ -499,7 +601,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		}
 
 		// no default page exists for this version. Find the first page node
-		$this->page = \Admin\Model_Page::find()->where('version_id', '=', $this->params['version'])->where('left_id', '>', 2)->where('right_id', '=', \DB::expr('left_id + 1'))->get_one();
+		$this->page = Model_Page::find()->where('version_id', '=', $this->params['version'])->where('left_id', '>', 2)->where('right_id', '=', \DB::expr('left_id + 1'))->get_one();
 
 		if ($this->page)
 		{
@@ -541,7 +643,7 @@ class Controller_Documentation extends \Controller_Base_Public
 		catch (\CacheNotFoundException $e)
 		{
 			// load the tree for this version
-			$model = \Admin\Model_Page::forge()->tree_select($this->params['version'])->tree_get_root();
+			$model = Model_Page::forge()->tree_select($this->params['version'])->tree_get_root();
 
 			// did we find it?
 			$this->tree = $model ? $model->tree_dump_as_array(array(), true, true) : array();
@@ -582,8 +684,11 @@ class Controller_Documentation extends \Controller_Base_Public
 					}
 					else
 					{
+						// check if this page has any docs defined
+						$count = Model_Doc::query()->where('page_id', '=', $node['id'])->count();
+
 						// and add the link to the docs page
-						$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'"'.($close?' style="display:none;"':'').'><div'.($node['id']==$params['page']?' class="current"':'').'><a href="/documentation/page/'.$node['id'].'">'.$node['title'].'</a></div>'."\n";
+						$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'"'.($count?' class="no-nest"':'').($close?' style="display:none;"':'').'><div'.($node['id']==$params['page']?' class="current"':'').'><a href="/documentation/page/'.$node['id'].'">'.$node['title'].'</a></div>'."\n";
 					}
 
 					// close the node

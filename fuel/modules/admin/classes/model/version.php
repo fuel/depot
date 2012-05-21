@@ -27,8 +27,14 @@ class Model_Version extends \Orm\Model
 	);
 
 	protected static $_has_many = array(
-		'docblox' => array('cascade_delete' => true),
-		'page' => array('cascade_delete' => true),
+		'docblox' => array(
+			'model_to' => '\\Api\\Model_Docblox',
+			'cascade_delete' => true
+		),
+		'page' => array(
+			'model_to' => '\\Documentation\\Model_Page',
+			'cascade_delete' => true
+		),
 	);
 
 	protected static $_observers = array(
@@ -37,6 +43,13 @@ class Model_Version extends \Orm\Model
 			'mysql_timestamp' => false,
 		),
 	);
+
+	public static function _init()
+	{
+		// make sure the required modules are loaded
+		\Module::load('api');
+		\Module::load('documentation');
+	}
 
 	public static function validate($forge)
 	{

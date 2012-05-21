@@ -43,7 +43,7 @@ class Controller_Admin_Branches extends Controller_Base
 		$page--;
 
 		// set pagination information
-		$this->pagination['pagination_url'] = \Uri::create('admin/branches/');
+		$this->pagination['pagination_url'] = \Uri::create('admin/admin/branches/');
 		$this->pagination['total_items'] = Model_Version::count();
 
 		\Pagination::set_config($this->pagination);
@@ -68,7 +68,7 @@ class Controller_Admin_Branches extends Controller_Base
 		{
 			// bail out with an error if not found
 			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
-			\Response::redirect('admin/branches');
+			\Response::redirect('admin/admin/branches');
 		}
 
 		// set the admin page title
@@ -134,7 +134,7 @@ class Controller_Admin_Branches extends Controller_Base
 					}
 
 					\Session::set_flash('success', 'Added source branch #'.$this->data['version']->id.'.');
-					\Response::redirect('admin/branches');
+					\Response::redirect('admin/admin/branches');
 				}
 				else
 				{
@@ -172,7 +172,7 @@ class Controller_Admin_Branches extends Controller_Base
 		{
 			// bail out with an error if not found
 			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
-			\Response::redirect('admin/branches');
+			\Response::redirect('admin/admin/branches');
 		}
 
 		// run the validation rules on the input
@@ -195,7 +195,7 @@ class Controller_Admin_Branches extends Controller_Base
 				$version->default and $query = Model_Version::query()->set('default', 0)->where('id', '!=', $id)->update();
 
 				\Session::set_flash('success', 'Updated source branch #' . $id);
-				\Response::redirect('admin/branches');
+				\Response::redirect('admin/admin/branches');
 			}
 
 			else
@@ -247,7 +247,7 @@ class Controller_Admin_Branches extends Controller_Base
 			\Session::set_flash('error', 'Could not delete source branch #'.$id);
 		}
 
-		\Response::redirect('admin/branches');
+		\Response::redirect('admin/admin/branches');
 
 	}
 

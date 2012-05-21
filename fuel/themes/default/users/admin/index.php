@@ -23,9 +23,9 @@
 			<td><?php echo Date::forge($user->created_at)->format('eu_datetime'); ?></td>
 			<td><?php echo Date::forge($user->last_login)->format('eu_datetime'); ?></td>
 			<td class="center shrink">
-				<?php echo Html::anchor('admin/users/view/'.$user->id, 'View', array('class' => 'btn inline')); ?>
-				<?php echo Html::anchor('admin/users/edit/'.$user->id, 'Edit', array('class' => 'btn inline')); ?>
-				<?php echo Html::anchor('admin/users/delete/'.$user->id, 'Delete', array('onclick' => "return confirm('Are you sure?')", 'class' => 'btn inline')); ?>
+				<?php echo Html::anchor('admin/users/users/view/'.$user->id, 'View', array('class' => 'btn inline')); ?>
+				<?php echo Html::anchor('admin/users/users/edit/'.$user->id, 'Edit', array('class' => 'btn inline')); ?>
+				<?php echo Html::anchor('admin/users/users/delete/'.$user->id, 'Delete', array('onclick' => "return confirm('Are you sure?')", 'class' => 'btn inline')); ?>
 			</td>
 		</tr>
 <?php endforeach; ?>	</tbody>
@@ -37,5 +37,5 @@
 <p>There are no users defined.</p>
 
 <?php endif; ?><p>
-	<?php echo Html::anchor('admin/users/create', 'Add new User', array('class' => 'btn success pull-right')); ?>
+	<?php echo Html::anchor('admin/users/users/create', 'Add new User', array('class' => 'btn success pull-right')); ?>
 </p>
