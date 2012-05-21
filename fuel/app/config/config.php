@@ -97,7 +97,7 @@ return array(
 	 * Fuel::L_INFO
 	 * Fuel::L_ALL
 	 */
-	'log_threshold'    => Fuel::L_WARNING,
+	'log_threshold'    => Fuel::$env == Fuel::DEVELOPMENT ? Fuel::L_ALL : Fuel::L_ERROR,
 	'log_path'         => APPPATH.'..'.DS.'logs/',
 	'log_date_format'  => 'Y-m-d H:i:s',
 
