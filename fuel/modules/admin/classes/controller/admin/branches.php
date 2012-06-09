@@ -44,12 +44,12 @@ class Controller_Admin_Branches extends Controller_Base
 
 		// set pagination information
 		$this->pagination['pagination_url'] = \Uri::create('admin/admin/branches/');
-		$this->pagination['total_items'] = Model_Version::count();
+		$this->pagination['total_items'] = \Documentation\Model_Version::count();
 
 		\Pagination::set_config($this->pagination);
 
 		// get the records for the current page
-		$this->data['versions'] = Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
+		$this->data['versions'] = \Documentation\Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
@@ -64,7 +64,7 @@ class Controller_Admin_Branches extends Controller_Base
 	public function action_view($id = null)
 	{
 		// get the version record we want to view
-		if ( ! $this->data['version'] = Model_Version::find($id))
+		if ( ! $this->data['version'] = \Documentation\Model_Version::find($id))
 		{
 			// bail out with an error if not found
 			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
@@ -87,7 +87,7 @@ class Controller_Admin_Branches extends Controller_Base
 		if (\Input::method() == 'POST')
 		{
 			// run the validation rules on the input
-			$val = Model_Version::validate('create');
+			$val = \Documentation\Model_Version::validate('create');
 			if ($val->run())
 			{
 				// create the version object from posted data
@@ -107,11 +107,11 @@ class Controller_Admin_Branches extends Controller_Base
 					if (\Input::post('docsversion', 0))
 					{
 						// get all pages
-						$pages = Model_Page::find()->where('version_id', '=', \Input::post('docsversion', 0))->get();
+						$pages = \Documentation\Model_Page::find()->where('version_id', '=', \Input::post('docsversion', 0))->get();
 						foreach ($pages as $id => $page)
 						{
 							// get the latest docs for this page
-							$doc = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
+							$doc = \Documentation\Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
 
 							// convert the page to an array and make it new data
 							$page = $page->to_array();
@@ -119,7 +119,7 @@ class Controller_Admin_Branches extends Controller_Base
 							$page['version_id'] = $this->data['version']->id;
 
 							// insert the new page
-							$newpage = Model_Page::forge($page);
+							$newpage = \Documentation\Model_Page::forge($page);
 							$newpage->save();
 
 							// copy the page doc too if it was present
@@ -128,7 +128,7 @@ class Controller_Admin_Branches extends Controller_Base
 								$doc = $doc->to_array();
 								unset($doc['id']);
 								$doc['page_id'] = $newpage->id;
-								Model_Doc::forge($doc)->save();
+								\Documentation\Model_Doc::forge($doc)->save();
 							}
 						}
 					}
@@ -150,7 +150,7 @@ class Controller_Admin_Branches extends Controller_Base
 
 		// determine the current versions
 		$this->data['versions'] = array(0 => '&nbsp;');
-		foreach (Model_Version::find('all') as $version)
+		foreach (\Documentation\Model_Version::find('all') as $version)
 		{
 			$this->data['versions'][$version->id] = $version->major.'.'.$version->minor.'/'.$version->branch;
 		}
@@ -168,7 +168,7 @@ class Controller_Admin_Branches extends Controller_Base
 	public function action_edit($id = null)
 	{
 		// get the version record we want to edit
-		if ( ! $version = Model_Version::find($id))
+		if ( ! $version = \Documentation\Model_Version::find($id))
 		{
 			// bail out with an error if not found
 			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
@@ -176,7 +176,7 @@ class Controller_Admin_Branches extends Controller_Base
 		}
 
 		// run the validation rules on the input
-		$val = Model_Version::validate('edit');
+		$val = \Documentation\Model_Version::validate('edit');
 		if ($val->run())
 		{
 			// populate the object from the input
@@ -192,7 +192,7 @@ class Controller_Admin_Branches extends Controller_Base
 			if ($version->save())
 			{
 				// if this one is default, reset any others
-				$version->default and $query = Model_Version::query()->set('default', 0)->where('id', '!=', $id)->update();
+				$version->default and $query = \Documentation\Model_Version::query()->set('default', 0)->where('id', '!=', $id)->update();
 
 				\Session::set_flash('success', 'Updated source branch #' . $id);
 				\Response::redirect('admin/admin/branches');
@@ -235,7 +235,7 @@ class Controller_Admin_Branches extends Controller_Base
 	 */
 	public function action_delete($id = null)
 	{
-		if ($version = Model_Version::find($id))
+		if ($version = \Documentation\Model_Version::find($id))
 		{
 			$version->delete();
 

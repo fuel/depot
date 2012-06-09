@@ -55,7 +55,7 @@ class Model_Version extends \Orm\Model
 	{
 		$val = \Validation::forge($forge);
 
-		$val->add_callable('\\Admin\\Model_Version')
+		$val->add_callable('\\Documentation\\Model_Version')
 			->set_message('valid_path', 'The field :label does not contain an accessible path.');
 
 		$val->add_field('major', 'Major', 'required|is_numeric|numeric_min[0]');
