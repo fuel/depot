@@ -1,6 +1,7 @@
 <?php \Theme::instance()->asset->css(array('docs.css', 'highlight.css'), array(), 'header'); ?>
 
 <div id="docs">
+	<div id="spinner"></div>
 	<div class="header">
 		<div class="alignleft">
 			<h1>Online Documentation</h1>
@@ -24,8 +25,10 @@
 					<button class="btn small purple">New page</button> &nbsp;
 					<?php echo \Form::close(); ?>
 					<?php endif; ?>
+					<?php if ($menutree): ?>
 					<button class="btn small expand_all">Expand all</button>
 					<button class="btn small collapse_all">Collapse all</button>
+					<?php endif; ?>
 				</li>
 			</ul>
 
@@ -36,11 +39,10 @@
 		</div>
 
 		<div class="page">
-			<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
-				<div class="editpage">
-					<?php
-						if ($doccount !== false)
-						{
+			<?php if ($function == 'page'): ?>
+				<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
+					<div class="editpage">
+						<?php
 							if ($doccount)
 							{
 								echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
@@ -53,23 +55,23 @@
 									echo \Form::close();
 								}
 							}
-							else
+							if ($page_id and \Auth::has_access('access.staff'))
 							{
-								echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
-								echo \Form::submit('new', 'New page', array('class' => 'btn small purple '));
+								echo \Form::open(array('action' => 'documentation/delete/'.$selection['page'], 'style' => 'display:inline;'));
+								echo \Form::submit('delete', 'Delete page', array('class' => 'btn small'));
 								echo \Form::close();
 							}
-						}
-					?>
-				</div>
-			<?php endif; ?>
-			<?php if ($pagedata):?>
+						?>
+					</div>
+				<?php endif; ?>
 				<p class="right">
-					Page last modified by <strong><?php echo $pagedata['user']; ?></strong> on <strong><?php $date = \Date::forge($pagedata['updated']); echo $date->format($pagedata['format'].'_full', true);?></strong> <?php echo $date->get_timezone_abbr(true); ?>
+					<?php if ($pagedata):?>
+						Page last modified by <strong><?php echo $pagedata['user']; ?></strong> on <strong><?php $date = \Date::forge($pagedata['updated']); echo $date->format($pagedata['format'].'_full', true);?></strong> <?php echo $date->get_timezone_abbr(true); ?>
+					<?php endif; ?>
 				</p>
 			<?php endif; ?>
 			<div class="details">
-				<?php echo $details; ?>
+			<?php echo $details; ?>
 			</div>
 		</div>
 		<div class="clearfix"></div>

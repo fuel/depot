@@ -59,6 +59,17 @@
 #docs .details ul {list-style-image:url('../img/bullet.png');}
 #docs .details ins {color:green;background:#dfd;text-decoration:none}
 #docs .details del {color:red;background:#fdd;text-decoration:none}
+#spinner {
+	position: absolute;
+	display:none;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.7) url(../img/spinner.gif) no-repeat center center ;
+	z-index: 1000;
+}
+
 
 /* Docs api docs ------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 

@@ -10,7 +10,7 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Documentation;
 
 class Model_Version extends \Orm\Model
 {

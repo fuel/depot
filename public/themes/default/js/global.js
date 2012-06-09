@@ -161,7 +161,7 @@ $(document).ready(function(){
 				update: function(event, ui) {
 					$.ajax({
 					  type: "POST",
-					  url: "/documentation/move.json",
+					  url: "/documentation/api/move.json",
 					  data: { 'current': $(ui.item).attr('id'), 'next': $(ui.item).next().attr('id'), 'previous': $(ui.item).prev().attr('id'), 'parent': $(ui.item).parent().parent().attr('id') },
 					  beforeSend: function() {
 						 $('#spinner').show()

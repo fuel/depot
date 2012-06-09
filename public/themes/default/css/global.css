@@ -2,6 +2,12 @@
 html, body { height: 100%; }
 body { background-color: #f9f9fa; overflow-x: hidden; }
 
+/* Bootstrap copies --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+.pull-right{float:right;}
+.pull-left{float:left;}
+.hide{display:none;}
+.show{display:block;}
+
 /* Header --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 body.home #headerWrapper { background-image: url(../img/header-bg.jpg); background-repeat: repeat; width: 100%; height: 450px; border-top: 8px solid #1d1d1d; margin: 0 auto; padding: 0; }
 body #headerWrapper { background-image: url(../img/header-bg.jpg); background-repeat: repeat; width: 100%; height: 125px; border-top: 8px solid #1d1d1d; margin: 0 auto; padding: 0; }
@@ -78,6 +84,7 @@ form.form ul li label { display: block; font-weight: bold; }
 form.form ul { list-style: none; margin: 0; padding: 0; }
 form.form ul li { list-style: none; margin: 0 0 15px 0; padding: 0; }
 form.form ul li input[type=text], form.form ul li input[type=password] { width: 425px; background-color: #e8e8e8; border: 1px solid #BBB; border-radius: 3px; -o-border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;padding: 5px; font-size: 13px; font-weight: bold; color: #858585; letter-spacing: 0.5px; text-shadow: 1px 1px 0px #fbfbfb; margin: 0; }
+form.form ul li select { width: 435px; }
 form.form ul li button {margin:0 10px 0 0;height:34px;}
 form.form ul li a {font-size: 14px;}
 

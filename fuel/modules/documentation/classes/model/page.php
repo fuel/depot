@@ -33,6 +33,7 @@ class Model_Page extends \Nestedsets\Model
 		'left_id',
 		'right_id',
 		'symlink_id',
+		'default',
 		'editable',
 		'user_id',
 		'title',
@@ -42,9 +43,7 @@ class Model_Page extends \Nestedsets\Model
 	);
 
 	protected static $_belongs_to = array(
-		'version' => array(
-			'model_to' => '\\Admin\Model_Version',
-		),
+		'version',
 		'user' => array(
 			'model_to' => '\\Users\Model_User',
 		),
@@ -64,7 +63,6 @@ class Model_Page extends \Nestedsets\Model
 			),
 		),
 		'doc' => array(
-			'model_to' => '\\Documentation\\Model_Doc',
 			'cascade_delete' => true,
 		),
 	);

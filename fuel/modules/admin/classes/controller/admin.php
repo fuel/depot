@@ -25,6 +25,11 @@ class Controller_Admin extends Controller_Base
 	 */
 	public function action_index()
 	{
+
+		// load the required modules so we can access their models (TODO: make it an HMVC call!)
+		\Module::load('documentation');
+		\Module::load('api');
+
 		// user account information
 		$data['active_users'] = \Users\Model_User::find()->where('group', '!=', -1)->count();
 		$data['banned_users'] = \Users\Model_User::find()->where('group', '=', -1)->count();
@@ -34,10 +39,9 @@ class Controller_Admin extends Controller_Base
 		$data['google_accounts'] = \Users\Model_Authentication::find()->where('provider', '=', 'google')->count();
 
 		// api docs data
-		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
+		$data['versions'] = \Documentation\Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
 		// page counts
-		\Module::load('documentation');
 		$data['pagecounts'] = array();
 		foreach ($data['versions'] as $version)
 		{
@@ -45,7 +49,6 @@ class Controller_Admin extends Controller_Base
 		}
 
 		// docblox counts
-		\Module::load('api');
 		$data['apicounts'] = array();
 		foreach ($data['versions'] as $version)
 		{
