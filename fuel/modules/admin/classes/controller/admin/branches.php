@@ -49,7 +49,7 @@ class Controller_Admin_Branches extends Controller_Base
 		\Pagination::set_config($this->pagination);
 
 		// get the records for the current page
-		$this->data['versions'] = \Documentation\Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
+		$this->data['versions'] = \Documentation\Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
