@@ -31,6 +31,10 @@
 
 						<?php
 						$section_segment = basename($controller, '.php');
+						if ($section_segment == 'dashboard')
+						{
+							continue;
+						}
 						$section_title = Inflector::humanize($section_segment);
 						$controller = explode('/', $controller);
 						$module = $controller[count($controller)-5];
@@ -46,6 +50,7 @@
 	            <li class="menu">
 	                <a href="#" class="menu"><?php echo $current_user->username ?></a>
 	                <ul class="menu-dropdown">
+	                    <li><?php echo Html::anchor('users/profile', 'Profile') ?></li>
 	                    <li><?php echo Html::anchor('users/logout', 'Logout') ?></li>
 	                </ul>
 	            </li>

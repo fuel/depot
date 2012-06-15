@@ -25,41 +25,31 @@ class Controller_Admin extends Controller_Base
 	 */
 	public function action_index()
 	{
+		$data = array();
 
-		// load the required modules so we can access their models (TODO: make it an HMVC call!)
-		\Module::load('documentation');
-		\Module::load('api');
-
-		// user account information
-		$data['active_users'] = \Users\Model_User::find()->where('group', '!=', -1)->count();
-		$data['banned_users'] = \Users\Model_User::find()->where('group', '=', -1)->count();
-		$data['github_accounts'] = \Users\Model_Authentication::find()->where('provider', '=', 'github')->count();
-		$data['twitter_accounts'] = \Users\Model_Authentication::find()->where('provider', '=', 'twitter')->count();
-		$data['facebook_accounts'] = \Users\Model_Authentication::find()->where('provider', '=', 'facebook')->count();
-		$data['google_accounts'] = \Users\Model_Authentication::find()->where('provider', '=', 'google')->count();
-
-		// api docs data
-		$data['versions'] = \Documentation\Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
-
-		// page counts
-		$data['pagecounts'] = array();
-		foreach ($data['versions'] as $version)
+		// loop through the modules to find dashboard admin controllers
+		foreach (glob(APPPATH.'../modules/*/classes/controller/admin/dashboard.php') as $controller)
 		{
-			$data['pagecounts'][$version->id] = \Documentation\Model_Page::query()->where('version_id', $version->id)->count();
-		}
+			// fetch the module name from the path found
+			$controller = explode(DS,substr($controller, strlen(APPPATH)+3));
+			$module = $controller[1];
 
-		// docblox counts
-		$data['apicounts'] = array();
-		foreach ($data['versions'] as $version)
-		{
-			$data['apicounts'][$version->id] = \Api\Model_Docblox::query()->where('version_id', $version->id)->count();
+			// and fetch the dashboard data
+			try
+			{
+				$data[$module] = \Request::forge($module.'/admin/dashboard/index', false)->execute()->response()->body;
+			}
+			catch (\Exception $e)
+			{
+				var_dump($e);
+			}
 		}
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Dashboard');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/dashboard')->set($data);
+		\Theme::instance()->set_partial('content', 'admin/dashboard')->set('dashboard', $data);
 	}
 
 }
