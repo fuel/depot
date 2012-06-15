@@ -43,7 +43,7 @@
 				<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
 					<div class="editpage">
 						<?php
-							if ($doccount)
+							if ($doccount !== null)
 							{
 								echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
 								echo \Form::submit('edit', 'Edit page', array('class' => 'btn small purple'));

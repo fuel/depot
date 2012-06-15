@@ -25,8 +25,8 @@ class Controller_Edit extends Controller_Pagebase
 		// do we have a page? we should have!
 		$page or \Response::redirect('documentation');
 
-		// validate the access
-		if ( ! $this->checkaccess())
+		// validate the access and make sure the page is editable
+		if ( ! $this->checkaccess() or ! $page->editable)
 		{
 			\Response::redirect('documentation/page/'.$page->id);
 		}
@@ -133,6 +133,9 @@ class Controller_Edit extends Controller_Pagebase
 				->set('page', $doc ? $doc->content : '')
 				->set('preview', false);
 		}
+
+		// pages with children can't have a docs page
+		$details->set('has_children', $page->tree_has_children());
 
 		// and set the partial
 		$partial->set('details', $details);

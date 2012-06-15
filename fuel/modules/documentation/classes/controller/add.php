@@ -26,7 +26,7 @@ class Controller_Add extends Controller_Pagebase
 		}
 
 		// create a dummy page object
-		$page = (object) array('id' => 0, 'title' => '', 'slug' => '', 'node' => 0);
+		$page = (object) array('id' => 0, 'title' => '', 'slug' => '', 'node' => 0, 'editable' => 1);
 
 		// build the page layout partial
 		$partial = $this->buildpage($page);
@@ -50,18 +50,31 @@ class Controller_Add extends Controller_Pagebase
 				// set the validation rules
 				$val->add('title', 'Title')->add_rule('required');
 				$val->add('slug', 'Slug')->add_rule('required');
+				$val->add('insert', 'Insert type')->add_rule('required')->add_rule('is_numeric');
+				$val->add('node', 'Menu node ID')->add_rule('required')->add_rule('is_numeric');
 
 				if ($val->run())
 				{
-					// fetch the previous sibling node
-					if ($model = Model_Page::find(\Input::post('node')))
+					// get the parent node
+					$node = \Input::post('node', false);
+					if ($insert = \Input::post('insert', false))
 					{
-						// get the user id
-						$user = \Auth::get_user_id();
+						$parent = Model_Page::find($node);
+					}
+					else
+					{
+						$parent = Model_Page::forge()->tree_select(\Session::get('version'))->tree_get_root();
+					}
+
+					// do we have a parent node?
+					if ($parent)
+					{
+						// get the current user's id
+						list($notused, $userid) = \Auth::get_user_id();
 
 						// create the new page
 						$page = Model_Page::forge(array(
-							'user_id' => $user[1],
+							'user_id' => $userid,
 							'default' => 0,
 							'editable' => 1,
 							'title' => $val->validated('title'),
@@ -70,15 +83,28 @@ class Controller_Add extends Controller_Pagebase
 						));
 
 						// and create the new page entry
-						if ($page->tree_is_root())
+						if ($insert == 0)
 						{
-							// the root has no siblings
-							$page->tree_new_first_child_of($model);
+							// create the new page as a child of the parent
+							$page->tree_new_last_child_of($parent);
+						}
+						elseif ($insert == 1)
+						{
+							// create the new page as a sibling of the parent
+							$page->tree_new_next_sibling_of($parent);
+						}
+						elseif ($insert == 2)
+						{
+							// create the new page as a child of the parent
+							$page->tree_new_first_child_of($parent);
 						}
 						else
 						{
-							// as next silbling of the selected node
-							$page->tree_new_next_sibling_of($model);
+							// inform the user there was an error
+							\Messages::error('Invalid insert method. Page could not be inserted!');
+
+							// return to the created page
+							\Response::redirect('documentation/page/'.$page->id);
 						}
 
 						// delete the menu cache so it will be refreshed
@@ -89,7 +115,7 @@ class Controller_Add extends Controller_Pagebase
 						{
 							$doc = Model_Doc::forge(array(
 								'page_id' => $page->id,
-								'user_id' => $user[1],
+								'user_id' => $userid,
 								'content' => $doc,
 							));
 							$doc->save();
@@ -104,7 +130,7 @@ class Controller_Add extends Controller_Pagebase
 					else
 					{
 						// inform the user the parent node can not be found
-						\Messages::info('Selected previous page no longer exists');
+						\Messages::info('Selected page node no longer exists. Page could not be inserted.');
 					}
 				}
 
@@ -141,19 +167,56 @@ class Controller_Add extends Controller_Pagebase
 		}
 
 		// load the tree for this version
-		if ($model = Model_Page::forge()->tree_select(\Session::get('version'))->tree_get_root())
+		if ($model = Model_Page::forge()->tree_select(\Session::get('version'))->tree_get_root() and $model->tree_has_children())
 		{
 			// fetch the menu tree
-			$details->set('pagetree', $model->tree_dump_dropdown('title'));
+			$details->set('pagetree', $this->menu_chapters_tree($model ,'title'));
 		}
 		else
 		{
 			// no existing pages for this version
-			$details->set('pagetree', array(0 => ''));
+			$details->set('pagetree', array(0 => '---'));
 		}
 
 		// and set the partial
 		$partial->set('details', $details);
 	}
 
+	/**
+	 * custom tree dropdown, find all nodes that can be parent page nodes
+	 */
+	protected function menu_chapters_tree(\Nestedsets\Model $model, $field = null, $skip_root = false)
+	{
+		// set the name field
+		empty($field) and $field = $model->tree_get_property('title_field');
+
+		// we need a name field to generate the tree
+		if ( ! is_null($field))
+		{
+			// fetch the tree into an array
+			$result = $model->tree_dump_as_array(array('id', $field), $skip_root);
+
+			// storage for the dropdown tree
+			$tree = array();
+
+			if ($result)
+			{
+				// loop trough the tree, fetch all nodes with children or without any docs pages
+				foreach ($result as $key => $value)
+				{
+					if ($value[$model->tree_get_property('right_field')] - $value[$model->tree_get_property('left_field')] > 1 or Model_Doc::find()->where('page_id', $value['id'])->count() == 0)
+					{
+						$tree[$value['_key_']] = str_repeat('&nbsp;', ($value['_level_']) * 3) . ($value['_level_'] ? '&raquo; ' : '') . $value[$field];
+					}
+				}
+			}
+
+			// return the result
+			return $tree;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

@@ -4,15 +4,17 @@
 ?>
 <h3>Delete a page</h3>
 <?php echo \Form::open(array('class' => 'form left'));
-	echo \Form::submit('delete', 'Confirm delete', array('class' => 'btn '));
+	echo \Form::submit('confirm', 'Confirm delete', array('class' => 'btn '));
 	echo \Form::submit('cancel', 'Cancel', array('class' => 'btn purple '));
 ?>
+<?php if ( ! empty($doc)): ?>
 <br /><hr />
 <ul>
 	<li>
 		<?php echo $doc; ?>
 	</li>
 </ul>
+<?php endif; ?>
 <?php
 	echo \Form::close();
 ?>

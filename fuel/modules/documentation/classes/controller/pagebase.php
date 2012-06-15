@@ -41,10 +41,16 @@ class Controller_Pagebase extends \Controller_Base_Public
 		$partial->set(array('versions' => $dropdown, 'selection' => array('version' => \Session::get('version'), 'page' => ($page ? $page->id : 0))));
 
 		// get the number of page versions of the loaded page
-		$doccount = Model_Doc::find()->where('page_id', '=', ($page ? $page->id : 0))->order_by('created_at', 'DESC')->count();
-
-		// set a default for the  doccount and the pagedata
-		$partial->set('doccount', $doccount)->set('page_id', ($page ? $page->id : 0))->set('pagedata', false)->set('function', \Uri::segment(2));
+		if ($page and $page->editable)
+		{
+			$doccount = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->count();
+			$partial->set('doccount', $doccount)->set('page_id', $page->id)->set('pagedata', false)->set('function', \Uri::segment(2));
+		}
+		else
+		{
+			// no docs pages available for editing
+			$partial->set('doccount', null)->set('page_id', 0)->set('pagedata', false)->set('function', \Uri::segment(2));
+		}
 
 		// add the docs menu to the docs index partial
 		$partial->set('menutree', $this->buildmenu(($page ? $page->id : 0)), false);
@@ -117,7 +123,14 @@ class Controller_Pagebase extends \Controller_Base_Public
 						$submenu = $menu($node['children'], $depth+1, ! in_array($node['id'], $state));
 
 						// add the node
-						$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div>'.e($node['title']).'</div>'."\n".$submenu;
+						if (\Auth::has_access('access.staff'))
+						{
+							$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div><a href="/documentation/page/'.$node['id'].'">'.e($node['title']).'</a></div>'."\n".$submenu;
+						}
+						else
+						{
+							$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div>'.e($node['title']).'</div>'."\n".$submenu;
+						}
 
 					}
 					else

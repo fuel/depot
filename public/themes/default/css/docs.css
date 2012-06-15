@@ -30,8 +30,8 @@
 #menu_list li div  { padding: 2px 1px 2px 10px; margin: 0; background-color: #F3F3F3; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; }
 #menu_list li div {cursor: pointer;}
 #menu_list li div:hover {background-color: #dbdbdb; -webkit-border-radius: 4px; -moz-border-radius: 4px; -o-border-radius: 4px; border-radius: 4px; }
-#menu_list .plus { color: #858585;font-weight:bold; font-size: 14px; background: url('../img/expand.png') no-repeat -4px 4px; }
-#menu_list .minus { color: #858585;font-weight:bold; font-size: 14px; background: url('../img/collapse.png') no-repeat -4px 4px; }
+#menu_list .plus { color: #858585;font-weight:bold; font-size: 14px; background: url('../img/expand.png') no-repeat -4px 1px; }
+#menu_list .minus { color: #858585;font-weight:bold; font-size: 14px; background: url('../img/collapse.png') no-repeat -4px 1px; }
 #menu_list li div.current { background-color:#c141ff; }
 #menu_list li div.current a {color: #fff;}
 #menu_list li div.current:hover {background-color: #B688CD;}

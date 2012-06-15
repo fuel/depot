@@ -15,10 +15,10 @@
 		<hr />
 	</li>
 	<?php endif; ?>
-	<li class="markdown"><?php echo Form::label('Page content', 'page'), Form::textarea('page', $page, array('class' => 'markItUp')); ?></li>
+	<li class="markdown"><?php if ( ! $has_children) echo Form::label('Page content', 'page'), Form::textarea('page', $page, array('class' => 'markItUp')); ?></li>
 </ul>
 <?php
-	echo \Form::submit('preview', 'Preview', array('class' => 'btn '));
+	if ( ! $has_children) echo \Form::submit('preview', 'Preview', array('class' => 'btn '));
 	echo \Form::submit('submit', 'Submit changes', array('class' => 'btn purple '));
 	echo \Form::submit('cancel', 'Cancel', array('class' => 'btn '));
 	echo \Form::close();

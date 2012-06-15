@@ -37,7 +37,7 @@ class Controller_Delete extends Controller_Pagebase
 			\Response::redirect('documentation/page/'.$page->id);
 		}
 
-		elseif (\Input::post('delete'))
+		elseif (\Input::post('confirm'))
 		{
 			$page->tree_delete();
 
@@ -57,7 +57,8 @@ class Controller_Delete extends Controller_Pagebase
 		$doc = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
 
 		// add the edit page partial
-		$details = \Theme::instance()->view('documentation/delpage')->set('page', $page)->set('doc', $this->renderpage($doc->content), false);
+		$details = \Theme::instance()->view('documentation/delpage');
+		$details->set('page', $page)->set('doc', $doc ? $this->renderpage($doc->content) : '', false);
 
 		// and set the partial
 		$partial->set('details', $details);

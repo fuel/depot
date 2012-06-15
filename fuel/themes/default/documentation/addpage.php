@@ -7,7 +7,9 @@
 <ul>
 	<li><?php echo Form::label('Title of this page', 'title'), Form::input('title', $title, array('class' => 'large')); ?></li>
 	<li><?php echo Form::label('Slug', 'slug'), Form::input('slug', $slug, array()); ?></li>
-	<li><?php echo Form::label('Insert new page after this one', 'node'), Form::select('node', $node, $pagetree); ?></li>
+	<li>
+		<?php echo Form::label('Insert this page:', 'node'), Form::select('insert', 0, array('0' => 'as a new book', '1' => 'as a chapter after', '2' => 'as a page of')), Form::select('node', $node, $pagetree);?>
+	</li>
 	<?php if (! empty($preview)):?>
 	<li>
 		<label>Preview</label>
