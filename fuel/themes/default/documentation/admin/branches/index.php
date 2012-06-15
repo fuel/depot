@@ -15,9 +15,9 @@
 			<td><?php echo $version->major.'.'.$version->minor.'/'.$version->branch; ?></td>
 			<td><?php echo $version->default ? 'Yes' : 'No'; ?></td>
 			<td class="center shrink">
-				<?php echo Html::anchor('admin/admin/branches/view/'.$version->id, 'View', array('class' => 'btn inline')); ?>
-				<?php echo Html::anchor('admin/admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn inline')); ?>
-				<?php echo Html::anchor('admin/admin/branches/delete/'.$version->id, 'Delete', array('onclick' => "return confirm('Are you sure?')", 'class' => 'btn inline')); ?>
+				<?php echo Html::anchor('documentation/admin/branches/view/'.$version->id, 'View', array('class' => 'btn inline')); ?>
+				<?php echo Html::anchor('documentation/admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn inline')); ?>
+				<?php echo Html::anchor('documentation/admin/branches/delete/'.$version->id, 'Delete', array('onclick' => "return confirm('Are you sure?')", 'class' => 'btn inline')); ?>
 			</td>
 		</tr>
 <?php endforeach; ?>	</tbody>
@@ -29,5 +29,5 @@
 <p>There are no source branches defined.</p>
 
 <?php endif; ?><p>
-	<?php echo Html::anchor('admin/admin/branches/create', 'Add new branch', array('class' => 'btn success pull-right')); ?>
+	<?php echo Html::anchor('documentation/admin/branches/create', 'Add new branch', array('class' => 'btn success pull-right')); ?>
 </p>

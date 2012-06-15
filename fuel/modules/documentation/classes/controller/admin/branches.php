@@ -10,9 +10,9 @@
  * @link       http://depot.fuelphp.com
  */
 
-namespace Admin;
+namespace Documentation;
 
-class Controller_Admin_Branches extends Controller_Base
+class Controller_Admin_Branches extends \Admin\Controller_Base
 {
 	/**
 	 * @var	array	data to send to the view
@@ -43,19 +43,19 @@ class Controller_Admin_Branches extends Controller_Base
 		$page--;
 
 		// set pagination information
-		$this->pagination['pagination_url'] = \Uri::create('admin/admin/branches/');
-		$this->pagination['total_items'] = \Documentation\Model_Version::count();
+		$this->pagination['pagination_url'] = \Uri::create('documentation/admin/branches/');
+		$this->pagination['total_items'] = Model_Version::count();
 
 		\Pagination::set_config($this->pagination);
 
 		// get the records for the current page
-		$this->data['versions'] = \Documentation\Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
+		$this->data['versions'] = Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/branches/index')->set($this->data);
+		\Theme::instance()->set_partial('content', 'documentation/admin/branches/index')->set($this->data);
 	}
 
 	/**
@@ -68,14 +68,14 @@ class Controller_Admin_Branches extends Controller_Base
 		{
 			// bail out with an error if not found
 			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
-			\Response::redirect('admin/admin/branches');
+			\Response::redirect('documentation/admin/branches');
 		}
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/branches/view')->set($this->data);
+		\Theme::instance()->set_partial('content', 'documentation/admin/branches/view')->set($this->data);
 	}
 
 	/**
@@ -132,9 +132,25 @@ class Controller_Admin_Branches extends Controller_Base
 							}
 						}
 					}
+					else
+					{
+						// create a new page tree root for this branch
+						$page = \Documentation\Model_Page::forge(array(
+							'title' => '---',
+							'slug' => '',
+							'user_id' => 1,
+							'default' => 0,
+							'editable' => 0,
+							'updated_at' => 0)
+						)->tree_new_root();
+
+						// update the version to match the branch version id
+						$page->version = $this->data['version'];
+						$page->save();
+					}
 
 					\Session::set_flash('success', 'Added source branch #'.$this->data['version']->id.'.');
-					\Response::redirect('admin/admin/branches');
+					\Response::redirect('documentation/admin/branches');
 				}
 				else
 				{
@@ -159,7 +175,7 @@ class Controller_Admin_Branches extends Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Source branches');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/branches/create')->set($this->data);
+		\Theme::instance()->set_partial('content', 'documentation/admin/branches/create')->set($this->data);
 	}
 
 	/**
@@ -172,7 +188,7 @@ class Controller_Admin_Branches extends Controller_Base
 		{
 			// bail out with an error if not found
 			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
-			\Response::redirect('admin/admin/branches');
+			\Response::redirect('documentation/admin/branches');
 		}
 
 		// run the validation rules on the input
@@ -195,7 +211,7 @@ class Controller_Admin_Branches extends Controller_Base
 				$version->default and $query = \Documentation\Model_Version::query()->set('default', 0)->where('id', '!=', $id)->update();
 
 				\Session::set_flash('success', 'Updated source branch #' . $id);
-				\Response::redirect('admin/admin/branches');
+				\Response::redirect('documentation/admin/branches');
 			}
 
 			else
@@ -227,7 +243,7 @@ class Controller_Admin_Branches extends Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Source branches');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'admin/branches/edit')->set($this->data)->set('version', $version, false);
+		\Theme::instance()->set_partial('content', 'documentation/admin/branches/edit')->set($this->data)->set('version', $version, false);
 	}
 
 	/**
@@ -247,7 +263,7 @@ class Controller_Admin_Branches extends Controller_Base
 			\Session::set_flash('error', 'Could not delete source branch #'.$id);
 		}
 
-		\Response::redirect('admin/admin/branches');
+		\Response::redirect('documentation/admin/branches');
 
 	}
 
