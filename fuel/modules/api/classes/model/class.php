@@ -12,35 +12,36 @@
 
 namespace Api;
 
-class Model_Docblox extends \Orm\Model
+class Model_Class extends \Orm\Model
 {
-	protected static $_table_name = 'docblox';
+	protected static $_table_name = 'docblox_classes';
 
 	protected static $_properties = array(
 		'id',
-		'version_id',
+		'docblox_id',
+		'name',
+		'fullname',
+		'namespace',
+		'extends',
+		'abstract',
+		'final',
 		'package',
-		'hash',
-		'file',
 		'docblock',
-		'markers',
+		'properties',
 	);
 
 	protected static $_belongs_to = array(
-		'version' => array(
-			'model_to' => '\\Documentation\\Model_Version',
-		),
+		'docblox',
 	);
 
 	protected static $_has_many = array(
-		'class' => array(
-			'cascade_delete' => true,
-		),
-		'function' => array(
+		'methods' => array(
+			'model_to' => '\\Api\\Model_Function',
 			'key_to' => 'parent_id',
 			'cascade_delete' => true,
 		),
-		'constant' => array(
+		'constants' => array(
+			'model_to' => '\\Api\\Model_Constant',
 			'key_to' => 'parent_id',
 			'cascade_delete' => true,
 		),
@@ -48,12 +49,6 @@ class Model_Docblox extends \Orm\Model
 
 	protected static $_observers = array(
 	);
-
-	public static function _init()
-	{
-		// make sure the required modules are loaded
-		\Module::load('documentation');
-	}
 
 	public static function validate($factory)
 	{

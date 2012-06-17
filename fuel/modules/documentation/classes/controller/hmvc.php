@@ -26,4 +26,53 @@ class Controller_Hmvc extends \Controller
 		}
 	}
 
+
+	public function action_versioncheck($major = null, $minor = null, $branch = null)
+	{
+		if (empty($major) or empty($minor) or empty($branch))
+		{
+			throw new \Exception('Documentation Versioncheck: incorrect URI parameters specified.');
+		}
+
+		// check if we know this version
+		$result = \DB::select()->from('versions')->where('major', $major)->where('minor', $minor)->where('branch', $branch)->execute();
+
+		if ( ! $result->count())
+		{
+			throw new \Exception('Documentation Versioncheck: requested version does not exist.');
+		}
+
+		// return the record's id
+		return \Response::forge($result[0]['id']);
+	}
+
+	public function action_versioncreate($major = null, $minor = null, $branch = null)
+	{
+		if (empty($major) or empty($minor) or empty($branch))
+		{
+			throw new \Exception('Documentation Versioncheck: incorrect URI parameters specified.');
+		}
+
+		// check if we know this version
+		$result = \DB::select()->from('versions')->where('major', $major)->where('minor', $minor)->where('branch', $branch)->execute();
+
+		if ($result->count())
+		{
+			throw new \Exception('Documentation Versioncheck: requested version already exists.');
+		}
+
+		list($result, $rows_affected) = \DB::insert('versions')->set(array(
+			'major' => $major,
+			'minor' => $minor,
+			'branch' => $branch,
+			'default' => 0,
+			'editable' => 0,
+			'codepath' => '',
+			'docspath' => '',
+			'docbloxpath' => '',
+		))->execute();
+
+		// return the record's id
+		return \Response::forge($result);
+	}
 }

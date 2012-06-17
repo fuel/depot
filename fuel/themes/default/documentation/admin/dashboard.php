@@ -11,7 +11,7 @@
 <?php foreach ($versions as $version): ?>		<tr>
 			<td><?php echo $version->major.'.'.$version->minor.'/'.$version->branch; ?></td>
 			<td><?php echo $pagecounts[$version->id]; ?> page<?php echo $pagecounts[$version->id] == 1 ? '' : 's'; ?> created</td>
-			<td><?php echo $apicounts[$version->id]; ?> page<?php echo $apicounts[$version->id] == 1 ? '' : 's'; ?> created</td>
+			<td><?php echo $apicounts[$version->id]; ?> file<?php echo $apicounts[$version->id] == 1 ? '' : 's'; ?> documented</td>
 			<td><?php echo $version->default ? 'Yes' : 'No'; ?></td>
 		</tr>
 <?php endforeach; ?>	</tbody>
