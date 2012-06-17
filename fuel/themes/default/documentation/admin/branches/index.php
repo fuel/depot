@@ -5,6 +5,7 @@
 			<th></th>
 			<th>Version</th>
 			<th>Default?</th>
+			<th>Editable?</th>
 			<th class="center">Options</th>
 		</tr>
 	</thead>
@@ -14,6 +15,7 @@
 			<td class="right shrink"><?php echo '#'.$version->id; ?></td>
 			<td><?php echo $version->major.'.'.$version->minor.'/'.$version->branch; ?></td>
 			<td><?php echo $version->default ? 'Yes' : 'No'; ?></td>
+			<td><?php echo $version->editable ? 'Yes' : 'No'; ?></td>
 			<td class="center shrink">
 				<?php echo Html::anchor('documentation/admin/branches/view/'.$version->id, 'View', array('class' => 'btn inline')); ?>
 				<?php echo Html::anchor('documentation/admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn inline')); ?>

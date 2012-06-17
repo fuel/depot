@@ -37,6 +37,30 @@ class Controller_Delete extends Controller_Pagebase
 			\Response::redirect('documentation/page/'.$page->id);
 		}
 
+		elseif (\Input::post('lock'))
+		{
+			$page->editable = 0;
+			$page->save();
+
+			// inform the user the page is a goner
+			\Messages::success('This page is now marked read-only');
+
+			// cancel button used
+			\Response::redirect('documentation/page/'.$page->id);
+		}
+
+		elseif (\Input::post('unlock'))
+		{
+			$page->editable = 1;
+			$page->save();
+
+			// inform the user the page is a goner
+			\Messages::success('Write access has been enabled for this page');
+
+			// cancel button used
+			\Response::redirect('documentation/page/'.$page->id);
+		}
+
 		elseif (\Input::post('confirm'))
 		{
 			$page->tree_delete();

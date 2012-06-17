@@ -7,9 +7,11 @@
 	<p>&nbsp;</p>
 	<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
 		<?php if ($page): ?>
-			<h5>Click on the "Edit page" button to add content to this topic.</h5>
-	<?php else: ?>
+			<?php if ($page->editable): ?>
+				<h5>Click on the "Edit page" button to add content to this topic.</h5>
+			<?php endif; ?>
+		<?php else: ?>
 			<h5>Click on the "New page" button to add a new page to the documenation.</h5>
-	<?php endif; ?>
+		<?php endif; ?>
 	<?php endif; ?>
 </div>

@@ -33,6 +33,13 @@
 		</div>
 	</div>
 	<div class="clearfix">
+		<?php echo Form::label('Editable?', 'editable'); ?>
+
+		<div class="input">
+			<p class="span3"><?php echo $version->editable ? 'Yes' : 'No'; ?></p>
+		</div>
+	</div>
+	<div class="clearfix">
 		<?php echo Form::label('Local path to the code repository', 'codepath'); ?>
 
 		<div class="input">

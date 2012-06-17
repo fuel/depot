@@ -34,7 +34,7 @@ class Controller_Page extends Controller_Pagebase
 			// set some data about the last editor, and the time of the last edit
 			if ($doc)
 			{
-				$partial->set('pagedata', array('user' => $page->user->profile_fields['full_name'],'updated' => $doc->created_at, 'format' => $this->date_format));
+				$partial->set('pagedata', array('user' => $page->user->profile_fields['full_name'],'editable' => $page->editable, 'updated' => $doc->created_at, 'format' => $this->date_format));
 			}
 			else
 			{

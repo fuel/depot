@@ -30,18 +30,26 @@ class Controller_Pagebase extends \Controller_Base_Public
 			->order_by('created_at', 'ASC')
 			->execute();
 
+		// flag to indicate if the current version is editable
+		$editable = (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github');
+
 		// create the dropdown array
 		$dropdown = array();
 		foreach ($versions as $record)
 		{
 			$dropdown[$record['id']] = $record['major'].'.'.$record['minor'].'/'.$record['branch'];
+
+			if ($record['id'] == \Session::get('version'))
+			{
+				$editable and $editable = $record['editable'];
+			}
 		}
 
 		// add the version dropdown and the selected version and page to the template partial
-		$partial->set(array('versions' => $dropdown, 'selection' => array('version' => \Session::get('version'), 'page' => ($page ? $page->id : 0))));
+		$partial->set(array('versions' => $dropdown, 'editable' => $editable, 'selection' => array('version' => \Session::get('version'), 'page' => ($page ? $page->id : 0))));
 
 		// get the number of page versions of the loaded page
-		if ($page and $page->editable)
+		if ($page and $editable)
 		{
 			$doccount = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->count();
 			$partial->set('doccount', $doccount)->set('page_id', $page->id)->set('pagedata', false)->set('function', \Uri::segment(2));

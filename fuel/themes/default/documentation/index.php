@@ -20,7 +20,7 @@
 
 			<ul>
 				<li>
-					<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
+					<?php if ($editable): ?>
 					<?php echo \Form::open(array('action' => '/documentation/add/'.$selection['version'], 'style' => 'display:inline;'));?>
 					<button class="btn small purple">New page</button> &nbsp;
 					<?php echo \Form::close(); ?>
@@ -40,25 +40,33 @@
 
 		<div class="page">
 			<?php if ($function == 'page'): ?>
-				<?php if (\Auth::has_access('access.staff') or \Session::get('ninjauth.authentication.provider', false) == 'github'): ?>
+				<?php if (\Auth::has_access('access.staff') or ($editable and \Session::get('ninjauth.authentication.provider', false) == 'github')): ?>
 					<div class="editpage">
 						<?php
 							if ($doccount !== null)
 							{
 								echo \Form::open(array('action' => 'documentation/edit/'.$selection['page'], 'style' => 'display:inline;'));
-								echo \Form::submit('edit', 'Edit page', array('class' => 'btn small purple'));
+								echo \Form::submit('edit', 'Edit', array('class' => 'btn small purple'));
 								echo \Form::close();
 								if ($doccount > 1)
 								{
 									echo \Form::open(array('action' => 'documentation/diff/'.$selection['page'], 'style' => 'display:inline;'));
-									echo \Form::submit('diff', 'View changes', array('class' => 'btn small'));
+									echo \Form::submit('diff', 'Versions', array('class' => 'btn small'));
 									echo \Form::close();
 								}
 							}
 							if ($page_id and \Auth::has_access('access.staff'))
 							{
 								echo \Form::open(array('action' => 'documentation/delete/'.$selection['page'], 'style' => 'display:inline;'));
-								echo \Form::submit('delete', 'Delete page', array('class' => 'btn small'));
+								echo \Form::submit('delete', 'Delete', array('class' => 'btn small'));
+								if ($pagedata['editable'])
+								{
+									echo \Form::submit('lock', 'Lock', array('class' => 'btn small'));
+								}
+								else
+								{
+									echo \Form::submit('unlock', 'Unlock', array('class' => 'btn small'));
+								}
 								echo \Form::close();
 							}
 						?>

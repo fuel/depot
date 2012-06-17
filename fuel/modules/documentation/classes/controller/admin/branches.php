@@ -96,6 +96,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 					'minor' => \Input::post('major'),
 					'branch' => \Input::post('branch'),
 					'default' => \Input::post('default'),
+					'editable' => \Input::post('editable'),
 					'codepath' => \Input::post('codepath'),
 					'docspath' => \Input::post('docspath'),
 					'docbloxpath' => \Input::post('docbloxpath'),
@@ -200,6 +201,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 			$version->minor = \Input::post('minor');
 			$version->branch = \Input::post('branch');
 			$version->default = \Input::post('default');
+			$version->editable = \Input::post('editable');
 			$version->codepath = \Input::post('codepath');
 			$version->docspath = \Input::post('docspath');
 			$version->docbloxpath = \Input::post('docbloxpath');
@@ -230,6 +232,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 				$version->minor = $val->validated('minor');
 				$version->branch = $val->validated('branch');
 				$version->default = $val->validated('default');
+				$version->editable = \Input::post('editable');
 				$version->codepath = $val->validated('codepath');
 				$version->docspath = $val->validated('docspath');
 				$version->docbloxpath = $val->validated('docbloxpath');

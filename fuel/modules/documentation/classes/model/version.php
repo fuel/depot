@@ -20,6 +20,7 @@ class Model_Version extends \Orm\Model
 		'minor',
 		'branch',
 		'default',
+		'editable',
 		'codepath',
 		'docspath',
 		'docbloxpath',
