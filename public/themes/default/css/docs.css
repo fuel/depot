@@ -118,13 +118,13 @@
 #docs_classes .docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
 #docs_classes .docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
 #docs_classes .properties p {margin: 0; padding: 20px 0px 5px 0px; font-weight:bold; font-size:150%; }
-#docs_classes .properties dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc; margin-bottom:10px; }
+#docs_classes .properties dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc; margin-bottom:10px;}
 #docs_classes .properties dl p {font-weight:bold; font-size:120%; padding-left:5px; }
-#docs_classes .properties dt {clear:left; float:left; width:280px; padding:5px; padding-top:10px; border-top:1px dotted #ccc; font-weight:bold;}
-#docs_classes .properties dd {float:left; width:439px; padding:5px; border-top:1px dotted #ccc;}
-#docs_classes .properties dd span {margin: 0; font-weight:bold; font-size: 100%; }
+#docs_classes .properties dt {clear:left; float:left; width:280px; padding:5px 0 5px 5px; padding-top:10px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_classes .properties dd {float:left; width:448px; padding:5px 0 5px 5px; border-top:1px dotted #ccc;}
 #docs_classes .properties dd pre {margin:0; padding:5px 0 0 0;}
-#docs_classes .properties dd span {float:right; margin: 0 0 0 5px; }
+#docs_classes .properties dd span {float:right; margin: 0 0 0 5px; font-weight:bold; font-size: 100%; }
 #docs_classes .function span.badge {float:right; margin: 0 0 0 5px; }
+#docs_classes .class span.badge.red {float:right; margin: 0 0 0 5px; }
 #docs_classes .function {margin-top:20px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
 #docs_classes .function span {margin: 0px 5px 0px 0px; }

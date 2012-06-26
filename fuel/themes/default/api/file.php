@@ -144,12 +144,13 @@ $func_functions = function($functions, $is_method = false) use($func_variables)
 			// function/method header
 			$result .= '<div class="function">'.
 						(empty($function['final']) ? '' : '<span class="badge red">final</span>').
-						($function['visibility'] == 'public' ? '<span class="badge lightblue">public</span>' : '').
-						($function['visibility'] == 'protected' ? '<span class="badge blue">protected</span>' : '').
-						($function['visibility'] == 'private' ? '<span class="badge darkblue">private</span>' : '').
 						(empty($function['protected']) ? '' : '<span class="badge blue">protected</span>').
 						(empty($function['private']) ? '' : '<span class="badge darkblue">private</span>').
 						(empty($function['static']) ? '' : '<span class="badge green">static</span>').
+						($function['visibility'] == 'public' ? '<span class="badge lightblue">public</span>' : '').
+						($function['visibility'] == 'protected' ? '<span class="badge blue">protected</span>' : '').
+						($function['visibility'] == 'private' ? '<span class="badge darkblue">private</span>' : '').
+						(empty($function['abstract']) ? '' : '<span class="badge red">abstract</span>').
 						'<span>'.$function->type.'</span> '.$function->name.
 						'(';
 
@@ -256,6 +257,8 @@ $func_classes = function($classes) use($func_functions, $func_docblock, $func_pr
 		{
 			$result .= '<div class="class">'."\n".'<dt>';
 			empty($class['namespace']) or $result .= '<span class="badge">'.$class->namespace.'</span>';
+			empty($class['final']) or $result .= '<span class="badge red">final</span>&nbsp;';
+			empty($class['abstract']) or $result .= '<span class="badge red">abstract</span>&nbsp;';
 			$result .= ' '.$class['name'];
 			if ( ! empty($class['extends']))
 			{
