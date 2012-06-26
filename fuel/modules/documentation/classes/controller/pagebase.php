@@ -108,7 +108,7 @@ class Controller_Pagebase extends \Controller_Base_Public
 		}
 
 		// get the menu state cookie so we can restore state
-		$state = explode(',', str_replace('#node_', '', \Cookie::get('depotmenustate', '')));
+		$state = explode(',', str_replace('#page_', '', \Cookie::get('page_menustate', '')));
 
 		// closure to generate an unordered list
 		$menu = function ($nodes, $depth = 3, $close = false) use(&$menu, $docs, $selected_page, $editmode, $state)
