@@ -12,7 +12,7 @@
 
 namespace Documentation;
 
-class Controller_Api extends \Controller_Rest
+class Controller_Rest extends \Controller_Rest
 {
 	/**
 	 * before action processing.
