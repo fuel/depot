@@ -59,13 +59,16 @@
 							{
 								echo \Form::open(array('action' => 'documentation/delete/'.$selection['page'], 'style' => 'display:inline;'));
 								echo \Form::submit('delete', 'Delete', array('class' => 'btn small'));
-								if ($pagedata['editable'])
+								if ($pagedata)
 								{
-									echo \Form::submit('lock', 'Lock', array('class' => 'btn small'));
-								}
-								else
-								{
-									echo \Form::submit('unlock', 'Unlock', array('class' => 'btn small'));
+									if ($pagedata['editable'])
+									{
+										echo \Form::submit('lock', 'Lock', array('class' => 'btn small'));
+									}
+									else
+									{
+										echo \Form::submit('unlock', 'Unlock', array('class' => 'btn small'));
+									}
 								}
 								echo \Form::close();
 							}
