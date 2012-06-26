@@ -26,8 +26,12 @@ class Model_Class extends \Orm\Model
 		'abstract',
 		'final',
 		'package',
-		'docblock',
-		'properties',
+		'docblock' => array(
+			'data_type' => 'serialize',
+		),
+		'properties' => array(
+			'data_type' => 'serialize',
+		),
 	);
 
 	protected static $_belongs_to = array(
@@ -48,6 +52,9 @@ class Model_Class extends \Orm\Model
 	);
 
 	protected static $_observers = array(
+		'Orm\\Observer_Typing' => array(
+			'after_load'
+		)
 	);
 
 	public static function validate($factory)

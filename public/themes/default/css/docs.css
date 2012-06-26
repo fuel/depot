@@ -83,19 +83,21 @@
 #docs_errors {margin-bottom:20px; }
 #docs_errors .error { color:red !important; }
 
+#docs_info  {margin-bottom:20px; }
+
 #docs_docblock {font-size: 80%;}
 #docs_docblock dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
-#docs_docblock dt {clear:left; float:left; width:219px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
-#docs_docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
+#docs_docblock dt {clear:left; float:left; width:269px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
+#docs_docblock dd {float:left; width:450px; padding:5px; border-top:1px dotted #ccc;}
 
-#docs_constants {font-size:80%;}
-#docs_constants h3 {margin-top: 20px;}
+#docs_constants {font-size:80%; }
+#docs_constants h4 {margin-top: 20px;}
 #docs_constants dl {float:left; width:100%; padding:0; border-bottom: 1px dotted #ccc;}
 #docs_constants dt {clear:left; float:left; width:269px; padding:5px; border-top:1px dotted #ccc; font-weight:bold;}
 #docs_constants dd {float:left; width:450px; padding:5px; border-top:1px dotted #ccc; overflow-x:hidden; }
 
 #docs_functions {font-size:80%;}
-#docs_functions h3 {margin-top:20px;margin-bottom:0px;}
+#docs_functions h4 {margin-top:20px;margin-bottom:0px;}
 #docs_functions .function {margin-top:20px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
 #docs_functions .docblock p {margin: 0;padding: 5px 0px; font-weight:bold; font-size:110%; }
 #docs_functions .docblock p p {font-weight:normal; }
@@ -104,7 +106,7 @@
 #docs_functions .docblock dd {float:left; width:500px; padding:5px; border-top:1px dotted #ccc;}
 
 #docs_classes {font-size:80%;}
-#docs_classes h3 {margin-top:20px;}
+#docs_classes h4 {margin-top:20px;}
 #docs_classes .class dt {margin-top:15px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
 #docs_classes div.docblock {border-bottom: 1px dotted #ccc;}
 #docs_classes .docblock pre {margin:0; padding:0; }
@@ -122,5 +124,6 @@
 #docs_classes .properties dd span {margin: 0; font-weight:bold; font-size: 100%; }
 #docs_classes .properties dd pre {margin:0; padding:5px 0 0 0;}
 #docs_classes .properties dd span {float:right; margin: 0 0 0 5px; }
+#docs_classes .function span.badge {float:right; margin: 0 0 0 5px; }
 #docs_classes .function {margin-top:20px; width:100%; padding:5px 0px; color:#666; font-weight:bold; font-size:150%;}
 #docs_classes .function span {margin: 0px 5px 0px 0px; }

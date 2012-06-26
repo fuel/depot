@@ -1,6 +1,6 @@
 <?php \Theme::instance()->asset->css(array('docs.css'), array(), 'header'); ?>
 <div>
-	<h1>Class API Documentation</h1>
+	<h1>FuelPHP API Documentation</h1>
 </div>
 <div class="clearfix"></div>
 <div>
