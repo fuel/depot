@@ -90,7 +90,7 @@ HELP;
 			}
 		}
 
-		static::process($result->current());
+//		static::process($result->current());
 	}
 
 	protected static function process($version)
