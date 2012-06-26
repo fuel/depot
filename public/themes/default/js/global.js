@@ -77,7 +77,7 @@ $(document).ready(function(){
 			$item_list.find('li.minus:visible').each(function(){ items.push('#' + this.id) });
 
 			// save open parents in the cookie
-			$.cookie($cookie, items.join(', '), { expires: 1, path: '/' });
+			$.cookie($cookie, items.join(','), { expires: 1, path: '/' });
 		}
 
 		// this gets ran again after drop
@@ -86,8 +86,8 @@ $(document).ready(function(){
 			// add the minus icon to all parent items that now have visible children
 			$item_list.parent().find('ul li:has(li:visible)').removeClass('plus').addClass('minus');
 
-			// add the plus icon to all parent items with hidden children
-			$item_list.parent().find('ul li:has(li:hidden)').removeClass('minus').addClass('plus');
+			// add the plus icon to all parent items with all hidden children
+			$item_list.parent().find('ul li:not(:has(li:visible))').removeClass('minus').addClass('plus');
 
 			// remove the class if the child was removed
 			$item_list.parent().find('ul li:not(:has(li))').removeClass('plus minus');
@@ -113,7 +113,7 @@ $(document).ready(function(){
 			$item_list.find('li').clickable(true,  true);
 
 			// collapse all ordered lists but the top level
-			$item_list.find('ul').children().hide();
+//			$item_list.find('ul').children().hide();
 
 			refresh_tree();
 
@@ -122,7 +122,7 @@ $(document).ready(function(){
 			$cookie = $cookie.substr(0, $cookie.indexOf("_")) + '_menustate';
 
 			// set the icons properly on parents restored from cookie
-			$($.cookie($cookie)).has('ul').toggleClass('minus plus');
+			$($.cookie($cookie)).has('ul').removeClass('plus').addClass('minus');
 
 			// show the parents that were open on last visit
 			$($.cookie($cookie)).children('ul').children().show();

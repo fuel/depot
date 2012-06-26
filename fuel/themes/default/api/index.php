@@ -23,7 +23,7 @@
 					<?php if (true or $menutree): ?>
 					<div style="float:left;">
 						<?php echo \Form::open(array('name' => 'apitype', 'action' => '/api/version/'.$version, 'method' => 'post'));?>
-							<?php echo \Form::select('apitype', \Session::get('apitype', 'packages'), array('packages' => 'Packages', 'namespaces' => 'Namespaces', 'files' => 'Files'), array('class' => 'btn purple small', 'style' => 'width:95px;margin-right:3px;', 'onchange' => 'this.form.submit();')); ?>
+							<?php echo \Form::select('apitype', \Session::get('apitype', 'packages'), array('packages' => 'Packages', 'classes' => 'Classes', 'files' => 'Files'), array('class' => 'btn purple small', 'style' => 'width:95px;margin-right:3px;', 'onchange' => 'this.form.submit();')); ?>
 						<?php echo \Form::close(); ?>
 						<?php endif; ?>
 					</div>

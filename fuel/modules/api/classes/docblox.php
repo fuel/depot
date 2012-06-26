@@ -126,7 +126,7 @@ class Docblox
 			}
 			catch (\Exception $e)
 			{
-				throw new \Exception('Docblox: FuelPHP repository version "'.static::$major.'.'.static::$minor.'/'.static::$branch.'" could not be created.');
+				throw new \Exception('Docblox: FuelPHP repository version "'.static::$major.'.'.static::$minor.'/'.static::$branch.'" could not be created.'."\n".$e->getMessage());
 			}
 		}
 	}
@@ -159,6 +159,9 @@ class Docblox
 				// cascading deletes will take care of the related records
 				$db->delete();
 			}
+
+			// delete caches too
+			\Cache::delete_all('api.version_'.\Session::get('version'));
 		}
 
 		static::log('Start processing the XML file...'."\n");

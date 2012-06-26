@@ -12,7 +12,7 @@
 
 namespace Api;
 
-class Controller_Packages extends Controller_Apibase
+class Controller_Classes extends Controller_Apibase
 {
 	/**
 	 * API version index page, selection via packages
@@ -26,16 +26,15 @@ class Controller_Packages extends Controller_Apibase
 		if ( ! $file)
 		{
 			// fetch the first one we can find
-			$model = \DB::select('id', 'package', 'hash', 'file')
-				->from('docblox')
-				->where('version_id', '=', \Session::get('version', 0))
-				->order_by('package', 'ASC')
-				->order_by('file', 'ASC')
-				->limit(1)
-				->execute();
+			$model = Model_Class::find()
+				->related('docblox')
+				->where('docblox.version_id', '=', \Session::get('version', 0))
+				->order_by('namespace', 'ASC')
+				->rows_limit(1)
+				->get();
 
 			// and did we?
-			$model->count() and \Response::redirect('api/packages/'.$model[0]['hash']);
+			$model and \Response::redirect('api/classes/'.reset($model)->docblox->hash);
 		}
 
 		// add the packages menu to the page partial
@@ -51,66 +50,58 @@ class Controller_Packages extends Controller_Apibase
 	 */
 	protected function buildmenu($file = null)
 	{
-		// fetch the menu tree for the packages of this version
+		// fetch the menu tree for the files of this version
 		try
 		{
-			list($tree) = \Cache::get('api.version_'.\Session::get('version').'.packages_menu');
+			list($tree) = \Cache::get('api.version_'.\Session::get('version').'.classes_menu');
 		}
 		catch (\CacheNotFoundException $e)
 		{
-			// get the unique packages
-			$model = \DB::select('id', 'package')
-				->distinct()
-				->from('docblox')
-				->where('version_id', '=', \Session::get('version', 0))
-				->order_by('package', 'ASC')
-				->execute();
+			// get all classes
+			$model = Model_Class::find()
+				->related('docblox')
+				->where('docblox.version_id', '=', \Session::get('version', 0))
+				->order_by('namespace', 'ASC')
+				->order_by('name', 'ASC')
+				->get();
 
 			// create the tree index and the tree
 			$treeindex = array();
 			$tree = array();
 
 			// did we find any packages
-			if ($model->count())
+			if ($model)
 			{
 				// explode them into a tree, and keep an index so we can find them
-				foreach($model as $package)
+				foreach($model as $class)
 				{
-					$names = explode('/', $package['package']);
+					$names = explode('\\', $class->namespace);
 					$pointer =& $tree;
 					foreach ($names as $name)
 					{
 						isset($pointer[$name]) or $pointer[$name] = array();
 						$pointer =& $pointer[$name];
 					}
-					$treeindex[$package['package']] =& $pointer;
+					$treeindex[$class->namespace] =& $pointer;
 				}
 
-				// now get all files and add them to the tree
-				$model = \DB::select('id', 'package', 'hash', 'file')
-					->from('docblox')
-					->where('version_id', '=', \Session::get('version', 0))
-					->order_by('package', 'ASC')
-					->order_by('file', 'ASC')
-					->execute();
-
-				// did we find any packages
-				if ($model->count())
+				foreach($model as $class)
 				{
-					//
-					foreach($model as $sourcefile)
-					{
-						$treeindex[$sourcefile['package']][] = $sourcefile;
-					}
+					$treeindex[$class->namespace][] = array(
+						'id' => $class->docblox->id,
+						'hash' => $class->docblox->hash,
+						'file' => $class->docblox->file,
+						'class' => $class->name,
+					);
 				}
 			}
 
 			// and cache for an hour if not in development, else only for 60 seconds
-			\Cache::set('api.version_'.\Session::get('version').'.packages_menu', array($tree), \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
+			\Cache::set('api.version_'.\Session::get('version').'.classes_menu', array($tree), \Fuel::$env == \Fuel::DEVELOPMENT ? 60 : 3600);
 		}
 
 		// get the menu state cookie so we can restore state
-		$state = str_replace('#apipkg_', '', \Cookie::get('apipkg_menustate', ''));
+		$state = str_replace('#apins_', '', \Cookie::get('apins_menustate', ''));
 		$state = empty($state) ? array() : explode(',', $state);
 
 		// closure to generate an unordered list
@@ -128,14 +119,14 @@ class Controller_Packages extends Controller_Apibase
 					if (is_numeric($name))
 					{
 						// this is a file node
-						$output .= str_repeat("\t", $depth).'<li id="apipkg_'.$node['id'].($close?'" style="display:none;':'').'"><div'.($file==$node['hash']?' class="current"':'').'><a href="'.$node['hash'].'" title="'.$node['file'].'">'.basename($node['file']).'</a></div></li>'."\n";
+						$output .= str_repeat("\t", $depth).'<li id="apins_'.$node['id'].($close?'" style="display:none;':'').'"><div'.($file==$node['hash']?' class="current"':'').'><a href="'.$node['hash'].'" title="'.$node['file'].'">'.$node['class'].'</a></div></li>'."\n";
 					}
 					else
 					{
 						// new menu item
 						$nodeid = \Session::get('version').'~'.$id++;
 
-						$output .= str_repeat("\t", $depth).'<li id="apipkg_'.$nodeid.'" class="'.(in_array($nodeid, $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div>'.$name."</div>\n";
+						$output .= str_repeat("\t", $depth).'<li id="apins_'.$nodeid.'" class="'.(in_array($nodeid, $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div>'.$name."</div>\n";
 
 						// and recurse to generate the unordered list for the children
 						$output .= $menu($node, $depth+1, ! in_array($nodeid, $state), $id);
