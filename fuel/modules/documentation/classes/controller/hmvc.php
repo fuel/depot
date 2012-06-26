@@ -29,7 +29,7 @@ class Controller_Hmvc extends \Controller
 
 	public function action_versioncheck($major = null, $minor = null, $branch = null)
 	{
-		if (empty($major) or empty($minor) or empty($branch))
+		if ($major === null or $minor === null or $branch === null)
 		{
 			throw new \Exception('Documentation Versioncheck: incorrect URI parameters specified.');
 		}
@@ -48,7 +48,7 @@ class Controller_Hmvc extends \Controller
 
 	public function action_versioncreate($major = null, $minor = null, $branch = null)
 	{
-		if (empty($major) or empty($minor) or empty($branch))
+		if ($major === null or $minor === null or $branch === null)
 		{
 			throw new \Exception('Documentation Versioncheck: incorrect URI parameters specified.');
 		}
