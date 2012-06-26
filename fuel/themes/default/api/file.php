@@ -224,10 +224,10 @@ $func_properties = function($properties)
 
 			$result .= '<dt><span>'.$property['type'].'</span> '.$property['name'].'</dt><dd>'."\n".
 					($property['final'] == 'false' ? '' : '<span class="badge red">final</span>').
-					($property['static'] == 'false' ? '' : '<span class="badge green">static</span>').
 					($property['visibility'] == 'public' ? '<span class="badge lightblue">public</span>' : '').
 					($property['visibility'] == 'protected' ? '<span class="badge blue">protected</span>' : '').
 					($property['visibility'] == 'private' ? '<span class="badge darkblue">private</span>' : '').
+					($property['static'] == 'false' ? '' : '<span class="badge green">static</span>').
 					(empty($property['value']) ? '' : '<pre><code>'.$property['value'].'</code></pre></dd>').
 					"\n";
 		}
