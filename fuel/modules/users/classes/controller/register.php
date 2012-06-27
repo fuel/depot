@@ -112,7 +112,7 @@ class Controller_Register extends \Controller_Base_Public
 					{
 						$authentication = \Session::get('ninjauth.authentication', false);
 
-						\NinjAuth\Model_Authentication::forge(array(
+						Model_Authentication::forge(array(
 							'user_id' => $user_id,
 							'provider' => $authentication['provider'],
 							'uid' => $authentication['uid'],

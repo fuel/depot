@@ -42,10 +42,10 @@ class Controller_Admin_Dashboard extends \Admin\Controller_Base
 		$data = array();
 		$data['active_users'] = Model_User::find()->where('group', '!=', -1)->count();
 		$data['banned_users'] = Model_User::find()->where('group', '=', -1)->count();
-		$data['github_accounts'] = \Ninjauth\Model_Authentication::find()->where('provider', '=', 'github')->count();
-		$data['twitter_accounts'] = \Ninjauth\Model_Authentication::find()->where('provider', '=', 'twitter')->count();
-		$data['facebook_accounts'] = \Ninjauth\Model_Authentication::find()->where('provider', '=', 'facebook')->count();
-		$data['google_accounts'] = \Ninjauth\Model_Authentication::find()->where('provider', '=', 'google')->count();
+		$data['github_accounts'] = Model_Authentication::find()->where('provider', '=', 'github')->count();
+		$data['twitter_accounts'] = Model_Authentication::find()->where('provider', '=', 'twitter')->count();
+		$data['facebook_accounts'] = Model_Authentication::find()->where('provider', '=', 'facebook')->count();
+		$data['google_accounts'] = Model_Authentication::find()->where('provider', '=', 'google')->count();
 
 		// return the dashboard view
 		return \Theme::instance()->view('users/admin/dashboard')->set($data);
