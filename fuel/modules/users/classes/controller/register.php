@@ -61,7 +61,7 @@ class Controller_Register extends \Controller_Base_Public
 		// create the form fieldset, do not add an {open}, a closing ul and a {close}, we have a custom form layout!
 		$fieldset = \Fieldset::forge('register');
 		$fieldset->add('username', 'Username', array('maxlength' => 50), array(array('required')))
-			->add('full_name', 'Password', array('maxlength' => 50), array(array('required')))
+			->add('full_name', 'Full name', array('maxlength' => 50), array(array('required')))
 			->add('email', 'Email', array('maxlength' => 255), array(array('required'), array('valid_email')))
 			->add('timezone', 'Timezone', array('type' => 'select', 'options' => $tzlist, 'value' => 'Europe/London'), array(array('required')))
 			->add('dateformat', 'Date Format', array('type' => 'select', 'options' => array('eu' => 'European', 'us' => 'American')), array(array('required')))
@@ -124,7 +124,10 @@ class Controller_Register extends \Controller_Base_Public
 						))->save();
 					}
 
-					\Response::redirect(\Config::get('ninjauth.urls.registered'));
+					\Auth::force_login($user_id);
+
+					\Messages::success('You have logged in with your new account.');
+					\Response::redirect('/users/profile');
 				}
 				catch (\Auth\SimpleUserUpdateException $e)
 				{
