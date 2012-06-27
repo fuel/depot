@@ -22,3 +22,6 @@
 [submodule "fuel/packages/nestedsets"]
 	path = fuel/packages/nestedsets
 	url = https://github.com/fuel-packages/fuel-nestedsets
+[submodule "fuel/packages/ninjauth"]
+	path = fuel/packages/ninjauth
+	url = https://github.com/happyninjas/fuel-ninjauth.git

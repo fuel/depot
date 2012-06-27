@@ -12,13 +12,23 @@
 
 namespace Users;
 
+/**
+ * NinjAuth Controller
+ *
+ * @package    FuelPHP/NinjAuth
+ * @category   Controller
+ * @author     Phil Sturgeon
+ * @copyright  (c) 2012 HappyNinjas Ltd
+ * @license    http://philsturgeon.co.uk/code/dbad-license
+ */
+
 class Controller_Login extends \Controller_Base_Public
 {
-	/**
-	 * Controller method preparations
-	 *
-	 * @return  void
-	 */
+	public static $linked_redirect = '/';
+	public static $login_redirect = '/';
+	public static $register_redirect = '/users/register';
+	public static $registered_redirect = '/users/profile';
+
 	public function before()
 	{
 		// already logged in?
@@ -30,7 +40,10 @@ class Controller_Login extends \Controller_Base_Public
 
 		parent::before();
 
-		// Load the ninjaauth configuration
+		// load the ninjauth package
+		\Package::load('ninjauth');
+
+		// Load the configuration for this provider
 		\Config::load('ninjauth', true);
 	}
 
@@ -102,36 +115,112 @@ class Controller_Login extends \Controller_Base_Public
 		\Theme::instance()->set_partial('content', 'users/login/index')->set('fieldset', $fieldset, false);
 	}
 
-	/**
-	 * send the request to the selected provider
-	 * to start the authentication session
-	 */
-	public function action_session($provider = null)
+	public function action_session($provider)
 	{
-		try
-		{
-			Strategy::forge($provider)->authenticate();
-		}
-		catch (\Exception $e)
-		{
-			\Messages::error($e->getMessage());
-			\Response::redirect('users/login');
-		}
+		$url = \NinjAuth\Strategy::forge($provider)->authenticate();
+
+		\Response::redirect($url);
 	}
 
-	/**
-	 * handle the providers response
-	 */
 	public function action_callback($provider)
 	{
 		try
 		{
-			Strategy::login_or_register(Strategy::forge($provider));
+			// Whatever happens, we're sending somebody somewhere
+			$status = \NinjAuth\Strategy::forge($provider)->login_or_register();
+
+			// Stuff should go with each type of response
+			switch ($status)
+			{
+				case 'linked':
+					\Messages::success('You have linked '.$provider.' to your account.');
+					$url = static::$linked_redirect;
+				break;
+
+				case 'logged_in':
+					\Messages::success('You have logged in.');
+					$url = static::$login_redirect;
+				break;
+
+				case 'registered':
+					\Messages::success('You have logged in with your new account.');
+					$url = static::$registered_redirect;
+				break;
+
+				case 'register':
+					\Messages::info('Please fill in any missing details and add a password.');
+					$url = static::$register_redirect;
+				break;
+
+				default:
+					\Messages::error('Strategy::login_or_register() has come up with a result that we dont know how to handle.');
+					$url = '/';
+				break;
+			}
+
+			\Response::redirect($url);
 		}
-		catch (\Exception $e)
+
+		catch (\NinjAuth\CancelException $e)
+		{
+			\Messages::error('It looks like you canceled your authorisation.');
+			\Response::redirect('/users/login');
+		}
+
+		catch (\NinjAuth\ResponseException $e)
 		{
 			\Messages::error($e->getMessage());
-			\Response::redirect('users/login');
+			\Response::redirect('/users/login');
 		}
+
+		catch (\NinjAuth\AuthException $e)
+		{
+			\Messages::error($e->getMessage());
+			\Response::redirect('/users/login');
+		}
+	}
+
+	public function action_register()
+	{
+		$user_hash = \Session::get('ninjauth.user');
+		$authentication = \Session::get('ninjauth.authentication');
+
+		// Working with what?
+		$strategy = \NinjAuth\Strategy::forge($authentication['provider']);
+
+		$full_name = \Input::post('full_name') ?: \Arr::get($user_hash, 'name');
+		$username = \Input::post('username') ?: \Arr::get($user_hash, 'nickname');
+		$email = \Input::post('email') ?: \Arr::get($user_hash, 'email');
+		$password = \Input::post('password');
+
+		if ($username and $full_name and $email and $password)
+		{
+			$user_id = $strategy->adapter->create_user(array(
+				'username' => $username,
+				'email' => $email,
+				'full_name' => $full_name,
+				'password' => $password,
+			));
+
+			if ($user_id)
+			{
+				\NinjAuth\Model_Authentication::forge(array(
+					'user_id' => $user_id,
+					'provider' => $authentication['provider'],
+					'uid' => $authentication['uid'],
+					'access_token' => $authentication['access_token'],
+					'secret' => $authentication['secret'],
+					'refresh_token' => $authentication['refresh_token'],
+					'expires' => $authentication['expires'],
+					'created_at' => time(),
+				))->save();
+
+				\Response::redirect(static::$registered_redirect);
+			}
+		}
+
+		return \View::forge('register', array(
+			'user' => (object) compact('username', 'full_name', 'email', 'password')
+		));
 	}
 }

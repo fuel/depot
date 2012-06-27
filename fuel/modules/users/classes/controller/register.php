@@ -23,6 +23,9 @@ class Controller_Register extends \Controller_Base_Public
 	{
 		parent::before();
 
+		// load the ninjauth package
+		\Package::load('ninjauth');
+
 		// Load the ninjaauth configuration
 		\Config::load('ninjauth', true);
 	}
@@ -109,7 +112,7 @@ class Controller_Register extends \Controller_Base_Public
 					{
 						$authentication = \Session::get('ninjauth.authentication', false);
 
-						Model_Authentication::forge(array(
+						\NinjAuth\Model_Authentication::forge(array(
 							'user_id' => $user_id,
 							'provider' => $authentication['provider'],
 							'uid' => $authentication['uid'],
