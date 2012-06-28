@@ -61,6 +61,14 @@
 								echo \Form::submit('delete', 'Delete', array('class' => 'btn small'));
 								if ($pagedata)
 								{
+									if ($userinfo = \Auth::get_user_id())
+									{
+										list($driver, $id) = $userinfo;
+										if ($id == $pagedata['user_id'])
+										{
+											echo \Form::submit('undo', 'Undo', array('class' => 'btn small'));
+										}
+									}
 									if ($pagedata['editable'])
 									{
 										echo \Form::submit('lock', 'Lock', array('class' => 'btn small'));

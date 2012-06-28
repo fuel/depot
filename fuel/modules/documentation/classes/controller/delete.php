@@ -37,6 +37,32 @@ class Controller_Delete extends Controller_Pagebase
 			\Response::redirect('documentation/page/'.$page->id);
 		}
 
+		elseif (\Input::post('undo'))
+		{
+			// do we have a latest docs page
+			if ($doc = current($page->latest))
+			{
+				// only the current user can undo the last action
+				if ($userinfo = \Auth::get_user_id())
+				{
+					list($driver, $id) = $userinfo;
+					if ($id == $doc->user_id)
+					{
+						// delete this docs page
+						$doc->delete();
+
+						// delete the cached version of this page
+						\Cache::delete('documentation.version_'.$page->version_id.'.page_'.$page->id);
+
+						// inform the user this page version is a goner
+						\Messages::success('Succesfully reverted to the previous version of this page');
+					}
+				}
+			}
+
+			\Response::redirect('documentation/page/'.$page->id);
+		}
+
 		elseif (\Input::post('lock'))
 		{
 			$page->editable = 0;

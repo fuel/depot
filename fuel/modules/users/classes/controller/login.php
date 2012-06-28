@@ -154,7 +154,7 @@ class Controller_Login extends \Controller_Base_Public
 
 				default:
 					\Messages::error('Strategy::login_or_register() has come up with a result that we dont know how to handle.');
-					$url = '/';
+					$url = '/users/login';
 				break;
 			}
 
