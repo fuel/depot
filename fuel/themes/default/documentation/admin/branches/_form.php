@@ -57,7 +57,6 @@
 			<?php echo Form::input('docbloxpath', Input::post('docbloxpath', isset($version) ? $version->docbloxpath : ''), array('class' => 'span12')); ?>
 		</div>
 	</div>
-	<?php if ($form == 'create'): ?>
 	<div class="clearfix">
 		<?php echo Form::label('Copy documentation from', 'docsversion'); ?>
 
@@ -65,9 +64,6 @@
 			<?php echo Form::select('docsversion', Input::post('docsversion', isset($docsversion) ? $docsversion : 0), $versions, array('class' => 'span6')); ?>
 		</div>
 	</div>
-	<?php else: ?>
-		<input name="docsversion" type="hidden" value="0" />
-	<?php endif; ?>
 
 	<div class="actions">
 		<?php echo Form::submit('submit', 'Save', array('class' => 'btn primary')); ?>

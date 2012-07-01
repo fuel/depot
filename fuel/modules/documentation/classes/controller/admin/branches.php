@@ -107,31 +107,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 					// create a copy of the documentation for this version
 					if (\Input::post('docsversion', 0))
 					{
-						// get all pages
-						$pages = \Documentation\Model_Page::find()->where('version_id', '=', \Input::post('docsversion', 0))->get();
-						foreach ($pages as $id => $page)
-						{
-							// get the latest docs for this page
-							$doc = \Documentation\Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
-
-							// convert the page to an array and make it new data
-							$page = $page->to_array();
-							unset($page['id']);
-							$page['version_id'] = $this->data['version']->id;
-
-							// insert the new page
-							$newpage = \Documentation\Model_Page::forge($page);
-							$newpage->save();
-
-							// copy the page doc too if it was present
-							if ($doc)
-							{
-								$doc = $doc->to_array();
-								unset($doc['id']);
-								$doc['page_id'] = $newpage->id;
-								\Documentation\Model_Doc::forge($doc)->save();
-							}
-						}
+						$this->copy_docs(\Input::post('docsversion', 0), $this->data['version']->id);
 					}
 					else
 					{
@@ -169,11 +145,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		}
 
 		// determine the current versions
-		$this->data['versions'] = array(0 => '&nbsp;');
-		foreach (\Documentation\Model_Version::find('all') as $version)
-		{
-			$this->data['versions'][$version->id] = $version->major.'.'.$version->minor.'/'.$version->branch;
-		}
+		$this->data['versions'] = $this->get_versions();
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
@@ -215,6 +187,12 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 				// if this one is default, reset any others
 				$version->default and $query = \Documentation\Model_Version::query()->set('default', 0)->where('id', '!=', $id)->update();
 
+				// create a copy of the documentation if needed
+				if (\Input::post('docsversion', 0))
+				{
+					$this->copy_docs(\Input::post('docsversion', 0), $version->id);
+				}
+
 				\Messages::success('Updated source branch #' . $id);
 				\Messages::redirect('documentation/admin/branches');
 			}
@@ -248,6 +226,9 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 			}
 		}
 
+		// determine the current versions
+		$this->data['versions'] = $this->get_versions();
+
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
 
@@ -273,6 +254,58 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		}
 
 		\Messages::redirect('documentation/admin/branches');
+
+	}
+
+	/**
+	 * load the available documenation versions
+	 */
+	protected function get_versions()
+	{
+		// determine the current versions
+		$data = array(0 => '&nbsp;');
+
+		foreach (\Documentation\Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get() as $version)
+		{
+			$data[$version->id] = $version->major.'.'.$version->minor.'/'.$version->branch;
+		}
+
+		return $data;
+	}
+
+	protected function copy_docs($from_version, $to_version)
+	{
+		// delete any docs pages present for the to_version
+		$pages = \Documentation\Model_Page::find()->where('version_id', '=', $to_version)->get();
+		$pages and $pages->delete();
+
+		// get all pages of the from_version
+		$pages = \Documentation\Model_Page::find()->where('version_id', '=', $from_version)->get();
+		foreach ($pages as $id => $page)
+		{
+			// get the latest docs for this page
+			$doc = \Documentation\Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
+
+			// convert the page to an array and make it new data
+			$page = $page->to_array();
+			unset($page['id']);
+			$page['version_id'] = $to_version;
+
+			// insert the new page
+			$newpage = \Documentation\Model_Page::forge($page);
+			$newpage->save();
+
+			// copy the page doc too if it was present
+			if ($doc)
+			{
+				$doc = $doc->to_array();
+				unset($doc['id']);
+				$doc['page_id'] = $newpage->id;
+				\Documentation\Model_Doc::forge($doc)->save();
+			}
+		}
+
+		\Messages::success('Branch documenation copied from #'.$from_version.' to  #'.$to_version);
 
 	}
 
