@@ -67,8 +67,8 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		if ( ! $this->data['version'] = \Documentation\Model_Version::find($id))
 		{
 			// bail out with an error if not found
-			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
-			\Response::redirect('documentation/admin/branches');
+			\Messages::error('Source branch #'.$id.' does not exist.');
+			\Messages::redirect('documentation/admin/branches');
 		}
 
 		// set the admin page title
@@ -150,18 +150,21 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 						$page->save();
 					}
 
-					\Session::set_flash('success', 'Added source branch #'.$this->data['version']->id.'.');
-					\Response::redirect('documentation/admin/branches');
+					\Messages::success('Added source branch #'.$this->data['version']->id.'.');
+					\Messages::redirect('documentation/admin/branches');
 				}
 				else
 				{
-					\Session::set_flash('error', 'Could not save Source Branch.');
+					\Messages::error('Could not save Source Branch.');
 				}
 			}
 			else
 			{
-				// validation errors, show them
-				\Session::set_flash('error', $val->show_errors());
+				// and display the validation errors
+				foreach($val->error() as $e)
+				{
+					\Messages::error($e->get_message());
+				}
 			}
 		}
 
@@ -188,8 +191,8 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		if ( ! $version = \Documentation\Model_Version::find($id))
 		{
 			// bail out with an error if not found
-			\Session::set_flash('error', 'Source branch #'.$id.' does not exist.');
-			\Response::redirect('documentation/admin/branches');
+			\Messages::error('Source branch #'.$id.' does not exist.');
+			\Messages::redirect('documentation/admin/branches');
 		}
 
 		// run the validation rules on the input
@@ -212,13 +215,13 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 				// if this one is default, reset any others
 				$version->default and $query = \Documentation\Model_Version::query()->set('default', 0)->where('id', '!=', $id)->update();
 
-				\Session::set_flash('success', 'Updated source branch #' . $id);
-				\Response::redirect('documentation/admin/branches');
+				\Messages::success('Updated source branch #' . $id);
+				\Messages::redirect('documentation/admin/branches');
 			}
 
 			else
 			{
-				\Session::set_flash('error', 'Could not update source branch #' . $id);
+				\Messages::error('Could not update source branch #' . $id);
 			}
 		}
 
@@ -238,7 +241,10 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 				$version->docbloxpath = $val->validated('docbloxpath');
 
 				// and display the validation errors
-				\Session::set_flash('error', $val->show_errors());
+				foreach($val->error() as $e)
+				{
+					\Messages::error($e->get_message());
+				}
 			}
 		}
 
@@ -258,15 +264,15 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		{
 			$version->delete();
 
-			\Session::set_flash('success', 'Deleted source branch #'.$id);
+			\Messages::success('Deleted source branch #'.$id);
 		}
 
 		else
 		{
-			\Session::set_flash('error', 'Could not delete source branch #'.$id);
+			\Messages::error('Could not delete source branch #'.$id);
 		}
 
-		\Response::redirect('documentation/admin/branches');
+		\Messages::redirect('documentation/admin/branches');
 
 	}
 

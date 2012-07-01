@@ -34,7 +34,7 @@ class Controller_Files extends Controller_Apibase
 				->execute();
 
 			// and did we?
-			$model->count() and \Response::redirect('api/files/'.$model[0]['hash']);
+			$model->count() and \Messages::redirect('api/files/'.$model[0]['hash']);
 		}
 
 		// add the packages menu to the page partial

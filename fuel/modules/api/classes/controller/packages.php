@@ -35,7 +35,7 @@ class Controller_Packages extends Controller_Apibase
 				->execute();
 
 			// and did we?
-			$model->count() and \Response::redirect('api/packages/'.$model[0]['hash']);
+			$model->count() and \Messages::redirect('api/packages/'.$model[0]['hash']);
 		}
 
 		// add the packages menu to the page partial

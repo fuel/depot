@@ -29,26 +29,26 @@ class Controller_Move extends \Controller_Base_Public
 		if ( ! is_numeric($from) or ! $from = Model_Page::find($from))
 		{
 			\Messages::error('Invalid "from" page number');
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		if ( ! is_numeric($to) or ! $to = Model_Page::find($to))
 		{
 			\Messages::error('Invalid "to" page number');
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		if ( ! in_array($action, array('firstchild', 'lastchild', 'nextsibling', 'previoussibling')) )
 		{
 			\Messages::error('Invalid action specified');
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		// make sure the two nodes are part of the same tree
 		if ( ! $from->tree_same_tree_as($to, 'Move::action_index'))
 		{
 			\Messages::error('"from" and "to" don\'t belong to the same menu');
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		// ok, everything checks out, let's go
@@ -74,7 +74,7 @@ class Controller_Move extends \Controller_Base_Public
 
 
 		\Messages::success('page moved succesfully');
-		\Response::redirect('documentation/page/'.$to->id);
+		\Messages::redirect('documentation/page/'.$to->id);
 	}
 
 }

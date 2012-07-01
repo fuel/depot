@@ -23,12 +23,12 @@ class Controller_Edit extends Controller_Pagebase
 		$page === null or $page = Model_Page::find($page);
 
 		// do we have a page? we should have!
-		$page or \Response::redirect('documentation');
+		$page or \Messages::redirect('documentation');
 
 		// validate the access and make sure the page is editable
 		if ( ! $this->checkaccess() or ! $page->editable)
 		{
-			\Response::redirect('documentation/page/'.$page->id);
+			\Messages::redirect('documentation/page/'.$page->id);
 		}
 
 		// load the latest version of the docs for this page
@@ -46,7 +46,7 @@ class Controller_Edit extends Controller_Pagebase
 			if (\Input::post('cancel'))
 			{
 				// cancel button used
-				\Response::redirect('documentation/page/'.$page->id);
+				\Messages::redirect('documentation/page/'.$page->id);
 			}
 
 			elseif (\Input::post('submit'))
@@ -101,7 +101,7 @@ class Controller_Edit extends Controller_Pagebase
 					}
 
 					// and return to the page
-					\Response::redirect('documentation/page/'.$page->id);
+					\Messages::redirect('documentation/page/'.$page->id);
 				}
 
 				// set any error messages we need to display

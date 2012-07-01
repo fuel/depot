@@ -34,7 +34,7 @@ class Controller_Classes extends Controller_Apibase
 				->get();
 
 			// and did we?
-			$model and \Response::redirect('api/classes/'.reset($model)->docblox->hash);
+			$model and \Messages::redirect('api/classes/'.reset($model)->docblox->hash);
 		}
 
 		// add the packages menu to the page partial

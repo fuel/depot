@@ -22,7 +22,7 @@ class Controller_Api extends \Controller_Base_Public
 		// do we have a version stored in the session?
 		if ($version = \Session::get('version', false))
 		{
-			\Response::redirect('api/version/'.$version);
+			\Messages::redirect('api/version/'.$version);
 		}
 
 		// load the defined FuelPHP versions from the database, ordered by version
@@ -38,14 +38,14 @@ class Controller_Api extends \Controller_Base_Public
 		{
 			if ($record['default'])
 			{
-				\Response::redirect('api/version/'.$record['id']);
+				\Messages::redirect('api/version/'.$record['id']);
 			}
 		}
 
 		// get the latest if no default is defined
 		if ($versions->count())
 		{
-			\Response::redirect('api/version/'.$record['id']);
+			\Messages::redirect('api/version/'.$record['id']);
 		}
 
 		// giving up, no versions found, show an error message

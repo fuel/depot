@@ -27,9 +27,13 @@
 
 <!-- Begin messages -->
 <?php
-	foreach(\Messages::instance() as $message)
+	foreach (array('error', 'warning', 'success', 'info') as $type)
 	{
-		echo '<div class="',$message['type'],'-box">',$message['body'],'</div>',"\n";
+		foreach(\Messages::instance()->get($type) as $message)
+		{
+			echo '<div class="alert-message '.$type.'"><p>'.$message['body'].'</p></div>'."\n";
+		}
+
 	}
 	\Messages::reset();
 ?>

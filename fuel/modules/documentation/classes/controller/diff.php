@@ -28,7 +28,7 @@ class Controller_Diff extends Controller_Pagebase
 			// validate the access
 			if ( ! $this->checkaccess())
 			{
-				\Response::redirect('documentation/page/'.$page->id);
+				\Messages::redirect('documentation/page/'.$page->id);
 			}
 
 			// load the available versions of the docs for this page
@@ -41,20 +41,20 @@ class Controller_Diff extends Controller_Pagebase
 				\Messages::error('No page versions available to run a diff on!');
 
 				// and return to the page
-				\Response::redirect('documentation/page/'.$page->id);
+				\Messages::redirect('documentation/page/'.$page->id);
 			}
 		}
 		else
 		{
 			// how did we get here without a valid page id?
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		// do we have something posted?
 		if (\Input::post('cancel'))
 		{
 			// cancel button used
-			\Response::redirect('documentation/page/'.reset($docs)->page_id);
+			\Messages::redirect('documentation/page/'.reset($docs)->page_id);
 		}
 
 		elseif (\Input::post('delete') and \Auth::has_access('access.staff'))
@@ -82,7 +82,7 @@ class Controller_Diff extends Controller_Pagebase
 			}
 
 			// and return to the diff page
-			\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+			\Messages::redirect('documentation/diff/'.reset($docs)->page_id);
 		}
 
 		elseif (\Input::post('view'))
@@ -96,7 +96,7 @@ class Controller_Diff extends Controller_Pagebase
 					\Messages::error('No point comparing a version with itself!');
 
 					// invalid input, try again
-					\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+					\Messages::redirect('documentation/diff/'.reset($docs)->page_id);
 				}
 				else
 				{
@@ -131,7 +131,7 @@ class Controller_Diff extends Controller_Pagebase
 						\Messages::error('Invalid page versions selected to run a diff on!');
 
 						// invalid input, try again
-						\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+						\Messages::redirect('documentation/diff/'.reset($docs)->page_id);
 					}
 				}
 			}
@@ -141,7 +141,7 @@ class Controller_Diff extends Controller_Pagebase
 				\Messages::error('No page versions selected to run a diff on!');
 
 				// invalid input, try again
-				\Response::redirect('documentation/diff/'.reset($docs)->page_id);
+				\Messages::redirect('documentation/diff/'.reset($docs)->page_id);
 			}
 		}
 

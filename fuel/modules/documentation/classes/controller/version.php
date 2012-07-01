@@ -20,7 +20,7 @@ class Controller_Version extends \Controller_Base_Public
 	public function action_index($version = null)
 	{
 		// if no version is given, go and determine it
-		$version === null and \Response::redirect('documentation');
+		$version === null and \Messages::redirect('documentation');
 
 		// delete any stored version in the session
 		\Session::delete('version');
@@ -29,7 +29,7 @@ class Controller_Version extends \Controller_Base_Public
 		$version = Model_Version::find($version);
 
 		// if no version is found, go and determine it
-		$version === null and \Response::redirect('documentation');
+		$version === null and \Messages::redirect('documentation');
 
 		// store the version id in the session
 		\Session::set('version', $version->id);
@@ -46,7 +46,7 @@ class Controller_Version extends \Controller_Base_Public
 		}
 
 		// have the page controller deal with the pages
-		\Response::redirect('documentation/page/'.$page->id);
+		\Messages::redirect('documentation/page/'.$page->id);
 	}
 
 }

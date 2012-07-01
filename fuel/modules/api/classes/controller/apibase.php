@@ -59,7 +59,7 @@ class Controller_Apibase extends \Controller_Base_Public
 		if ( ! $model = Model_Docblox::find()->where('hash', '=', $file)->related('constant')->related('function')->related('class')->related('class.methods')->get_one())
 		{
 			// bail out to the main page if we didn't find it
-			\Response::redirect('api/packages');
+			\Messages::redirect('api/packages');
 		}
 
 		return \Theme::instance()->view('api/'.$view)->set('model', $model);

@@ -23,18 +23,18 @@ class Controller_Delete extends Controller_Pagebase
 		$page === null or $page = Model_Page::find($page);
 
 		// do we have a page? we should have!
-		$page or \Response::redirect('documentation');
+		$page or \Messages::redirect('documentation');
 
 		// validate the access
 		if ( ! $this->checkaccess())
 		{
-			\Response::redirect('documentation/page/'.$page->id);
+			\Messages::redirect('documentation/page/'.$page->id);
 		}
 
 		if (\Input::post('cancel'))
 		{
 			// cancel button used
-			\Response::redirect('documentation/page/'.$page->id);
+			\Messages::redirect('documentation/page/'.$page->id);
 		}
 
 		elseif (\Input::post('undo'))
@@ -60,7 +60,7 @@ class Controller_Delete extends Controller_Pagebase
 				}
 			}
 
-			\Response::redirect('documentation/page/'.$page->id);
+			\Messages::redirect('documentation/page/'.$page->id);
 		}
 
 		elseif (\Input::post('lock'))
@@ -72,7 +72,7 @@ class Controller_Delete extends Controller_Pagebase
 			\Messages::success('This page is now marked read-only');
 
 			// cancel button used
-			\Response::redirect('documentation/page/'.$page->id);
+			\Messages::redirect('documentation/page/'.$page->id);
 		}
 
 		elseif (\Input::post('unlock'))
@@ -84,7 +84,7 @@ class Controller_Delete extends Controller_Pagebase
 			\Messages::success('Write access has been enabled for this page');
 
 			// cancel button used
-			\Response::redirect('documentation/page/'.$page->id);
+			\Messages::redirect('documentation/page/'.$page->id);
 		}
 
 		elseif (\Input::post('confirm'))
@@ -97,7 +97,7 @@ class Controller_Delete extends Controller_Pagebase
 			// inform the user the page is a goner
 			\Messages::success('The page is succesfully deleted!');
 
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		// build the page layout partial

@@ -26,7 +26,7 @@ class Controller_Logout extends \Controller_Base_User
 		\Session::delete('ninjauth');
 		\Session::delete('state');
 		\Messages::success('Logout successful');
-		\Response::redirect('/');
+		\Messages::redirect('/');
 	}
 
 }

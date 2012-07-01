@@ -35,7 +35,7 @@ class Controller_Login extends \Controller_Base_Public
 		if (\Auth::check())
 		{
 			\Messages::error('You are already logged in');
-			\Response::redirect(\Input::post('redirect_to', '/'));
+			\Messages::redirect(\Input::post('redirect_to', '/'));
 		}
 
 		parent::before();
@@ -84,7 +84,7 @@ class Controller_Login extends \Controller_Base_Public
 						if ($auth->login(\Input::param('username'), \Input::param('password')))
 						{
 							\Messages::success('You have logged in successfully');
-							\Response::redirect(\Input::post('redirect_to', '/'));
+							\Messages::redirect(\Input::post('redirect_to', '/'));
 						}
 						else
 						{
@@ -94,19 +94,19 @@ class Controller_Login extends \Controller_Base_Public
 					break;
 
 				case 'Facebook':
-					\Response::redirect('users/login/session/facebook');
+					\Messages::redirect('users/login/session/facebook');
 					break;
 
 				case 'Twitter':
-					\Response::redirect('users/login/session/twitter');
+					\Messages::redirect('users/login/session/twitter');
 					break;
 
 				case 'Github':
-					\Response::redirect('users/login/session/github');
+					\Messages::redirect('users/login/session/github');
 					break;
 
 				case 'Google+':
-					\Response::redirect('users/login/session/google');
+					\Messages::redirect('users/login/session/google');
 					break;
 			}
 		}
@@ -119,7 +119,7 @@ class Controller_Login extends \Controller_Base_Public
 	{
 		$url = \NinjAuth\Strategy::forge($provider)->authenticate();
 
-		\Response::redirect($url);
+		\Messages::redirect($url);
 	}
 
 	public function action_callback($provider)
@@ -158,25 +158,25 @@ class Controller_Login extends \Controller_Base_Public
 				break;
 			}
 
-			\Response::redirect($url);
+			\Messages::redirect($url);
 		}
 
 		catch (\NinjAuth\CancelException $e)
 		{
 			\Messages::error('It looks like you canceled your authorisation.');
-			\Response::redirect('/users/login');
+			\Messages::redirect('/users/login');
 		}
 
 		catch (\NinjAuth\ResponseException $e)
 		{
 			\Messages::error($e->getMessage());
-			\Response::redirect('/users/login');
+			\Messages::redirect('/users/login');
 		}
 
 		catch (\NinjAuth\AuthException $e)
 		{
 			\Messages::error($e->getMessage());
-			\Response::redirect('/users/login');
+			\Messages::redirect('/users/login');
 		}
 	}
 
@@ -215,7 +215,7 @@ class Controller_Login extends \Controller_Base_Public
 					'created_at' => time(),
 				))->save();
 
-				\Response::redirect(static::$registered_redirect);
+				\Messages::redirect(static::$registered_redirect);
 			}
 		}
 

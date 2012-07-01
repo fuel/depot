@@ -20,7 +20,7 @@ class Controller_Version extends \Controller_Base_Public
 	public function action_index($version = null)
 	{
 		// if no version is given, go and determine it
-		$version === null and \Response::redirect('api');
+		$version === null and \Messages::redirect('api');
 
 		// delete any stored version in the session
 		\Session::delete('version');
@@ -30,7 +30,7 @@ class Controller_Version extends \Controller_Base_Public
 		$version = \Documentation\Model_Version::find($version);
 
 		// if no version is found, go and determine it
-		$version === null and \Response::redirect('api');
+		$version === null and \Messages::redirect('api');
 
 		// store the version id in the session
 		\Session::set('version', $version->id);
@@ -46,7 +46,7 @@ class Controller_Version extends \Controller_Base_Public
 		}
 
 		// and have the type controller deal with the pages
-		\Response::redirect('api/'.$type);
+		\Messages::redirect('api/'.$type);
 	}
 
 }

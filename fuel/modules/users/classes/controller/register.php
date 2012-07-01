@@ -127,7 +127,7 @@ class Controller_Register extends \Controller_Base_Public
 					\Auth::force_login($user_id);
 
 					\Messages::success('You have logged in with your new account.');
-					\Response::redirect('/users/profile');
+					\Messages::redirect('/users/profile');
 				}
 				catch (\Auth\SimpleUserUpdateException $e)
 				{

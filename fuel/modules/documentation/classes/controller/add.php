@@ -22,7 +22,7 @@ class Controller_Add extends Controller_Pagebase
 		// validate the access
 		if ( ! $this->checkaccess())
 		{
-			\Response::redirect('documentation');
+			\Messages::redirect('documentation');
 		}
 
 		// create a dummy page object
@@ -40,7 +40,7 @@ class Controller_Add extends Controller_Pagebase
 			if (\Input::post('cancel'))
 			{
 				// cancel button used
-				\Response::redirect('documentation/version/'.$version);
+				\Messages::redirect('documentation/version/'.$version);
 			}
 			elseif (\Input::post('submit'))
 			{
@@ -104,7 +104,7 @@ class Controller_Add extends Controller_Pagebase
 							\Messages::error('Invalid insert method. Page could not be inserted!');
 
 							// return to the created page
-							\Response::redirect('documentation/page/'.$page->id);
+							\Messages::redirect('documentation/page/'.$page->id);
 						}
 
 						// delete the menu cache so it will be refreshed
@@ -125,7 +125,7 @@ class Controller_Add extends Controller_Pagebase
 						\Messages::success('Page successfully created!');
 
 						// return to the created page
-						\Response::redirect('documentation/page/'.$page->id);
+						\Messages::redirect('documentation/page/'.$page->id);
 					}
 					else
 					{

@@ -77,8 +77,8 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		if ( ! $this->data['user'] = Model_User::find($id))
 		{
 			// bail out with an error if not found
-			\Session::set_flash('error', 'User #'.$id.' does not exist.');
-			\Response::redirect('admin/users');
+			\Messages::error('User #'.$id.' does not exist.');
+			\Messages::redirect('admin/users');
 		}
 
 		// set the admin page title
@@ -107,19 +107,22 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 					$id = \Auth::create_user(\Input::post('username'), \Input::post('password'), \Input::post('email'), \Input::post('group'), $profile);
 
 					// if a user object is created, save it
-					\Session::set_flash('success', 'Added user #'.$id.'.');
-					\Response::redirect('admin/users');
+					\Messages::success('Added user #'.$id.'.');
+					\Messages::redirect('admin/users');
 				}
 				catch (\Exception $e)
 				{
 					// else display an error
-					\Session::set_flash('error', $e->getMessage());
+					\Messages::error($e->getMessage());
 				}
 			}
 			else
 			{
 				// validation errors, show them
-				\Session::set_flash('error', $val->show_errors());
+				foreach($val->error() as $e)
+				{
+					\Messages::error($e->get_message());
+				}
 			}
 		}
 
@@ -139,8 +142,8 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		if ( ! $user = Model_User::find($id))
 		{
 			// bail out with an error if not found
-			\Session::set_flash('error', 'User #'.$id.' does not exist.');
-			\Response::redirect('admin/users');
+			\Messages::error('User #'.$id.' does not exist.');
+			\Messages::redirect('admin/users');
 		}
 
 		// make sure the full_name profile field exists
@@ -163,13 +166,13 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 			// and save it
 			if ($user->save())
 			{
-				\Session::set_flash('success', 'Updated user #' . $id);
-				\Response::redirect('admin/users');
+				\Messages::success('Updated user #' . $id);
+				\Messages::redirect('admin/users');
 			}
 
 			else
 			{
-				\Session::set_flash('error', 'Could not update user #' . $id);
+				\Messages::error('Could not update user #' . $id);
 			}
 		}
 
@@ -182,7 +185,10 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 				$user->username = $val->validated('username');
 
 				// and display the validation errors
-				\Session::set_flash('error', $val->show_errors());
+				foreach($val->error() as $e)
+				{
+					\Messages::error($e->get_message());
+				}
 			}
 		}
 
@@ -202,15 +208,15 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		{
 			$user->delete();
 
-			\Session::set_flash('success', 'Deleted user #'.$id);
+			\Messages::success('Deleted user #'.$id);
 		}
 
 		else
 		{
-			\Session::set_flash('error', 'Could not delete user #'.$id);
+			\Messages::error('Could not delete user #'.$id);
 		}
 
-		\Response::redirect('users/admin');
+		\Messages::redirect('users/admin');
 
 	}
 
