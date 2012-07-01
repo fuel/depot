@@ -62,9 +62,7 @@ class Messages_Instance implements ArrayAccess, Iterator
 	 */
 	public function error($message)
 	{
-		$this->add_message('error', $message);
-
-		return $this;
+		return $this->add_message('error', $message);
 	}
 
 	/**
@@ -75,9 +73,7 @@ class Messages_Instance implements ArrayAccess, Iterator
 	 */
 	public function info($message)
 	{
-		$this->add_message('info', $message);
-
-		return $this;
+		return $this->add_message('info', $message);
 	}
 
 	/**
@@ -88,9 +84,7 @@ class Messages_Instance implements ArrayAccess, Iterator
 	 */
 	public function warning($message)
 	{
-		$this->add_message('warning', $message);
-
-		return $this;
+		return $this->add_message('warning', $message);
 	}
 
 	/**
@@ -101,9 +95,7 @@ class Messages_Instance implements ArrayAccess, Iterator
 	 */
 	public function success($message)
 	{
-		$this->add_message('success', $message);
-
-		return $this;
+		return $this->add_message('success', $message);
 	}
 
 	/**
@@ -119,6 +111,18 @@ class Messages_Instance implements ArrayAccess, Iterator
 	}
 
 	/**
+	 * Keep existing messages in the store
+	 *
+	 * @return  $this
+	 */
+	public function keep()
+	{
+		\Session::keep_flash($this->instance);
+
+		return $this;
+	}
+
+	/**
 	 * Returns if there are any messages in the queue or not
 	 *
 	 * @return  bool
@@ -126,6 +130,36 @@ class Messages_Instance implements ArrayAccess, Iterator
 	public function any()
 	{
 		return (bool) count($this->messages);
+	}
+
+	/**
+	 * Get all messsages of a given type, or all if no type was given
+	 *
+	 * @return  array
+	 */
+	public function get($type = null)
+	{
+		$messages = array();
+
+		foreach($this->messages as $message)
+		{
+			if ($type === null or $message['type'] == $type)
+			{
+				$messages[] = $message;
+			}
+		}
+
+		return $messages;
+	}
+
+	/**
+	 * Message aware alias for Response::redirect.
+	 * Saves stored messages before redirecting.
+	 */
+	public function redirect($url = '', $method = 'location', $code = 302)
+	{
+		$this->keep();
+		\Response::redirect($url, $method, $code);
 	}
 
 	/**
@@ -151,6 +185,8 @@ class Messages_Instance implements ArrayAccess, Iterator
 				'body' => $msg
 			));
 		}
+
+		return $this;
 	}
 
 

@@ -68,7 +68,7 @@ class Messages
 	{
 		if ($exists = static::instance($name))
 		{
-			\Error::notice('Messages with this name exists already, cannot be overwritten.');
+			\Error::notice('Messages instance with this name exists already, cannot be overwritten.');
 			return $exists;
 		}
 
@@ -146,6 +146,16 @@ class Messages
 	}
 
 	/**
+	 * Keep error message currently in the store
+	 *
+	 * @return  $this
+	 */
+	public static function keep()
+	{
+		return static::instance()->keep();
+	}
+
+	/**
 	 * Returns if there are any messages in the queue or not
 	 *
 	 * @return  bool
@@ -153,5 +163,24 @@ class Messages
 	public static function any()
 	{
 		return static::instance()->any();
+	}
+
+	/**
+	 * Get all messsages of a given type, or all if no type was given
+	 *
+	 * @return  array
+	 */
+	public static function get($type = null)
+	{
+		return static::instance()->get($type);
+	}
+
+	/**
+	 * Message aware alias for Response::redirect.
+	 * Saves stored messages before redirecting.
+	 */
+	public static function redirect($url = '', $method = 'location', $code = 302)
+	{
+		return static::instance()->redirect($url, $method, $code);
 	}
 }
