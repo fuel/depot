@@ -65,7 +65,7 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'users/admin/index')->set($this->data);
+		\Theme::instance()->set_partial('content', 'users/admin/users/index')->set($this->data);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'users/admin/view')->set($this->data);
+		\Theme::instance()->set_partial('content', 'users/admin/users/view')->set($this->data);
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'users/admin/create')->set($this->data);
+		\Theme::instance()->set_partial('content', 'users/admin/users/create')->set($this->data);
 	}
 
 	/**
@@ -196,7 +196,7 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		\Theme::instance()->get_template()->set('title', 'Users');
 
 		// and define the content body
-		\Theme::instance()->set_partial('content', 'users/admin/edit')->set($this->data)->set('user', $user, false);
+		\Theme::instance()->set_partial('content', 'users/admin/users/edit')->set($this->data)->set('user', $user, false);
 	}
 
 	/**

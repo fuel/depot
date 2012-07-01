@@ -1,6 +1,6 @@
 <h3>API Documentation Status</h3>
 <?php if ($versions): ?>
-<table class="table table-bordered table-condensed">
+<table class="table table-bordered">
 	<thead>
 		<th>Branch</th>
 		<th>Documentation</th>

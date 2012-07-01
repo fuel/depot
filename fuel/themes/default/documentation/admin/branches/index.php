@@ -1,5 +1,5 @@
 <?php if ($versions): ?>
-<table class="table zebra-striped table-bordered table-condensed">
+<table class="table table-striped table-bordered">
 	<thead>
 		<tr>
 			<th></th>
@@ -17,9 +17,9 @@
 			<td><?php echo $version->default ? 'Yes' : 'No'; ?></td>
 			<td><?php echo $version->editable ? 'Yes' : 'No'; ?></td>
 			<td class="center shrink">
-				<?php echo Html::anchor('documentation/admin/branches/view/'.$version->id, 'View', array('class' => 'btn inline')); ?>
-				<?php echo Html::anchor('documentation/admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn inline')); ?>
-				<?php echo Html::anchor('documentation/admin/branches/delete/'.$version->id, 'Delete', array('onclick' => "return confirm('Are you sure?')", 'class' => 'btn inline')); ?>
+				<?php echo Html::anchor('documentation/admin/branches/view/'.$version->id, 'View', array('class' => 'btn btn-mini')); ?>
+				<?php echo Html::anchor('documentation/admin/branches/edit/'.$version->id, 'Edit', array('class' => 'btn btn-mini')); ?>
+				<?php echo Html::anchor('documentation/admin/branches/delete/'.$version->id, 'Delete', array('onclick' => "return confirm('Are you sure?')", 'class' => 'btn btn-mini')); ?>
 			</td>
 		</tr>
 <?php endforeach; ?>	</tbody>
@@ -31,5 +31,5 @@
 <p>There are no source branches defined.</p>
 
 <?php endif; ?><p>
-	<?php echo Html::anchor('documentation/admin/branches/create', 'Add new branch', array('class' => 'btn success pull-right')); ?>
+	<?php echo Html::anchor('documentation/admin/branches/create', 'Add new branch', array('class' => 'btn btn-success pull-right')); ?>
 </p>

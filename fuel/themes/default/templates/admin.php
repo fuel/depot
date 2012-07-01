@@ -18,12 +18,12 @@
 <body>
 
 	<?php if ($current_user): ?>
-	<div class="topbar">
-	    <div class="fill">
+	<div class="navbar navbar-fixed-top">
+	    <div class="navbar-inner">
 	        <div class="container">
-	            <h3><a href="/">Fuel Depot</a></h3>
-	            <ul>
-	                <li class="<?php echo Uri::segment(2) == '' ? 'active' : '' ?>">
+	            <a href="/" class="brand">Fuel Depot</a>
+	            <ul class="nav">
+	                <li class="<?php echo Uri::segment(3) == 'dashboard' ? 'active' : '' ?>">
 						<?php echo Html::anchor('admin', 'Dashboard') ?>
 					</li>
 
@@ -40,21 +40,22 @@
 						$module = $controller[count($controller)-5];
 						?>
 
-	                <li class="<?php echo Uri::segment(2) == $section_segment ? 'active' : '' ?>">
+	                <li class="<?php echo Uri::segment(3) == $section_segment ? 'active' : '' ?>">
 						<?php echo Html::anchor('admin/'.$module.'/'.$section_segment, $section_title) ?>
 					</li>
 					<?php endforeach; ?>
-	          </ul>
+				</ul>
 
-	          <ul class="nav secondary-nav">
-	            <li class="menu">
-	                <a href="#" class="menu"><?php echo $current_user->username ?></a>
-	                <ul class="menu-dropdown">
-	                    <li><?php echo Html::anchor('users/profile', 'Profile') ?></li>
-	                    <li><?php echo Html::anchor('users/logout', 'Logout') ?></li>
-	                </ul>
-	            </li>
-	          </ul>
+				<ul class="nav pull-right">
+
+					<li class="dropdown">
+						<a data-toggle="dropdown" class="dropdown-toggle" href="#"><?php echo $current_user->username ?> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><?php echo Html::anchor('users/profile', 'Profile') ?></li>
+							<li><?php echo Html::anchor('admin/logout', 'Logout') ?></li>
+						</ul>
+					</li>
+				</ul>
 	        </div>
 	    </div>
 	</div>
@@ -62,7 +63,7 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="span16">
+			<div class="span12">
 				<h1><?php echo $title; ?></h1>
 				<hr>
 				<!-- Begin messages -->
@@ -79,10 +80,12 @@
 				?>
 				<!-- End of messages -->
 			</div>
-			<div class="span16">
+			<div class="span12">
 <?php echo $partials['content']; ?>
 			</div>
 		</div>
+
+		<hr/>
 		<footer>
 			<p class="pull-right">Page rendered in {exec_time}s using {mem_usage}mb of memory.</p>
 			<p>
@@ -90,6 +93,7 @@
 				<small>Running on the <?php echo e(Fuel::VERSION); ?> code branch</small>
 			</p>
 		</footer>
+
 	</div>
 </body>
 </html>
