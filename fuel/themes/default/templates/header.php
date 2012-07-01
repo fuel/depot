@@ -31,7 +31,7 @@
 	{
 		foreach(\Messages::instance()->get($type) as $message)
 		{
-			echo '<div class="alert-message '.$type.'"><p>'.$message['body'].'</p></div>'."\n";
+			echo '<div class="',$message['type'],'-box">',$message['body'],'</div>',"\n";
 		}
 
 	}
