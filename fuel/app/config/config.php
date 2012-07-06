@@ -46,12 +46,12 @@ return array(
 	/**
 	 * auto enable profiling when in development
 	 */
-	'profiling'  => false, //(\Fuel::$env == \Fuel::DEVELOPMENT),
+	'profiling'  => (\Fuel::$env == \Fuel::DEVELOPMENT),
 
 	/**
 	 * Settings for Cache class
 	 */
-	'caching'         => false,
+	'caching'         => true,
 	'cache_dir'       => APPPATH.'..'.DS.'cache/',
 	'cache_lifetime'  => 3600, // In Seconds
 
@@ -62,7 +62,7 @@ return array(
 
 	'errors'  => array(
 		// Which errors should we show, but continue execution?
-		'continue_on'  => array(E_NOTICE, E_WARNING, E_DEPRECATED, E_STRICT),
+		'continue_on'  => array(),
 		// How many errors should we show before we stop showing them? (prevents out-of-memory errors)
 		'throttle'     => 10,
 		// Should notices from Error::notice() be shown?
