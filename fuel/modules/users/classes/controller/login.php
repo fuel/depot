@@ -117,7 +117,15 @@ class Controller_Login extends \Controller_Base_Public
 
 	public function action_session($provider)
 	{
-		$url = \NinjAuth\Strategy::forge($provider)->authenticate();
+		try
+		{
+			$url = \NinjAuth\Strategy::forge($provider)->authenticate();
+		}
+		catch (\Exception $e)
+		{
+			\Messages::error($e->getMessage());
+			$url = '/users/login';
+		}
 
 		\Messages::redirect($url);
 	}
