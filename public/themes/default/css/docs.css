@@ -23,7 +23,7 @@
 #docs form hr { margin: 15px 0px; border:2px dotted #ccc;}
 
 /* Docs menu layout ------------------------------------------------------------------------------------------------------------------------------------------------------*/
-#menu_list h5 {margin: 15px 0px;}
+#menu_list h5 {margin: 15px 0px 15px 15px;}
 #menu_list ul, #menu_list ul ul, #menu_list ul ul ul, #menu_list ul ul ul ul { margin: 0; padding: 0; list-style-type: none; cursor: default; }
 #menu_list ul { margin-right: 10px }
 #menu_list li { margin: 2px 0; padding-left: 15px; }

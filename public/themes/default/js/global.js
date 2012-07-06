@@ -101,7 +101,7 @@ $(document).ready(function(){
 				update_cookie();
 			});
 			$('.sidebar .collapse_all').click(function() {
-				$item_list.find('ul').children().hide();
+				$item_list.find('ul').children().not('.no-collapse').hide();
 				refresh_tree();
 				update_cookie();
 			});

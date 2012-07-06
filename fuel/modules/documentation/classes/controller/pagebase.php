@@ -111,81 +111,68 @@ class Controller_Pagebase extends \Controller_Base_Public
 		$state = explode(',', str_replace('#page_', '', \Cookie::get('page_menustate', '')));
 
 		// closure to generate an unordered list
-		$menu = function ($nodes, $depth = 3, $close = false) use(&$menu, $docs, $selected_page, $editmode, $state)
+		$menu = function ($nodes, $depth = 1, $close = false) use(&$menu, $docs, $selected_page, $editmode, $state)
 		{
-			// some storage for the result
-			$output = '';
-
-			// do we have any nodes?
-			if ($nodes)
+			// start the new unordered list
+			if ($depth === 1)
 			{
-				$result = '';
+				$output = str_repeat("\t", $depth).'<br /><ul'.($editmode?' class="sortable"':'').'>'."\n";
+			}
+			else
+			{
+				$output = str_repeat("\t", $depth).'<ul>'."\n";
+			}
 
-				// loop through the nodes
-				foreach ($nodes as $node)
+			// loop through the nodes
+			foreach ($nodes as $node)
+			{
+				// is this an end-node?
+				if (empty($node['children']))
 				{
-					// does this node have children?
-					if ($node['children'])
-					{
-						// and recurse to generate the unordered list for the children
-						$submenu = $menu($node['children'], $depth+1, ! in_array($node['id'], $state));
+					// check if this page has any docs defined
+					$has_docs = in_array($node['id'], $docs);
 
-						// add the node
-						if (\Auth::has_access('access.staff'))
-						{
-							$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div><a href="/documentation/page/'.$node['id'].'">'.e($node['title']).'</a></div>'."\n".$submenu;
-						}
-						else
-						{
-							$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus"':'plus"').($close?' style="display:none;"':'').'><div>'.e($node['title']).'</div>'."\n".$submenu;
-						}
-
-					}
-					else
-					{
-						// check if this page has any docs defined
-						$has_docs = in_array($node['id'], $docs);
-
-						// and add the link to the docs page
-						$result .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'"'.($has_docs?' class="no-nest"':'').($close?' style="display:none;"':'').'><div'.($node['id']==$selected_page?' class="current"':'').'><a href="/documentation/page/'.$node['id'].'">'.e($node['title']).'</a></div>'."\n";
-					}
-
-					// close the node
-					$result .= str_repeat("\t", $depth+1).'</li>'."\n";
-				}
-
-				// start the new unordered list
-				if ($depth == 3)
-				{
-					$output .= str_repeat("\t", $depth).'<ul'.($editmode?' class="sortable"':'').'>'."\n";
+					// and add the link to the docs page
+					$output .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'"'.($has_docs?' class="no-nest"':'').($close?' style="display:none;"':'').'><div'.($node['id']==$selected_page?' class="current"':'').'><a href="/documentation/page/'.$node['id'].'">'.e($node['title']).'</a></div></li>'."\n";
 				}
 				else
 				{
-					$output .= str_repeat("\t", $depth).'<ul>'."\n";
-				}
+					// add the node
+					if ($depth == 1)
+					{
+						// new chapter
+						$output .= str_repeat("\t", $depth+1).'<h5>'.e($node['title']).'</h5>'."\n";
+					}
+					else
+					{
+						// first level of a chapter is never closed
+						$depth == 2 and $close = false;
 
-				// close the list
-				$output .= $result.str_repeat("\t", $depth).'</ul>'."\n";
+						// if staff, all nodes are clickable
+						if (\Auth::has_access('access.staff'))
+						{
+							$output .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus':'plus').($depth==2?' no-collapse"':'"').($close?' style="display:none;"':'').'><div><a href="/documentation/page/'.$node['id'].'">'.e($node['title']).'</a></div>'."\n";
+						}
+						else
+						{
+							$output .= str_repeat("\t", $depth+1).'<li id="page_'.$node['id'].'" class="'.(in_array($node['id'], $state)?'minus':'plus').($depth==2?' no-collapse"':'"').($close?' style="display:none;"':'').'><div>'.e($node['title']).'</div>'."\n";
+						}
+					}
+
+					// add the next level to the output
+					$output .= $menu($node['children'], $depth+1, ! in_array($node['id'], $state));
+				}
 			}
+
+			// close the unordered list
+			$output .= str_repeat("\t", $depth).'</ul>'."\n";
 
 			// return the result
 			return $output;
 		};
 
 		// convert the tree into an unordered list
-		$menutree = '';
-
-		foreach ($tree as $book)
-		{
-			// add a new book title
-			$menutree .= "\t\t\t".'<h5>'.$book['title'].'</h5>'."\n";
-
-			// generate the menu for this book
-			$menutree .= $menu($book['children']);
-		}
-
-		// return the generated tree
-		return $menutree;
+		return $menu($tree);
 	}
 
 	/*
