@@ -52,7 +52,7 @@
 						<a data-toggle="dropdown" class="dropdown-toggle" href="#"><?php echo $current_user->username ?> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><?php echo Html::anchor('users/profile', 'Profile') ?></li>
-							<li><?php echo Html::anchor('admin/logout', 'Logout') ?></li>
+							<li><?php echo Html::anchor('users/logout', 'Logout') ?></li>
 						</ul>
 					</li>
 				</ul>

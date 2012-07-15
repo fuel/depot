@@ -3,9 +3,6 @@
 echo \Theme::instance()->view('templates/header');
 ?>
 
-<!-- Begin body -->
-<body id="top" class="home">
-
 <div id="subheaderWrapper">
 	<div id="subheader">
 

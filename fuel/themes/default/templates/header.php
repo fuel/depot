@@ -25,6 +25,9 @@
 </head>
 <!-- End head -->
 
+<!-- Begin body -->
+<body id="top" class="home">
+
 <!-- Begin messages -->
 <?php
 	foreach (array('error', 'warning', 'success', 'info') as $type)

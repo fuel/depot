@@ -1,8 +1,5 @@
 <?php echo \Theme::instance()->view('templates/header'); ?>
 
-<!-- Begin body -->
-<body id="top" class="home">
-
 <div id="headerWrapper">
 	<div id="header">
 
