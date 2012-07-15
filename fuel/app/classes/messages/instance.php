@@ -41,7 +41,7 @@ class Messages_Instance implements ArrayAccess, Iterator
 		$this->messages = \Session::get_flash($this->instance, array());
 
 		// register a shutdown event to write messages to flash
-		\Event::register('shutdown', array($this, 'shutdown'));
+		\Event::register('shutdown', array($this, 'shutdown'), true);
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Messages_Instance implements ArrayAccess, Iterator
 	 */
 	public function keep()
 	{
-		\Session::keep_flash($this->instance);
+		$this->messages = array_merge(\Session::get_flash($this->instance, array()), $this->messages);
 
 		return $this;
 	}

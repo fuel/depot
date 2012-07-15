@@ -98,12 +98,9 @@ class Controller_Base_Template extends Controller_Hybrid
 				$response = \Response::forge(\Theme::instance());
 			}
 
-			// If the response isn't a Response object, embed in the available one for BC
-			// @deprecated  can be removed when $this->response is removed
 			if ( ! $response instanceof Response)
 			{
-				$this->response->body = $response;
-				$response = $this->response;
+				$response = \Response::forge($response);
 			}
 
 			return $response;
