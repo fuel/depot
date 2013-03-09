@@ -13,8 +13,8 @@ nbproject/
 .idea
 
 /localoil
-/fuel/logs/*/*/*
-/fuel/cache/*/*
+/fuel/logs/*
+/fuel/cache/*
 /fuel/vendor/*
 
 /fuel/app/config/crypt.php
