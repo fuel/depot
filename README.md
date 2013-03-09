@@ -3,7 +3,10 @@
 ## Description
 
 Fuel Depot was designed to become the new documentation repository of the FuelPHP project. This repository contains the source code of the Depot application, written in FuelPHP offcourse.
+
 It has become obsolete due to the decision to use PHPDocumentor for API documentation, and, for version 2, switch to markdown based documentation with a simple front controller that can be used locally, either with a local webserver or using PHP 5.4's built-in webserver.
+
+It now serves as an example application, to see what FuelPHP can do. It does not have the most optimal application design, because the main goal was to show how to use as many features as possible.
 
 ## FuelPHP
 
