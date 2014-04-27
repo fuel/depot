@@ -29,7 +29,7 @@ class Controller_Page extends Controller_Pagebase
 		if ($page)
 		{
 			// load the latest version of the docs for this page
-			$doc = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
+			$doc = Model_Doc::query()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
 
 			// set some data about the last editor, and the time of the last edit
 			if ($doc)

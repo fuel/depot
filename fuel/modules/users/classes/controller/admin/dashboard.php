@@ -40,12 +40,12 @@ class Controller_Admin_Dashboard extends \Admin\Controller_Base
 	{
 		// user account information
 		$data = array();
-		$data['active_users'] = Model_User::find()->where('group', '!=', -1)->count();
-		$data['banned_users'] = Model_User::find()->where('group', '=', -1)->count();
-		$data['github_accounts'] = Model_Authentication::find()->where('provider', '=', 'github')->count();
-		$data['twitter_accounts'] = Model_Authentication::find()->where('provider', '=', 'twitter')->count();
-		$data['facebook_accounts'] = Model_Authentication::find()->where('provider', '=', 'facebook')->count();
-		$data['google_accounts'] = Model_Authentication::find()->where('provider', '=', 'google')->count();
+		$data['active_users'] = Model_User::query()->where('group', '!=', -1)->count();
+		$data['banned_users'] = Model_User::query()->where('group', '=', -1)->count();
+		$data['github_accounts'] = Model_Authentication::query()->where('provider', '=', 'github')->count();
+		$data['twitter_accounts'] = Model_Authentication::query()->where('provider', '=', 'twitter')->count();
+		$data['facebook_accounts'] = Model_Authentication::query()->where('provider', '=', 'facebook')->count();
+		$data['google_accounts'] = Model_Authentication::query()->where('provider', '=', 'google')->count();
 
 		// return the dashboard view
 		return \Theme::instance()->view('users/admin/dashboard')->set($data);

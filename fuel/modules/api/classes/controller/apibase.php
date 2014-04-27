@@ -56,7 +56,7 @@ class Controller_Apibase extends \Controller_Base_Public
 
 		// fetch the file by hash. note: this is not unique, but an
 		// identical hash means an indentical file, so we don't care
-		if ( ! $model = Model_Docblox::find()->where('hash', '=', $file)->related('constant')->related('function')->related('class')->related('class.methods')->get_one())
+		if ( ! $model = Model_Docblox::query()->where('hash', '=', $file)->related('constant')->related('function')->related('class')->related('class.methods')->get_one())
 		{
 			// bail out to the main page if we didn't find it
 			\Messages::redirect('api/packages');

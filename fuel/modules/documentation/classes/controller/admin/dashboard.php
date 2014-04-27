@@ -39,7 +39,7 @@ class Controller_Admin_Dashboard extends \Admin\Controller_Base
 		$data = array();
 
 		// api docs data
-		$data['versions'] = Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
+		$data['versions'] = Model_Version::query()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
 		// page counts
 		$data['pagecounts'] = array();

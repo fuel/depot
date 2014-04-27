@@ -204,7 +204,7 @@ class Controller_Add extends Controller_Pagebase
 				// loop trough the tree, fetch all nodes with children or without any docs pages
 				foreach ($result as $key => $value)
 				{
-					if ($value[$model->tree_get_property('right_field')] - $value[$model->tree_get_property('left_field')] > 1 or Model_Doc::find()->where('page_id', $value['id'])->count() == 0)
+					if ($value[$model->tree_get_property('right_field')] - $value[$model->tree_get_property('left_field')] > 1 or Model_Doc::query()->where('page_id', $value['id'])->count() == 0)
 					{
 						$tree[$value['_key_']] = str_repeat('&nbsp;', ($value['_level_']) * 3) . ($value['_level_'] ? '&raquo; ' : '') . $value[$field];
 					}

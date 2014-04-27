@@ -32,7 +32,7 @@ class Controller_Diff extends Controller_Pagebase
 			}
 
 			// load the available versions of the docs for this page
-			$docs = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get();
+			$docs = Model_Doc::query()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get();
 
 			// did we find more then one?
 			if ( ! $docs or count($docs) < 2)

@@ -151,7 +151,7 @@ class Docblox
 		set_time_limit(0);
 
 		// delete the current docblock data for this version
-		if ($docblox = Model_Docblox::find()->where('version_id', '=', static::$version_id)->get())
+		if ($docblox = Model_Docblox::query()->where('version_id', '=', static::$version_id)->get())
 		{
 			static::log('Deleting previously imported information...'."\n");
 			foreach($docblox as $db)

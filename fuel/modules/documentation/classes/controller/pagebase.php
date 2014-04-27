@@ -51,7 +51,7 @@ class Controller_Pagebase extends \Controller_Base_Public
 		// get the number of page versions of the loaded page
 		if ($page and $editable)
 		{
-			$doccount = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->count();
+			$doccount = Model_Doc::query()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->count();
 			$partial->set('doccount', $doccount)->set('page_id', $page->id)->set('pagedata', false)->set('function', \Uri::segment(2));
 		}
 		else

@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Part of Fuel Depot.
@@ -32,7 +33,7 @@ class Controller_Edit extends Controller_Pagebase
 		}
 
 		// load the latest version of the docs for this page
-		$doc = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
+		$doc = Model_Doc::query()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
 
 		// create the page partial
 		$partial = $this->buildpage($page);

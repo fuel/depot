@@ -104,7 +104,7 @@ class Controller_Delete extends Controller_Pagebase
 		$partial = $this->buildpage($page);
 
 		// load the latest version of the docs for this page
-		$doc = Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
+		$doc = Model_Doc::query()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
 
 		// add the edit page partial
 		$details = \Theme::instance()->view('documentation/delpage');

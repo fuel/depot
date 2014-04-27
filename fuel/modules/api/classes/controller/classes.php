@@ -26,7 +26,7 @@ class Controller_Classes extends Controller_Apibase
 		if ( ! $file)
 		{
 			// fetch the first one we can find
-			$model = Model_Class::find()
+			$model = Model_Class::query()
 				->related('docblox')
 				->where('docblox.version_id', '=', \Session::get('version', 0))
 				->order_by('namespace', 'ASC')
@@ -58,7 +58,7 @@ class Controller_Classes extends Controller_Apibase
 		catch (\CacheNotFoundException $e)
 		{
 			// get all classes
-			$model = Model_Class::find()
+			$model = Model_Class::query()
 				->related('docblox')
 				->where('docblox.version_id', '=', \Session::get('version', 0))
 				->order_by('namespace', 'ASC')

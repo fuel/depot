@@ -35,10 +35,10 @@ class Controller_Version extends \Controller_Base_Public
 		\Session::set('version', $version->id);
 
 		// see if we can find a default page for the requested version
-		if ( ! $page = Model_Page::find()->where('version_id', '=', $version->id)->where('default', '=', 1)->get_one())
+		if ( ! $page = Model_Page::query()->where('version_id', '=', $version->id)->where('default', '=', 1)->get_one())
 		{
 			// no default page exists for this version. Find the first page node
-			if ( ! $page = Model_Page::find()->where('version_id', '=', $version->id)->where('left_id', '>', 2)->where('right_id', '=', \DB::expr('left_id + 1'))->get_one())
+			if ( ! $page = Model_Page::query()->where('version_id', '=', $version->id)->where('left_id', '>', 2)->where('right_id', '=', \DB::expr('left_id + 1'))->get_one())
 			{
 				// no page found, have the page controller deal with it
 				$page = (object) array('id' => '');

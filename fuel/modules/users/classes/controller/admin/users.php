@@ -59,7 +59,7 @@ class Controller_Admin_Users extends \Admin\Controller_Base
 		\Pagination::set_config($this->pagination);
 
 		// get the records for the current page
-		$this->data['users'] = Model_User::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
+		$this->data['users'] = Model_User::query()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->get();
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Users');

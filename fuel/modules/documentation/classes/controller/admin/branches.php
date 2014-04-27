@@ -49,7 +49,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		\Pagination::set_config($this->pagination);
 
 		// get the records for the current page
-		$this->data['versions'] = Model_Version::find()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
+		$this->data['versions'] = Model_Version::query()->offset(\Pagination::$offset)->limit(\Pagination::$per_page)->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get();
 
 		// set the admin page title
 		\Theme::instance()->get_template()->set('title', 'Source branches');
@@ -265,7 +265,7 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 		// determine the current versions
 		$data = array(0 => '&nbsp;');
 
-		foreach (\Documentation\Model_Version::find()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get() as $version)
+		foreach (\Documentation\Model_Version::query()->order_by('major', 'ASC')->order_by('minor', 'ASC')->order_by('branch', 'ASC')->get() as $version)
 		{
 			$data[$version->id] = $version->major.'.'.$version->minor.'/'.$version->branch;
 		}
@@ -276,15 +276,15 @@ class Controller_Admin_Branches extends \Admin\Controller_Base
 	protected function copy_docs($from_version, $to_version)
 	{
 		// delete any docs pages present for the to_version
-		$pages = \Documentation\Model_Page::find()->where('version_id', '=', $to_version)->get();
+		$pages = \Documentation\Model_Page::query()->where('version_id', '=', $to_version)->get();
 		$pages and $pages->delete();
 
 		// get all pages of the from_version
-		$pages = \Documentation\Model_Page::find()->where('version_id', '=', $from_version)->get();
+		$pages = \Documentation\Model_Page::query()->where('version_id', '=', $from_version)->get();
 		foreach ($pages as $id => $page)
 		{
 			// get the latest docs for this page
-			$doc = \Documentation\Model_Doc::find()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
+			$doc = \Documentation\Model_Doc::query()->where('page_id', '=', $page->id)->order_by('created_at', 'DESC')->get_one();
 
 			// convert the page to an array and make it new data
 			$page = $page->to_array();
