@@ -1,4 +1,4 @@
-#Fuel Depot
+# Fuel Depot
 
 ## Description
 
@@ -12,11 +12,11 @@ It now serves as an example application, to see what FuelPHP can do. It does not
 
 FuelPHP is a fast, lightweight PHP 5.3 framework. In an age where frameworks are a dime a dozen, We believe that FuelPHP will stand out in the crowd.  It will do this by combining all the things you love about the great frameworks out there, while getting rid of the bad.
 
-##Credits
+## Credits
 
 * The login, authentication and registration code is based on the [Ninjauth](http://github.com/happyninjas/fuel-ninjauth) package by @philsturgeon.
 
-##Donate
+## Donate
 
 [Donate Here](http://fuelphp.com/contribute/donate)
 
